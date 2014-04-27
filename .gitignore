@@ -1,4 +1,5 @@
-.idea/
-lib/
-templates_c/
+.idea/*
+lib/*
+templates_c/*
 *.iml
+config/*
