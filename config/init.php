@@ -5,7 +5,7 @@
   $BASE_DIR = '/var/www/med/';
   $BASE_URL = '/med/';
 
-  $conn = new PDO('pgsql:host=192.168.1.80;dbname=projetox', 'projetox', ',');
+  $conn = new PDO('pgsql:host=localhost;dbname=trigonum', 'trigonum', ',');
   $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
