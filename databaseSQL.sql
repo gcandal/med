@@ -6,22 +6,20 @@ DROP TABLE IF EXISTS Speciality CASCADE;
 DROP TABLE IF EXISTS Professional CASCADE;
 DROP TABLE IF EXISTS PrivatePayer CASCADE;
 DROP TABLE IF EXISTS EntityPayer CASCADE;
-DROP TABLE IF EXISTS Patient CASCADE;
 DROP TABLE IF EXISTS ProcedureType CASCADE;
 DROP TABLE IF EXISTS Procedure CASCADE;
-DROP TABLE IF EXISTS SubProcedure CASCADE;
 DROP TABLE IF EXISTS ProcedureProfessional CASCADE;
 DROP DOMAIN IF EXISTS Email CASCADE;
 DROP DOMAIN IF EXISTS NIF CASCADE;
 DROP TYPE IF EXISTS ProcedurePaymentStatus CASCADE;
 DROP TYPE IF EXISTS EntityType CASCADE;
-DROP TYPE IF EXISTS Authorization CASCADE;
+DROP TYPE IF EXISTS OrgAuthorizationType CASCADE;
 
 ------------------------------------------------------------------------
 
 CREATE TYPE ProcedurePaymentStatus AS ENUM ('Recebi', 'Paguei', 'Nada');
 CREATE TYPE EntityType AS ENUM ('Privado', 'Hospital', 'Seguro');
-CREATE TYPE Authorization AS ENUM ('Administrador', 'Visível', 'Invisível');
+CREATE TYPE OrgAuthorizationType AS ENUM ('Administrador', 'Visível', 'Invisível');
 
 ------------------------------------------------------------------------
 
@@ -54,10 +52,10 @@ CREATE TABLE Organization (
   name           VARCHAR(40) NOT NULL UNIQUE
 );
 
-CREATE TABLE Authorization (
+CREATE TABLE OrgAuthorization (
   idOrganization INTEGER NOT NULL REFERENCES Organization (idOrganization),
   idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
-  authorization 
+  orgAuthorization OrgAuthorizationType,
   PRIMARY KEY (idOrganization, idAccount)
 );
 
@@ -76,13 +74,6 @@ CREATE TABLE EntityPayer (
   valuePerK     REAL        NOT NULL
 );
 
-CREATE TABLE KSpeciality (
-  idSpeciality      INTEGER NOT NULL REFERENCES Specialty (idSpeciality),
-  idProcedureType   INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
-  k                 INTEGER NOT NULL,
-  PRIMARY KEY       (idSpeciality, idProcedureType)
-);
-
 CREATE TABLE Speciality (
   idSpeciality SERIAL PRIMARY KEY,
   name         VARCHAR(50),
@@ -97,12 +88,6 @@ CREATE TABLE Professional (
   nif            NIF     NOT NULL
 );
 
-CREATE TABLE ProcedureProcedureType (
-  idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure),
-  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
-  PRIMARY KEY     (idProcedure, idProcedureType)
-);
-
 CREATE TABLE ProcedureType (
   idProcedureType SERIAL PRIMARY KEY,
   name            VARCHAR(80) NOT NULL
@@ -110,12 +95,17 @@ CREATE TABLE ProcedureType (
 
 CREATE TABLE Procedure (
   idProcedure    SERIAL PRIMARY KEY,
-  idPatient      INTEGER                NOT NULL REFERENCES Patient (idPatient),
-  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT ,
+  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT 'Nada',
   idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outor
   idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
   date           DATE                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
   code           CHAR(32)               NOT NULL DEFAULT 'Nada'
+);
+
+CREATE TABLE ProcedureProcedureType (
+  idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure),
+  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
+  PRIMARY KEY     (idProcedure, idProcedureType)
 );
 
 CREATE TABLE ProcedureProfessional (
@@ -123,4 +113,11 @@ CREATE TABLE ProcedureProfessional (
   idProfessional INTEGER NOT NULL REFERENCES Professional (idProfessional),
   nonDefaultK    INTEGER,
   PRIMARY KEY (idProcedure, idProfessional)
+);
+
+CREATE TABLE KSpeciality (
+  idSpeciality      INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
+  idProcedureType   INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
+  k                 INTEGER NOT NULL,
+  PRIMARY KEY       (idSpeciality, idProcedureType)
 );
