@@ -15,12 +15,13 @@ DROP DOMAIN IF EXISTS Email CASCADE;
 DROP DOMAIN IF EXISTS NIF CASCADE;
 DROP TYPE IF EXISTS ProcedurePaymentStatus CASCADE;
 DROP TYPE IF EXISTS EntityType CASCADE;
+DROP TYPE IF EXISTS Authorization CASCADE;
 
 ------------------------------------------------------------------------
 
 CREATE TYPE ProcedurePaymentStatus AS ENUM ('Recebi', 'Paguei', 'Nada');
 CREATE TYPE EntityType AS ENUM ('Privado', 'Hospital', 'Seguro');
-CREATE TYPE Specialty AS ENUM ('Cirurgião', 'Anestesista', 'Enfermeiro');
+CREATE TYPE Authorization AS ENUM ('Administrador', 'Visível', 'Invisível');
 
 ------------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ CREATE TABLE Account (
 
 CREATE TABLE LoginAttempts (
   idAttempt SERIAL PRIMARY KEY,
-  idAccount INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  idAccount INTEGER     NOT NULL REFERENCES Account (idAccount),
   time      VARCHAR(30) NOT NULL
 );
 
@@ -53,9 +54,10 @@ CREATE TABLE Organization (
   name           VARCHAR(40) NOT NULL UNIQUE
 );
 
-CREATE TABLE OrganizationAccount (
-  idOrganization INTEGER NOT NULL REFERENCES Organization (idOrganization) ON DELETE CASCADE,
-  idAccount      INTEGER NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+CREATE TABLE Authorization (
+  idOrganization INTEGER NOT NULL REFERENCES Organization (idOrganization),
+  idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
+  authorization 
   PRIMARY KEY (idOrganization, idAccount)
 );
 
@@ -74,14 +76,11 @@ CREATE TABLE EntityPayer (
   valuePerK     REAL        NOT NULL
 );
 
-CREATE TABLE Patient (
-  idPatient SERIAL PRIMARY KEY
-);
-
-CREATE TABLE ProcedureType (
-  idProcedureType SERIAL PRIMARY KEY,
-  name            VARCHAR(80) NOT NULL,
-  numberOfK       REAL        NOT NULL
+CREATE TABLE KSpeciality (
+  idSpeciality      INTEGER NOT NULL REFERENCES Specialty (idSpeciality),
+  idProcedureType   INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
+  k                 INTEGER NOT NULL,
+  PRIMARY KEY       (idSpeciality, idProcedureType)
 );
 
 CREATE TABLE Speciality (
@@ -94,23 +93,29 @@ CREATE TABLE Professional (
   idProfessional SERIAL PRIMARY KEY,
   idSpeciality   INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
   name           VARCHAR(40), -- Ou um, ou outro
-  idAccount      INTEGER REFERENCES Account (idAccount) ON DELETE SET NULL,
+  idAccount      INTEGER REFERENCES Account (idAccount),
   nif            NIF     NOT NULL
+);
+
+CREATE TABLE ProcedureProcedureType (
+  idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure),
+  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
+  PRIMARY KEY     (idProcedure, idProcedureType)
+);
+
+CREATE TABLE ProcedureType (
+  idProcedureType SERIAL PRIMARY KEY,
+  name            VARCHAR(80) NOT NULL
 );
 
 CREATE TABLE Procedure (
   idProcedure    SERIAL PRIMARY KEY,
   idPatient      INTEGER                NOT NULL REFERENCES Patient (idPatient),
-  paymentStatus  ProcedurePaymentStatus NOT NULL,
-  idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer) ON DELETE SET NULL, -- Ou um, ou outro, ou ambos
-  idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer) ON DELETE SET NULL,
-  date           DATE                   NOT NULL
-);
-
-CREATE TABLE SubProcedure (
-  idSubProcedure  SERIAL PRIMARY KEY,
-  idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure),
-  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType)
+  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT ,
+  idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outor
+  idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
+  date           DATE                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  code           CHAR(32)               NOT NULL DEFAULT 'Nada'
 );
 
 CREATE TABLE ProcedureProfessional (
