@@ -6,7 +6,7 @@
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   </head>
   <body>
-  {if $USERNAME}
+  {if $EMAIL}
       {include file='common/menu_logged_in.tpl'}
   {else}
       {include file='common/menu_logged_out.tpl'}

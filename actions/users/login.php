@@ -21,13 +21,22 @@ $current_user = getUserByEmail($email);
 $password = hash('sha512', $password . $current_user['salt']);
 
 if ($current_user['password'] === $password) {
-    $_SESSION['idconta'] = $current_user['idconta'];
-    $_SESSION['username'] = $current_user['username'];
+    $_SESSION['idaccount'] = $current_user['idaccount'];
     $_SESSION['email'] = $current_user['email'];
 
     $_SESSION['success_messages'][] = 'Login successful';
 } else {
-    $_SESSION['error_messages'][] = 'Email e password inválidos. '.$password.'|||'.$current_user['password'];
+
+    try {
+        logAttempt($current_user['idaccount']);
+
+        if(checkBrute($current_user['idaccount']))
+            $_SESSION['error_messages'][] = 'Bruteforce detetado, conta bloqueada';
+    } catch (PDOException $e) {
+        $_SESSION['error_messages'][] = $e->getMessage();
+    }
+
+    $_SESSION['error_messages'][] = 'Email e password inválidos.';
 }
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);
