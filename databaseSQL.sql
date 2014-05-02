@@ -53,8 +53,8 @@ CREATE TABLE Organization (
 );
 
 CREATE TABLE OrgAuthorization (
-  idOrganization INTEGER NOT NULL REFERENCES Organization (idOrganization),
-  idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
+  idOrganization   INTEGER NOT NULL REFERENCES Organization (idOrganization),
+  idAccount        INTEGER NOT NULL REFERENCES Account (idAccount),
   orgAuthorization OrgAuthorizationType,
   PRIMARY KEY (idOrganization, idAccount)
 );
@@ -105,7 +105,7 @@ CREATE TABLE Procedure (
 CREATE TABLE ProcedureProcedureType (
   idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure),
   idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
-  PRIMARY KEY     (idProcedure, idProcedureType)
+  PRIMARY KEY (idProcedure, idProcedureType)
 );
 
 CREATE TABLE ProcedureProfessional (
@@ -116,8 +116,8 @@ CREATE TABLE ProcedureProfessional (
 );
 
 CREATE TABLE KSpeciality (
-  idSpeciality      INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
-  idProcedureType   INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
-  k                 INTEGER NOT NULL,
-  PRIMARY KEY       (idSpeciality, idProcedureType)
+  idSpeciality    INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
+  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
+  k               INTEGER NOT NULL,
+  PRIMARY KEY (idSpeciality, idProcedureType)
 );
