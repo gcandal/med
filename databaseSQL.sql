@@ -72,7 +72,7 @@ CREATE TABLE EntityPayer (
   contractStart DATE        NOT NULL,
   contractEnd   DATE        NOT NULL,
   type          EntityType  NOT NULL,
-  nif           NIF         NOT NULL UNIQUE,
+  nif           NIF         NOT NULL,
   valuePerK     REAL        NOT NULL
 );
 
