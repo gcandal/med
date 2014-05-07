@@ -1,14 +1,16 @@
 DROP TABLE IF EXISTS Account CASCADE;
 DROP TABLE IF EXISTS LoginAttempts CASCADE;
 DROP TABLE IF EXISTS Organization CASCADE;
-DROP TABLE IF EXISTS OrganizationAccount CASCADE;
-DROP TABLE IF EXISTS Speciality CASCADE;
-DROP TABLE IF EXISTS Professional CASCADE;
+DROP TABLE IF EXISTS OrgAuthorization CASCADE;
 DROP TABLE IF EXISTS PrivatePayer CASCADE;
 DROP TABLE IF EXISTS EntityPayer CASCADE;
+DROP TABLE IF EXISTS Speciality CASCADE;
+DROP TABLE IF EXISTS Professional CASCADE;
 DROP TABLE IF EXISTS ProcedureType CASCADE;
 DROP TABLE IF EXISTS Procedure CASCADE;
 DROP TABLE IF EXISTS ProcedureProfessional CASCADE;
+DROP TABLE IF EXISTS ProcedureProcedureType CASCADE;
+DROP TABLE IF EXISTS KSpeciality CASCADE;
 DROP DOMAIN IF EXISTS Email CASCADE;
 DROP DOMAIN IF EXISTS NIF CASCADE;
 DROP TYPE IF EXISTS ProcedurePaymentStatus CASCADE;
@@ -53,8 +55,8 @@ CREATE TABLE Organization (
 );
 
 CREATE TABLE OrgAuthorization (
-  idOrganization INTEGER NOT NULL REFERENCES Organization (idOrganization),
-  idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
+  idOrganization   INTEGER NOT NULL REFERENCES Organization (idOrganization),
+  idAccount        INTEGER NOT NULL REFERENCES Account (idAccount),
   orgAuthorization OrgAuthorizationType,
   PRIMARY KEY (idOrganization, idAccount)
 );
@@ -70,7 +72,7 @@ CREATE TABLE EntityPayer (
   contractStart DATE        NOT NULL,
   contractEnd   DATE        NOT NULL,
   type          EntityType  NOT NULL,
-  nif           NIF         NOT NULL UNIQUE,
+  nif           NIF         NOT NULL,
   valuePerK     REAL        NOT NULL
 );
 
@@ -105,7 +107,7 @@ CREATE TABLE Procedure (
 CREATE TABLE ProcedureProcedureType (
   idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure),
   idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
-  PRIMARY KEY     (idProcedure, idProcedureType)
+  PRIMARY KEY (idProcedure, idProcedureType)
 );
 
 CREATE TABLE ProcedureProfessional (
@@ -116,8 +118,8 @@ CREATE TABLE ProcedureProfessional (
 );
 
 CREATE TABLE KSpeciality (
-  idSpeciality      INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
-  idProcedureType   INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
-  k                 INTEGER NOT NULL,
-  PRIMARY KEY       (idSpeciality, idProcedureType)
+  idSpeciality    INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
+  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
+  k               INTEGER NOT NULL,
+  PRIMARY KEY (idSpeciality, idProcedureType)
 );
