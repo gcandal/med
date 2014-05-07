@@ -1,0 +1,4 @@
+session.cookie_secure = 1
+session.cookie_httponly = 1
+
+Eventualmente verificar se IP mudou e -> logout; a ver.

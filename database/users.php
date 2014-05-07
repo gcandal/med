@@ -38,18 +38,38 @@ function logAttempt($idAccount)
     return $stmt->fetch() == true;
 }
 
-function checkBrute($idAccount)
+function checkBrute($email)
 {
     global $conn;
     $valid_attempts = time() - (2 * 60 * 60); // All login attempts since 2 hours ago
 
     $stmt = $conn->prepare("SELECT time
-                            FROM loginattempts
-                            WHERE idaccount = :idAccount
+                            FROM loginattempts, account
+                            WHERE account.email = :email AND loginattempts.idaccount = account.idaccount
                             AND time > :time");
-    $stmt->execute(array("idAccount" => $idAccount, "time" => $valid_attempts));
+    $stmt->execute(array("email" => $email, "time" => $valid_attempts));
 
     return count($stmt->fetchAll()) > 5;
+}
+
+function editPassword($email, $password, $salt) {
+    global $conn;
+    $stmt = $conn->prepare("UPDATE account SET password = :password, salt = :salt
+                            WHERE email = :email");
+
+    $stmt->execute(array("password" => hash('sha512', $password . $salt), "email" => $email, "salt" => $salt));
+    return $stmt->fetch() == true;
+}
+
+function editEmail($email, $new_email) {
+    global $conn;
+    $stmt = $conn->prepare("UPDATE account SET email = :newemail
+                            WHERE email = :email");
+
+
+
+    $stmt->execute(array("newemail" => $new_email, "email" => $email));
+    return $stmt->fetch() == true;
 }
 
 ?>

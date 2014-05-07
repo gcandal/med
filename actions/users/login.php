@@ -18,10 +18,17 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 $current_user = getUserByEmail($email);
 
+if(checkBrute($current_user['idaccount'])) {
+    $_SESSION['error_messages'][] = 'Bruteforce detetado, conta bloqueada';
+
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit;
+}
+
 $password = hash('sha512', $password . $current_user['salt']);
 
 if ($current_user['password'] === $password) {
-    $_SESSION['idaccount'] = $current_user['idaccount'];
+    session_regenerate_id(true);
     $_SESSION['email'] = $current_user['email'];
 
     $_SESSION['success_messages'][] = 'Login successful';
@@ -29,9 +36,6 @@ if ($current_user['password'] === $password) {
 
     try {
         logAttempt($current_user['idaccount']);
-
-        if(checkBrute($current_user['idaccount']))
-            $_SESSION['error_messages'][] = 'Bruteforce detetado, conta bloqueada';
     } catch (PDOException $e) {
         $_SESSION['error_messages'][] = $e->getMessage();
     }

@@ -1,6 +1,6 @@
 {include file='common/header.tpl'}
 
-{if $USERNAME}
+{if $EMAIL}
     <p>Já está registado!</p>
 {else}
     {foreach $ERROR_MESSAGES as $error}
