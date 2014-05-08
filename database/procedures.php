@@ -1,40 +1,47 @@
 <?php
 
-function createEntity($name, $contractstart, $contractend, $type, $nif, $valueperk)
+function createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $idaccount)
 {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO EntityPayer(name, contractstart, contractend, type, nif, valueperk)
-                            VALUES (:name, :contractstart, :contractend, :type, :nif, :valueperk)");
+    $stmt = $conn->prepare("INSERT INTO EntityPayer(name, contractstart, contractend, type, nif, valueperk, idaccount)
+                            VALUES (:name, :contractstart, :contractend, :type, :nif, :valueperk, :idaccount)");
 
     $stmt->execute(array("name" => $name, "contractstart" => $contractstart, "contractend" => $contractend,
-        "type" => $type, "nif" => $nif, "valueperk" => $valueperk));
+        "type" => $type, "nif" => $nif, "valueperk" => $valueperk, "idaccount" => $idaccount));
 
     return $stmt->fetch() == true;
 }
 
-function createPrivateEntity($name)
+function createPrivatePayer($name, $accountId)
 {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO PrivatePayer(name) VALUES (:name)");
-    $stmt->execute(array("name" => $name));
+    $stmt = $conn->prepare("INSERT INTO PrivatePayer(name, idaccount) VALUES (:name, :accountId)");
+    $stmt->execute(array("name" => $name, "accountId" => $accountId));
 
     return $stmt->fetch() == true;
 }
 
-function getAllEntities($email) {
+function getEntityPayers($idAccount) {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT *
+                            FROM entitypayer
+                            WHERE idaccount = :idAccount");
+    $stmt->execute(array("idAccount" => $idAccount));
+
+    return $stmt->fetchAll();
+}
+
+function getPrivatePayers($idAccount) {
     global $conn;
 
     $stmt = $conn->prepare("SELECT *
                             FROM privatepayer
-                            WHERE idaccount = :idAccount
-                            AND time > :time");
-    $stmt->execute(array("idAccount" => $idAccount, "time" => $valid_attempts));
+                            WHERE idaccount = :idAccount");
+    $stmt->execute(array("idAccount" => $idAccount));
+
+    return $stmt->fetchAll();
 }
-
-function getAllPrivateEntities($email) {
-
-}
-
 
 function checkBrute($idAccount)
 {

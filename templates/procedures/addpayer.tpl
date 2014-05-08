@@ -11,14 +11,14 @@
         <option value="Privado">Privado</option>
     </select>
 
+    {if $FORM_VALUES.type}
     <script>
-        {if $FORM_VALUES.type}
             $("select#entitytype").val("{$FORM_VALUES.type}");
-        {/if}
     </script>
-    <script src="{$BASE_URL}javascript/addentity.js"></script>
+    {/if}
+    <script src="{$BASE_URL}javascript/addpayer.js"></script>
 
-    <form id="formentidade" method="post" action="{$BASE_URL}actions/procedures/addentity.php">
+    <form id="formentidade" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
         <input type="hidden" name="type" value="Seguro" required/>
 
         <label>
@@ -39,16 +39,18 @@
         <label>
             NIF:
             <input type="number" min="0" name="nif" placeholder="NIF" required/>
+            <span>{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
             Valor por K:
-            <input type="number" min="0" name="valueperk" placeholder="Valor por K" required/>
+            <input type="number" min="0" name="valueperk" placeholder="Valor por K"/>
+            <span>{$FIELD_ERRORS.valueperk}</span>
         </label>
         <button type="submit">Adicionar</button>
         <br>
     </form>
 
-    <form id="formprivado" method="post" action="{$BASE_URL}actions/procedures/addentity.php">
+    <form id="formprivado" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
         <input type="hidden" name="type" value="Privado" required/>
 
         <label>

@@ -2,6 +2,13 @@
 include_once('../../config/init.php');
 include_once($BASE_DIR .'database/users.php');
 
+if($_SESSION['email']) {
+    $_SESSION['error_messages'][] = 'Tem que fazer logout';
+    header('Location: ' . $BASE_URL);
+
+    exit;
+}
+
 if (!$_POST['email'] || !$_POST['password']) {
     $_SESSION['error_messages'][] = 'Não preencheu um dos campos.';
     if(!$_POST['email'])
@@ -18,6 +25,12 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 $current_user = getUserByEmail($email);
 
+if(!$current_user) {
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+    exit;
+}
+
 if(checkBrute($current_user['idaccount'])) {
     $_SESSION['error_messages'][] = 'Bruteforce detetado, conta bloqueada';
 
@@ -30,10 +43,10 @@ $password = hash('sha512', $password . $current_user['salt']);
 if ($current_user['password'] === $password) {
     session_regenerate_id(true);
     $_SESSION['email'] = $current_user['email'];
+    $_SESSION['idaccount'] = $current_user['idaccount'];
 
     $_SESSION['success_messages'][] = 'Login successful';
 } else {
-
     try {
         logAttempt($current_user['idaccount']);
     } catch (PDOException $e) {

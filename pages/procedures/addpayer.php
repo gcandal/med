@@ -1,5 +1,5 @@
 <?php
 include_once('../../config/init.php');
 
-$smarty->display('procedures/addentity.tpl');
+$smarty->display('procedures/addpayer.tpl');
 ?>

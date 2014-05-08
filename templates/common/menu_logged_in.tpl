@@ -13,6 +13,10 @@
     <button type="submit">Editar perfil</button>
 </form>
 
-<form action="{$BASE_URL}pages/procedures/addentity.php">
+<form action="{$BASE_URL}pages/procedures/payers.php">
+    <button type="submit">Ver Entidades</button>
+</form>
+
+<form action="{$BASE_URL}pages/procedures/addpayer.php">
     <button type="submit">Adicionar Entidade</button>
 </form>
