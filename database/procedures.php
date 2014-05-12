@@ -1,13 +1,15 @@
 <?php
 
-function createProcedure($paymentStatus, $idPrivatePayer, $idEntityPayer, $code)
+function createProcedure($paymentStatus, $idPrivatePayer, $idEntityPayer)
 {
     global $conn;
     if ($idPrivatePayer == 0 && $idEntityPayer != 0) {
+        $code = hash('sha256', $paymentStatus+$idEntityPayer+date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
         $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idEntityPayer, date, code)
                             VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code)");
         $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
-    } else {
+    } else if ($idPrivatePayer != 0 && $idEntityPayer == 0){
+        $code = hash('sha256', $paymentStatus+$idPrivatePayer+date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
         $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idPrivatePayer, date, code)
                             VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code)");
         $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
