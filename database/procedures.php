@@ -1,5 +1,56 @@
 <?php
 
+function createProcedure($paymentStatus, $idPrivatePayer, $idEntityPayer, $code)
+{
+    global $conn;
+    if ($idPrivatePayer == 0 && $idEntityPayer != 0) {
+        $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idEntityPayer, date, code)
+                            VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code)");
+        $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
+    } else {
+        $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idPrivatePayer, date, code)
+                            VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code)");
+        $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
+    }
+
+    return $stmt->fetch() == true;
+}
+
+function addSubProcedure($idProcedure, $idProcedureType)
+{
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO PROCEDUREPROCEDURETYPE (idprocedure, idproceduretype)
+                            VALUES (:idProcedure, :idProcedureType)");
+
+    $stmt->execute(array(":idProcedure" => $idProcedure, ":idProcedureType" => $idProcedureType));
+
+    return $stmt->fetch() == true;
+}
+
+function addProfessionals($professionals)
+{
+    global $conn;
+
+    $conn->beginTransaction();
+
+    foreach ($professionals as $professional) {
+        if (isset($professional['nonDefault'])) {
+            $stmt = $conn->prepare("INSERT INTO PROCEDUREPROFESSIONAL(idprocedure, idprofessional, nondefault)
+                                    VALUES (:idProcedure, :idProfessional, :nonDefault)");
+            $stmt->execute(array(":idProcedure" => $professional['idProcedure'], ":idProfessional" => $professional['idProfessional'],
+                ":nonDefault" => $professional['nonDefault']));
+
+        } else {
+            $stmt = $conn->prepare("INSERT INTO PROCEDUREPROFESSIONAL(idprocedure, idprofessional)
+                                    VALUES (:idProcedure, :idProfessional)");
+            $stmt->execute(array(":idProcedure" => $professional['idProcedure'], ":idProfessional" => $professional['idProfessional']));
+        }
+
+    }
+
+    return $conn->commit() == true;
+}
+
 function createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $idaccount)
 {
     global $conn;
@@ -21,18 +72,20 @@ function createPrivatePayer($name, $accountId)
     return $stmt->fetch() == true;
 }
 
-function getEntityPayers($idAccount) {
+function getEntityPayers($idAccount)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT *
                             FROM entitypayer
-                            WHERE idaccount = :idAccount");
+                            WHERE identitypayer = :idAccount");
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();
 }
 
-function getPrivatePayers($idAccount) {
+function getPrivatePayers($idAccount)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT *
@@ -56,4 +109,5 @@ function checkBrute($idAccount)
 
     return count($stmt->fetchAll()) > 5;
 }
+
 ?>
