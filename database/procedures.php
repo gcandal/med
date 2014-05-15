@@ -18,15 +18,20 @@ function createProcedure($paymentStatus, $idPrivatePayer, $idEntityPayer)
     return $stmt->fetch() == true;
 }
 
-function addSubProcedure($idProcedure, $idProcedureType)
+function addSubProcedures($subProcedures)
 {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO PROCEDUREPROCEDURETYPE (idprocedure, idproceduretype)
-                            VALUES (:idProcedure, :idProcedureType)");
 
-    $stmt->execute(array(":idProcedure" => $idProcedure, ":idProcedureType" => $idProcedureType));
+    $conn->beginTransaction();
 
-    return $stmt->fetch() == true;
+    foreach ($subProcedures as $subProcedure) {
+        $stmt = $conn->prepare("INSERT INTO PROCEDUREPROCEDURETYPE (idprocedure, idproceduretype)
+                              VALUES (:idProcedure, :idProcedureType)");
+
+        $stmt->execute(array(":idProcedure" => $subProcedure['idProcedure'], ":idProcedureType" => $subProcedure["idProcedureType"]));
+    }
+
+    return $conn->commit() == true;
 }
 
 function addProfessionals($professionals)
