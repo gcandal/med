@@ -30,14 +30,20 @@ if ($_POST['type'] === 'Privado') {
     $name = $_POST['name'];
     $accountId = $_SESSION['idaccount'];
 
+    if(checkDuplicateEntityName($accountId, $name)) {
+        $_SESSION['error_messages'][] = 'Entidade com este nome duplicada';
+        $_SESSION['field_errors']['name'] = 'Nome já existe';
+        $_SESSION['form_values'] = $_POST;
+
+        header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+        exit;
+    }
+
     try {
         createPrivatePayer($name, $accountId);
     } catch (PDOException $e) {
-
-        if (strpos($e->getMessage(), 'privatepayer_name_key') !== false) {
-            $_SESSION['error_messages'][] = 'Entidade privada com este nome duplicada';
-            $_SESSION['field_errors']['name'] = 'Nome já existe';
-        } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+        $_SESSION['form_values'] = $_POST;
 
         header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
         exit;
@@ -63,6 +69,15 @@ if($_SESSION['field_erors'][0]) {
 }
 
 $name = $_POST['name'];
+if(checkDuplicateEntityName($_SESSION['idaccount'], $name)) {
+    $_SESSION['error_messages'][] = 'Entidade com este nome duplicada';
+    $_SESSION['field_errors']['name'] = 'Nome já existe';
+    $_SESSION['form_values'] = $_POST;
+
+    header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+    exit;
+}
+
 $contractstart = $_POST['contractstart'];
 if(!$contractstart)
     $contractstart = NULL;
@@ -79,11 +94,6 @@ $accountId = $_SESSION['idaccount'];
 try {
     createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $accountId);
 } catch (PDOException $e) {
-
-    if (strpos($e->getMessage(), 'entitypayer_name_key') !== false) {
-        $_SESSION['error_messages'][] = 'Entidade com este nome duplicada';
-        $_SESSION['field_errors']['name'] = 'Nome já existe';
-    } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
 
     if (strpos($e->getMessage(), 'validnif') !== false) {
         $_SESSION['error_messages'][] = 'NIF inválido';

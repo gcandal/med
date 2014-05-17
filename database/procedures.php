@@ -21,7 +21,8 @@ function createPrivatePayer($name, $accountId)
     return $stmt->fetch() == true;
 }
 
-function getEntityPayers($idAccount) {
+function getEntityPayers($idAccount)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT *
@@ -32,7 +33,8 @@ function getEntityPayers($idAccount) {
     return $stmt->fetchAll();
 }
 
-function getPrivatePayers($idAccount) {
+function getPrivatePayers($idAccount)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT *
@@ -41,6 +43,33 @@ function getPrivatePayers($idAccount) {
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();
+}
+
+function checkDuplicateEntityName($idaccount, $name)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT name FROM privatepayer
+                            WHERE idaccount = :idaccount AND name=:name");
+    $stmt->execute(array("idaccount" => $idaccount, "name" => $name));
+
+    if(count($stmt->fetchAll()) > 0)
+        return true;
+
+    $stmt = $conn->prepare("SELECT name FROM entitypayer
+                            WHERE idaccount = :idaccount AND name=:name");
+    $stmt->execute(array("idaccount" => $idaccount, "name" => $name));
+
+    return count($stmt->fetchAll()) > 0;
+}
+
+function editPrivatePayerName($accountid, $name, $idprivatepayer) {
+    global $conn;
+    $stmt = $conn->prepare("UPDATE privatepayer SET name = :name
+                            WHERE idaccount = :accountid AND idprivatepayer = :idprivatepayer");
+    $stmt->execute(array("name" => $name, "accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
+
+    return $stmt->fetch() == true;
 }
 
 function checkBrute($idAccount)
@@ -56,4 +85,5 @@ function checkBrute($idAccount)
 
     return count($stmt->fetchAll()) > 5;
 }
+
 ?>

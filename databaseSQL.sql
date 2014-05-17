@@ -64,13 +64,13 @@ CREATE TABLE OrgAuthorization (
 CREATE TABLE PrivatePayer (
   idPrivatePayer SERIAL PRIMARY KEY,
   idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
-  name           VARCHAR(40) NOT NULL UNIQUE
+  name           VARCHAR(40) NOT NULL
 );
 
 CREATE TABLE EntityPayer (
   idEntityPayer SERIAL PRIMARY KEY,
   idAccount     INTEGER NOT NULL REFERENCES Account (idAccount),
-  name          VARCHAR(40) NOT NULL UNIQUE,
+  name          VARCHAR(40) NOT NULL,
   contractStart DATE,
   contractEnd   DATE,
   type          EntityType,
