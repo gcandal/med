@@ -12,7 +12,7 @@ if(!$_SESSION['email']) {
 $idaccount = $_SESSION['idaccount'];
 $entities['Entidade'] = getEntityPayers($idaccount);
 $entities['Privado'] = getPrivatePayers($idaccount);
-$smarty->assign('ENTITIES', $entities);
 
+$smarty->assign('ENTITIES', $entities);
 $smarty->display('procedures/payers.tpl');
 ?>

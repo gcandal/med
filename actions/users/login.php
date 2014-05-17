@@ -56,5 +56,5 @@ if ($current_user['password'] === $password) {
     $_SESSION['error_messages'][] = 'Email e password inválidos.';
 }
 
-header('Location: ' . $_SERVER['HTTP_REFERER']);
+header('Location: ' . $BASE_URL);
 ?>

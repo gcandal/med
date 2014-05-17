@@ -91,6 +91,14 @@ if(!$valueperk)
     $valueperk = NULL;
 $accountId = $_SESSION['idaccount'];
 
+if($contractstart > $contractend && $contractend) {
+    $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
+    $_SESSION['form_values'] = $_POST;
+
+    header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+    exit;
+}
+
 try {
     createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $accountId);
 } catch (PDOException $e) {
