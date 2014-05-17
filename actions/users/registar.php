@@ -6,7 +6,7 @@ if (!$_POST['email'] || !$_POST['password'] || !$_POST['passwordconfirm'] || !$_
     $_SESSION['error_messages'][] = 'Todos os campos são obrigatórios';
     $_SESSION['form_values'] = $_POST;
 
-    header("Location: $BASE_URL" . 'pages/users/registar.php');
+    header("Location: $BASE_URL" . 'pages/users/register.php');
     exit;
 }
 
@@ -19,7 +19,7 @@ if($password !== $passwordconfirm) {
     $_SESSION['field_errors']['passwordconfirm'] = 'As palavras-passe não coincidem';
     $_SESSION['form_values'] = $_POST;
 
-    header("Location: $BASE_URL" . 'pages/users/registar.php');
+    header("Location: $BASE_URL" . 'pages/users/register.php');
     exit;
 }
 
@@ -36,7 +36,7 @@ try {
     else $_SESSION['error_messages'][] = 'Erro a criar conta '.$e->getMessage();
 
     $_SESSION['form_values'] = $_POST;
-    header("Location: $BASE_URL" . 'pages/users/registar.php');
+    header("Location: $BASE_URL" . 'pages/users/register.php');
     exit;
 }
 $_SESSION['success_messages'][] = 'User registered successfully';
