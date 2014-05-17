@@ -14,6 +14,6 @@
     <button type="submit">Entrar</button><br>
 </form>
 
-<form action="{$BASE_URL}pages/users/registar.php">
+<form action="{$BASE_URL}pages/users/register.php">
     <button type="submit">Registar</button>
 </form>
