@@ -65,15 +65,15 @@
                     $('#addSubProcedure').click(function () {
                         addSubProcedure();
                         subProcedures++;
-                        console.log(subProcedures);
                         $('#nSubProcedures').value = subProcedures;
+                        console.log(subProcedures);
                     });
 
 
                     $('#removeSubProcedure').click(function () {
                         removeSubProcedure();
-                        subProcedures--;
                         $('#nSubProcedures').value = subProcedures;
+                        console.log(subProcedures);
                     })
 
                 });
@@ -88,15 +88,16 @@
         }
 
         var addSubProcedure = function () {
-            $('<select name="subProcedure"+subProcedures>' + getSubProcedureTypes() + '</select>').fadeIn('slow').appendTo('#subProcedures');
+            $('<select name="subProcedure"' + subProcedures + ' id="subProcedure">' + getSubProcedureTypes() + '</select><label id="customKLabel" >K Alternativo<input type="text" id="customKInput" name="customK"' + subProcedures + '"><br>').fadeIn('slow').appendTo('#subProcedures');
         }
 
         var removeSubProcedure = function () {
-            console.log(subProcedures);
             if (subProcedures > 1) {
-                $('#subProcedures:last').remove();
+                $('#subProcedure:last').remove();
+                $('#customKInput:last').remove();
+                $('#customKLabel:last').remove();
+                subProcedures--;
             }
-            console.log(subProcedures);
         }
     </script>
 {else}
