@@ -6,7 +6,7 @@
     {/foreach}
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/addprocedure.php">
-
+        {$PROCEDURETYPES}
         <label>
             Estado de pagamento:
             <select name="status" required>
@@ -49,7 +49,56 @@
         <p>
             Sub-Procedimentos
         </p>
+        <span id="subProcedures">
+            <input type="hidden" id="nSubProcedures" value="0">
+            <button type="button" id="addSubProcedure">Adicionar</button>
+            <button type="button" id="removeSubProcedure">Remover</button>
+            <br>
+        </span>
     </form>
+    <script type="text/javascript">
+        var subProcedures = 1;
+        var subProcedureTypes = {$PROCEDURETYPES|json_encode}
+                $(document).ready(function () {
+                    addSubProcedure();
+
+                    $('#addSubProcedure').click(function () {
+                        addSubProcedure();
+                        subProcedures++;
+                        console.log(subProcedures);
+                        $('#nSubProcedures').value = subProcedures;
+                    });
+
+
+                    $('#removeSubProcedure').click(function () {
+                        removeSubProcedure();
+                        subProcedures--;
+                        $('#nSubProcedures').value = subProcedures;
+                    })
+
+                });
+
+        var getSubProcedureTypes = function () {
+            var result = "";
+            for (var i = 0; i < subProcedureTypes.length; i++) {
+                result += '<option value = "' + subProcedureTypes[i].idproceduretype + '">' + subProcedureTypes[i].name + '</option>';
+            }
+            return result;
+            console.log(result);
+        }
+
+        var addSubProcedure = function () {
+            $('<select name="subProcedure"+subProcedures>' + getSubProcedureTypes() + '</select>').fadeIn('slow').appendTo('#subProcedures');
+        }
+
+        var removeSubProcedure = function () {
+            console.log(subProcedures);
+            if (subProcedures > 1) {
+                $('#subProcedures:last').remove();
+            }
+            console.log(subProcedures);
+        }
+    </script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}

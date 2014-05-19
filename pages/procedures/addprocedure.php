@@ -13,7 +13,6 @@ $idaccount = $_SESSION['idaccount'];
 $entities['Entidade'] = getEntityPayers($idaccount);
 $entities['Privado'] = getPrivatePayers($idaccount);
 $procedureTypes = getProcedureTypes();
-
 $smarty->assign('ENTITIES', $entities);
 $smarty->assign('PROCEDURETYPES', $procedureTypes);
 $smarty->display('procedures/addprocedure.tpl');
