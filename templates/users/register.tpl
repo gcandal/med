@@ -7,7 +7,7 @@
         <p>{$error}</p>
     {/foreach}
 
-    <form method="post" action="{$BASE_URL}actions/users/registar.php">
+    <form method="post" action="{$BASE_URL}actions/users/register.php">
         <label>
             Nome:
             <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required/>

@@ -23,8 +23,6 @@ if($_POST['name']) {
         exit;
     }
 
-    $_SESSION['success_messages'][] = "ya " . var_dump($_POST);
-
     try {
         editPrivatePayerName($accountId, $name, $idprivatepayer);
     } catch (PDOException $e) {

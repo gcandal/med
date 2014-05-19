@@ -15,6 +15,14 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 $passwordconfirm = $_POST['passwordconfirm'];
 
+if(strlen($name) > 40) {
+    $_SESSION['field_errors']['name'] = 'O nome só pode ter até 40 caratéres';
+    $_SESSION['form_values'] = $_POST;
+
+    header("Location: $BASE_URL" . 'pages/users/register.php');
+    exit;
+}
+
 if($password !== $passwordconfirm) {
     $_SESSION['field_errors']['passwordconfirm'] = 'As palavras-passe não coincidem';
     $_SESSION['form_values'] = $_POST;

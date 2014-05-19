@@ -117,6 +117,6 @@ try {
 
 $_SESSION['success_messages'][] = 'Entidade adicionada com sucesso';
 
-header("Location: $BASE_URL");
+header("Location: $BASE_URL" . 'pages/procedures/payers.php');
 
 ?>

@@ -8,6 +8,10 @@
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}" />
             <button type="submit">Editar</button>
         </form>
+        <form action="{$BASE_URL}pages/procedures/deleteprivatepayer.php" method="post">
+            <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}" />
+            <button type="submit">Apagar</button>
+        </form>
     {/foreach}
 
     <h1>Hospital/Seguro</h1>
@@ -20,6 +24,10 @@
         <form action="{$BASE_URL}pages/procedures/editentitypayer.php" method="post">
             <input type="hidden" name="identitypayer" value="{$entity.identitypayer}" />
             <button type="submit">Editar</button>
+        </form>
+        <form action="{$BASE_URL}pages/procedures/deleteentitypayer.php" method="post">
+            <input type="hidden" name="identitypayer" value="{$entity.identitypayer}" />
+            <button type="submit">Apagar</button>
         </form>
     {/foreach}
 {else}

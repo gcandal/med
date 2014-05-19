@@ -65,7 +65,7 @@ if($new_email) {
     } catch (PDOException $e) {
         $_SESSION['error_messages'][] = $e->getMessage();
     }
-} else $_SESSION['success_messages'][] = 'null';
+}
 
 header("Location: " . $BASE_URL);
 ?>

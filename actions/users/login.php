@@ -26,8 +26,9 @@ $password = $_POST['password'];
 $current_user = getUserByEmail($email);
 
 if(!$current_user) {
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    $_SESSION['error_messages'][] = 'Email e password inválidos.';
 
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit;
 }
 

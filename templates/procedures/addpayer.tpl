@@ -38,12 +38,14 @@
         </label>
         <label>
             NIF:
-            <input type="number" min="0" name="nif" placeholder="NIF" required/>
+            <input type="number" min="0" name="nif" placeholder="NIF" required
+                   value="{$FORM_VALUES.nif}"/>
             <span>{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
             Valor por K:
-            <input type="number" min="0" name="valueperk" placeholder="Valor por K"/>
+            <input type="number" min="0" name="valueperk" placeholder="Valor por K"
+                   value="{$FORM_VALUES.valueperk}"/>
             <span>{$FIELD_ERRORS.valueperk}</span>
         </label>
         <button type="submit">Adicionar</button>

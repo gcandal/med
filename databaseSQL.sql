@@ -100,6 +100,7 @@ CREATE TABLE ProcedureType (
 CREATE TABLE Procedure (
   idProcedure    SERIAL PRIMARY KEY,
   paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT 'Nada',
+  idAccount      INTEGER REFERENCES Account (idAccount),
   idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outor
   idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
   date           DATE                   NOT NULL DEFAULT CURRENT_TIMESTAMP,

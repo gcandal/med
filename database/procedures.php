@@ -85,7 +85,7 @@ function getEntityPayers($idAccount)
 
     $stmt = $conn->prepare("SELECT *
                             FROM entitypayer
-                            WHERE idaccount = :idAccount");
+                            WHERE idaccount = :idAccount ORDER BY name");
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();
@@ -97,7 +97,7 @@ function getPrivatePayers($idAccount)
 
     $stmt = $conn->prepare("SELECT *
                             FROM privatepayer
-                            WHERE idaccount = :idAccount");
+                            WHERE idaccount = :idAccount ORDER BY name");
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();
@@ -130,47 +130,57 @@ function editPrivatePayerName($accountid, $name, $idprivatepayer) {
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerName($accountid, $idprivatepayer, $name) {
+function editEntityPayerName($accountid, $identitypayer, $name) {
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET name = :name
-                            WHERE idaccount = :accountid AND idprivatepayer = :idprivatepayer");
-    $stmt->execute(array("name" => $name, "accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
+                            WHERE idaccount = :accountid AND identitypayer = :identitypayer");
+    $stmt->execute(array("name" => $name, "accountid" => $accountid, "identitypayer" => $identitypayer));
 
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerNIF($accountid, $idprivatepayer, $nif) {
+function editEntityPayerNIF($accountid, $identitypayer, $nif) {
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET nif = :nif
-                            WHERE idaccount = :accountid AND idprivatepayer = :idprivatepayer");
-    $stmt->execute(array("nif" => $nif, "accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
+                            WHERE idaccount = :accountid AND identitypayer = :identitypayer");
+    $stmt->execute(array("nif" => $nif, "accountid" => $accountid, "identitypayer" => $identitypayer));
 
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerContractStart($accountid, $idprivatepayer, $contractstart) {
+function editEntityPayerContractStart($accountid, $identitypayer, $contractstart) {
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET contractstart = :contractstart
-                            WHERE idaccount = :accountid AND idprivatepayer = :idprivatepayer");
-    $stmt->execute(array("contractstart" => $contractstart, "accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
+                            WHERE idaccount = :accountid AND identitypayer = :identitypayer");
+    $stmt->execute(array("contractstart" => $contractstart, "accountid" => $accountid, "identitypayer" => $identitypayer));
 
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerContractEnd($accountid, $idprivatepayer, $contractend) {
+function editEntityPayerContractEnd($accountid, $identitypayer, $contractend) {
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET contractend = :contractend
-                            WHERE idaccount = :accountid AND idprivatepayer = :idprivatepayer");
-    $stmt->execute(array("contractend" => $contractend, "accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
+                            WHERE idaccount = :accountid AND identitypayer = :identitypayer");
+    $stmt->execute(array("contractend" => $contractend, "accountid" => $accountid, "identitypayer" => $identitypayer));
 
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerValuePerK($accountid, $idprivatepayer, $valueperk) {
+function editEntityPayerValuePerK($accountid, $identitypayer, $valueperk) {
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET valueperk = :valueperk
-                            WHERE idaccount = :accountid AND idprivatepayer = :idprivatepayer");
-    $stmt->execute(array("valueperk" => $valueperk, "accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
+                            WHERE idaccount = :accountid AND identitypayer = :identitypayer");
+    $stmt->execute(array("valueperk" => $valueperk, "accountid" => $accountid, "identitypayer" => $identitypayer));
+
+    return $stmt->fetch() == true;
+}
+
+function deleteEntityPayer($accountid, $identitypayer) {
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM entitypayer
+                            WHERE idaccount = :accountid AND identitypayer = :identitypayer
+                            AND NOT EXISTS ");
+    $stmt->execute(array("accountid" => $accountid, "identitypayer" => $identitypayer));
 
     return $stmt->fetch() == true;
 }
