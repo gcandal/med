@@ -4,18 +4,29 @@ function createProcedure($paymentStatus, $idPrivatePayer, $idEntityPayer)
 {
     global $conn;
     if ($idPrivatePayer == 0 && $idEntityPayer != 0) {
-        $code = hash('sha256', $paymentStatus+$idEntityPayer+date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
+        $code = hash('sha256', $paymentStatus + $idEntityPayer + date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
         $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idEntityPayer, date, code)
                             VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code)");
         $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
-    } else if ($idPrivatePayer != 0 && $idEntityPayer == 0){
-        $code = hash('sha256', $paymentStatus+$idPrivatePayer+date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
+    } else if ($idPrivatePayer != 0 && $idEntityPayer == 0) {
+        $code = hash('sha256', $paymentStatus + $idPrivatePayer + date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
         $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idPrivatePayer, date, code)
                             VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code)");
         $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
     }
 
     return $stmt->fetch() == true;
+}
+
+function getProcedureTypes()
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT * FROM PROCEDURETYPE");
+
+    $stmt->execute();
+
+    return $stmt->fetchAll();
 }
 
 function addSubProcedures($subProcedures)
@@ -85,7 +96,7 @@ function getEntityPayers($idAccount)
 
     $stmt = $conn->prepare("SELECT *
                             FROM entitypayer
-                            WHERE idaccount = :idAccount ORDER BY name");
+                            WHERE identitypayer = :idAccount ORDER BY name");
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();
@@ -97,7 +108,7 @@ function getPrivatePayers($idAccount)
 
     $stmt = $conn->prepare("SELECT *
                             FROM privatepayer
-                            WHERE idaccount = :idAccount ORDER BY name");
+                            WHERE idprivatepayer = :idAccount ORDER BY name");
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();
@@ -111,7 +122,7 @@ function checkDuplicateEntityName($idaccount, $name)
                             WHERE idaccount = :idaccount AND name=:name");
     $stmt->execute(array("idaccount" => $idaccount, "name" => $name));
 
-    if(count($stmt->fetchAll()) > 0)
+    if (count($stmt->fetchAll()) > 0)
         return true;
 
     $stmt = $conn->prepare("SELECT name FROM entitypayer
@@ -121,7 +132,8 @@ function checkDuplicateEntityName($idaccount, $name)
     return count($stmt->fetchAll()) > 0;
 }
 
-function editPrivatePayerName($accountid, $name, $idprivatepayer) {
+function editPrivatePayerName($accountid, $name, $idprivatepayer)
+{
     global $conn;
     $stmt = $conn->prepare("UPDATE privatepayer SET name = :name
                             WHERE idaccount = :accountid AND idprivatepayer = :idprivatepayer");
@@ -130,7 +142,8 @@ function editPrivatePayerName($accountid, $name, $idprivatepayer) {
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerName($accountid, $identitypayer, $name) {
+function editEntityPayerName($accountid, $identitypayer, $name)
+{
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET name = :name
                             WHERE idaccount = :accountid AND identitypayer = :identitypayer");
@@ -139,7 +152,8 @@ function editEntityPayerName($accountid, $identitypayer, $name) {
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerNIF($accountid, $identitypayer, $nif) {
+function editEntityPayerNIF($accountid, $identitypayer, $nif)
+{
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET nif = :nif
                             WHERE idaccount = :accountid AND identitypayer = :identitypayer");
@@ -148,7 +162,8 @@ function editEntityPayerNIF($accountid, $identitypayer, $nif) {
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerContractStart($accountid, $identitypayer, $contractstart) {
+function editEntityPayerContractStart($accountid, $identitypayer, $contractstart)
+{
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET contractstart = :contractstart
                             WHERE idaccount = :accountid AND identitypayer = :identitypayer");
@@ -157,7 +172,8 @@ function editEntityPayerContractStart($accountid, $identitypayer, $contractstart
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerContractEnd($accountid, $identitypayer, $contractend) {
+function editEntityPayerContractEnd($accountid, $identitypayer, $contractend)
+{
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET contractend = :contractend
                             WHERE idaccount = :accountid AND identitypayer = :identitypayer");
@@ -166,7 +182,8 @@ function editEntityPayerContractEnd($accountid, $identitypayer, $contractend) {
     return $stmt->fetch() == true;
 }
 
-function editEntityPayerValuePerK($accountid, $identitypayer, $valueperk) {
+function editEntityPayerValuePerK($accountid, $identitypayer, $valueperk)
+{
     global $conn;
     $stmt = $conn->prepare("UPDATE entitypayer SET valueperk = :valueperk
                             WHERE idaccount = :accountid AND identitypayer = :identitypayer");
@@ -175,7 +192,8 @@ function editEntityPayerValuePerK($accountid, $identitypayer, $valueperk) {
     return $stmt->fetch() == true;
 }
 
-function deleteEntityPayer($accountid, $identitypayer) {
+function deleteEntityPayer($accountid, $identitypayer)
+{
     global $conn;
     $stmt = $conn->prepare("DELETE FROM entitypayer WHERE identitypayer NOT IN (
                               SELECT
@@ -188,7 +206,8 @@ function deleteEntityPayer($accountid, $identitypayer) {
     return $stmt->rowCount() > 0;
 }
 
-function deletePrivatePayer($accountid, $idprivatepayer) {
+function deletePrivatePayer($accountid, $idprivatepayer)
+{
     global $conn;
     $stmt = $conn->prepare("DELETE FROM privatepayer WHERE idprivatepayer NOT IN (
                               SELECT

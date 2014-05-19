@@ -17,6 +17,10 @@
     <button type="submit">Ver Entidades</button>
 </form>
 
+<form action="{$BASE_URL}pages/procedures/addprocedure.php">
+    <button type="submit">Adicionar Procedimento</button>
+</form>
+
 <form action="{$BASE_URL}pages/procedures/addpayer.php">
     <button type="submit">Adicionar Entidade</button>
 </form>
