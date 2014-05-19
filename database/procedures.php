@@ -177,12 +177,28 @@ function editEntityPayerValuePerK($accountid, $identitypayer, $valueperk) {
 
 function deleteEntityPayer($accountid, $identitypayer) {
     global $conn;
-    $stmt = $conn->prepare("DELETE FROM entitypayer
-                            WHERE idaccount = :accountid AND identitypayer = :identitypayer
-                            AND NOT EXISTS ");
+    $stmt = $conn->prepare("DELETE FROM entitypayer WHERE identitypayer NOT IN (
+                              SELECT
+                                identitypayer
+                              FROM procedure
+                              WHERE idaccount = :accountid
+                            ) AND identitypayer = :identitypayer");
     $stmt->execute(array("accountid" => $accountid, "identitypayer" => $identitypayer));
 
-    return $stmt->fetch() == true;
+    return $stmt->rowCount() > 0;
+}
+
+function deletePrivatePayer($accountid, $idprivatepayer) {
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM privatepayer WHERE idprivatepayer NOT IN (
+                              SELECT
+                                idprivatepayer
+                              FROM procedure
+                              WHERE idaccount = :accountid
+                            ) AND idprivatepayer = :idprivatepayer");
+    $stmt->execute(array("accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
+
+    return $stmt->rowCount() > 0;
 }
 
 function checkBrute($idAccount)
