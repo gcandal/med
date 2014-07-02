@@ -4,26 +4,27 @@ DROP TABLE IF EXISTS Organization CASCADE;
 DROP TABLE IF EXISTS OrgAuthorization CASCADE;
 DROP TABLE IF EXISTS PrivatePayer CASCADE;
 DROP TABLE IF EXISTS EntityPayer CASCADE;
-DROP TABLE IF EXISTS Speciality
-CASCADE;
+DROP TABLE IF EXISTS Speciality CASCADE;
 DROP TABLE IF EXISTS Professional CASCADE;
 DROP TABLE IF EXISTS ProcedureType CASCADE;
 DROP TABLE IF EXISTS Procedure CASCADE;
 DROP TABLE IF EXISTS ProcedureProfessional CASCADE;
 DROP TABLE IF EXISTS ProcedureProcedureType CASCADE;
 DROP TABLE IF EXISTS KSpeciality CASCADE;
+
 DROP DOMAIN IF EXISTS Email CASCADE;
 DROP DOMAIN IF EXISTS NIF CASCADE;
 DROP DOMAIN IF EXISTS LicenseId CASCADE;
+
 DROP TYPE IF EXISTS ProcedurePaymentStatus CASCADE;
 DROP TYPE IF EXISTS EntityType CASCADE;
 DROP TYPE IF EXISTS OrgAuthorizationType CASCADE;
 
 ------------------------------------------------------------------------
 
-CREATE TYPE ProcedurePaymentStatus AS ENUM ('Recebi', 'Paguei', 'Nada');
-CREATE TYPE EntityType AS ENUM ('Privado', 'Hospital', 'Seguro');
-CREATE TYPE OrgAuthorizationType AS ENUM ('Administrador', 'Visível', 'Invisível');
+CREATE TYPE ProcedurePaymentStatus AS ENUM ('Received Payment', 'Concluded', 'Payment Pending');
+CREATE TYPE EntityType AS ENUM ('Private', 'Hospital', 'Insurance');
+CREATE TYPE OrgAuthorizationType AS ENUM ('Admin', 'Visible', 'NotVisible');
 
 ------------------------------------------------------------------------
 
