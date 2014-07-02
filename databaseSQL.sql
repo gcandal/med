@@ -124,7 +124,7 @@ CREATE TABLE ProcedureProcedureType (
 CREATE TABLE ProcedureProfessional (
   idProcedure    INTEGER NOT NULL REFERENCES Procedure (idProcedure),
   idProfessional INTEGER NOT NULL REFERENCES Professional (idProfessional),
-  nonDefaultK    INTEGER,
+  remuneration   FLOAT,
   PRIMARY KEY (idProcedure, idProfessional)
 );
 
