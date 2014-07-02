@@ -107,12 +107,12 @@ CREATE TABLE ProcedureType (
 
 CREATE TABLE Procedure (
   idProcedure    SERIAL PRIMARY KEY,
-  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT 'Nothing',
+  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT 'Payment Pending',
   idAccount      INTEGER REFERENCES Account (idAccount) ON DELETE CASCADE,
   idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
   idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
   date           DATE                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  code           CHAR(32)               NOT NULL DEFAULT 'Nothing',
+  code           CHAR(32)               NOT NULL DEFAULT 'Payment Pending',
   totalValue     FLOAT
 );
 
