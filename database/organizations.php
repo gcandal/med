@@ -37,13 +37,14 @@ function createOrganization($name, $accountId)
     $stmt->execute(array("name" => $name));
 
     $stmt = $conn->prepare("INSERT INTO OrgAuthorization(idOrganization, idaccount, orgauthorization)
-                            VALUES (currval('Organization_idOrganization_seq'), :accountId, 'Administrador')");
+                            VALUES (currval('Organization_idOrganization_seq'), :accountId, 'Admin')");
     $stmt->execute(array("accountId" => $accountId));
 
     $conn->commit();
 }
 
-function getMembersFromOrganization($idorganization) {
+function getMembersFromOrganization($idorganization)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT name, licenseid
@@ -55,12 +56,14 @@ function getMembersFromOrganization($idorganization) {
     return $stmt->fetchAll();
 }
 
-function isAdministrator($idAccount, $idOrganization) {
+function isAdministrator($idAccount, $idOrganization)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT idaccount
                             FROM orgauthorization
-                            WHERE idaccount = :idAccount AND idorganization = :idOrganization");
+                            WHERE idaccount = :idAccount AND idorganization = :idOrganization
+                            AND orgAuthorization = 'Admin'");
     $stmt->execute(array("idOrganization" => $idOrganization, "idAccount" => $idAccount));
 
     return $stmt->fetch() == true;

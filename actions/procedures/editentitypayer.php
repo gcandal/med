@@ -10,6 +10,7 @@ if (!$_SESSION['email']) {
 }
 
 $name = $_POST['name'];
+$identitypayer = $_POST['identitypayer'];
 
 if($name) {
     $_SESSION['error_messages'][] = -1;
@@ -18,12 +19,13 @@ if($name) {
         $_SESSION['field_errors']['name'] = 'Nome já existe';
         $_SESSION['form_values'] = $_POST;
 
+        $_SESSION['identitypayer'] = $identitypayer;
+
         header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
         exit;
     }
 }
 
-$identitypayer = $_POST['identitypayer'];
 $contractstart = $_POST['contractstart'];
 $contractend = $_POST['contractend'];
 $nif = $_POST['nif'];
@@ -34,24 +36,26 @@ if($contractstart > $contractend && $contractend) {
     $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
     $_SESSION['form_values'] = $_POST;
 
+    $_SESSION['identitypayer'] = $identitypayer;
+
     header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
     exit;
 }
 
 if($name) {
-    $_SESSION['error_messages'][] = 0;
     try {
         editEntityPayerName($accountId, $identitypayer, $name);
     } catch(PDOException $e) {
         $_SESSION['error_messages'][] = $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
+        $_SESSION['identitypayer'] = $identitypayer;
+
         header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
         exit;
     }
 }
 if($nif) {
-    $_SESSION['error_messages'][] = 1;
     try {
         editEntityPayerNIF($accountId, $identitypayer, $nif);
     } catch(PDOException $e) {
@@ -62,18 +66,24 @@ if($nif) {
 
         $_SESSION['form_values'] = $_POST;
 
+        $_SESSION['identitypayer'] = $identitypayer;
+
         header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
         exit;
     }
 }
 
 if($contractstart) {
-    $_SESSION['error_messages'][] = 2;
     try {
         editEntityPayerContractStart($accountId, $identitypayer, $contractstart);
     } catch(PDOException $e) {
-        $_SESSION['error_messages'][] = $e->getMessage();
+        if (strpos($e->getMessage(), 'entitypayer_check') !== false) {
+            $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
+            $_SESSION['field_errors']['name'] = 'Data do contrato não é coerente';
+        } else $_SESSION['error_messages'][] = $e->getMessage();
         $_SESSION['form_values'] = $_POST;
+
+        $_SESSION['identitypayer'] = $identitypayer;
 
         header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
         exit;
@@ -81,12 +91,16 @@ if($contractstart) {
 }
 
 if($contractend) {
-    $_SESSION['error_messages'][] = 3;
     try {
-        editEntityPayerContractEnd($accountId, $identitypayer, $contractstart);
+        editEntityPayerContractEnd($accountId, $identitypayer, $contractend);
     } catch(PDOException $e) {
-        $_SESSION['error_messages'][] = $e->getMessage();
+        if (strpos($e->getMessage(), 'entitypayer_check') !== false) {
+            $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
+            $_SESSION['field_errors']['name'] = 'Data do contrato não é coerente';
+        } else $_SESSION['error_messages'][] = $e->getMessage();
         $_SESSION['form_values'] = $_POST;
+
+        $_SESSION['identitypayer'] = $identitypayer;
 
         header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
         exit;
@@ -94,12 +108,13 @@ if($contractend) {
 }
 
 if($valueperk) {
-    $_SESSION['error_messages'][] = 4;
     try {
         editEntityPayerValuePerK($accountId, $identitypayer, intval($valueperk));
     } catch(PDOException $e) {
         $_SESSION['error_messages'][] = $e->getMessage();
         $_SESSION['form_values'] = $_POST;
+
+        $_SESSION['identitypayer'] = $identitypayer;
 
         header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
         exit;

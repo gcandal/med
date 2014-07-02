@@ -17,7 +17,7 @@ if (!$_POST['type']) {
     exit;
 }
 
-if ($_POST['type'] === 'Privado') {
+if ($_POST['type'] === 'Private') {
     if (!$_POST['name']) {
         $_SESSION['error_messages'][] = 'Alguns campos em falta';
         $_SESSION['field_errors']['name'] = 'Nome é obrigatório';

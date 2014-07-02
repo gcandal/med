@@ -19,6 +19,8 @@ if($_POST['name']) {
         $_SESSION['field_errors']['name'] = 'Nome já existe';
         $_SESSION['form_values'] = $_POST;
 
+        $_SESSION['identitypayer'] = $identitypayer;
+
         header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
         exit;
     }
@@ -28,6 +30,8 @@ if($_POST['name']) {
     } catch (PDOException $e) {
         $_SESSION['error_messages'][] = 'Erro a editar entidade ' . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
+
+        $_SESSION['identitypayer'] = $identitypayer;
 
         header("Location: $BASE_URL" . 'pages/procedures/editprivatepayer.php');
         exit;

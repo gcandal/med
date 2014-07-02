@@ -44,6 +44,9 @@ try {
     } elseif (strpos($e->getMessage(), 'validlicenseid') !== false) {
         $_SESSION['error_messages'][] = 'Número de cédula inválido';
         $_SESSION['field_errors']['licenseid'] = 'Número de cédula inválido';
+    } elseif (strpos($e->getMessage(), 'account_licenseid_key') !== false) {
+        $_SESSION['error_messages'][] = 'Número de cédula já em uso';
+        $_SESSION['field_errors']['licenseid'] = 'Número de cédula já em uso';
     }
     else $_SESSION['error_messages'][] = 'Erro a criar conta '.$e->getMessage();
 

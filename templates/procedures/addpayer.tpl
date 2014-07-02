@@ -7,8 +7,8 @@
 
     <select id="entitytype">
         <option value="Hospital">Hospital</option>
-        <option value="Seguro">Seguro</option>
-        <option value="Privado">Privado</option>
+        <option value="Insurance">Seguro</option>
+        <option value="Private">Privado</option>
     </select>
 
     {if $FORM_VALUES.type}
@@ -19,7 +19,7 @@
     <script src="{$BASE_URL}javascript/addpayer.js"></script>
 
     <form id="formentidade" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
-        <input type="hidden" name="type" value="Seguro" required/>
+        <input type="hidden" name="type" value="Insurance" required/>
 
         <label>
             Nome:
@@ -53,7 +53,7 @@
     </form>
 
     <form id="formprivado" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
-        <input type="hidden" name="type" value="Privado" required/>
+        <input type="hidden" name="type" value="Private" required/>
 
         <label>
             Nome:
