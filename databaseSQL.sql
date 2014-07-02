@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 DROP TABLE IF EXISTS Account CASCADE;
 DROP TABLE IF EXISTS LoginAttempts CASCADE;
 DROP TABLE IF EXISTS Organization CASCADE;
@@ -53,7 +54,7 @@ CREATE TABLE Account (
 
 CREATE TABLE LoginAttempts (
   idAttempt SERIAL PRIMARY KEY,
-  idAccount INTEGER     NOT NULL REFERENCES Account (idAccount),
+  idAccount INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   time      VARCHAR(30) NOT NULL
 );
 
@@ -63,21 +64,21 @@ CREATE TABLE Organization (
 );
 
 CREATE TABLE OrgAuthorization (
-  idOrganization   INTEGER NOT NULL REFERENCES Organization (idOrganization),
-  idAccount        INTEGER NOT NULL REFERENCES Account (idAccount),
+  idOrganization   INTEGER NOT NULL REFERENCES Organization (idOrganization) ON DELETE CASCADE,
+  idAccount        INTEGER NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   orgAuthorization OrgAuthorizationType,
   PRIMARY KEY (idOrganization, idAccount)
 );
 
 CREATE TABLE PrivatePayer (
   idPrivatePayer SERIAL PRIMARY KEY,
-  idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
+  idAccount      INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   name           VARCHAR(40) NOT NULL
 );
 
 CREATE TABLE EntityPayer (
   idEntityPayer SERIAL PRIMARY KEY,
-  idAccount     INTEGER NOT NULL REFERENCES Account (idAccount),
+  idAccount     INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   name          VARCHAR(40) NOT NULL,
   contractStart DATE,
   contractEnd   DATE,
@@ -107,24 +108,24 @@ CREATE TABLE ProcedureType (
 
 CREATE TABLE Procedure (
   idProcedure    SERIAL PRIMARY KEY,
-  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT 'Nada',
-  idAccount      INTEGER REFERENCES Account (idAccount),
-  idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outor
+  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT 'Nothing',
+  idAccount      INTEGER REFERENCES Account (idAccount) ON DELETE CASCADE,
+  idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
   idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
   date           DATE                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  code           CHAR(32)               NOT NULL DEFAULT 'Nada',
+  code           CHAR(32)               NOT NULL DEFAULT 'Nothing',
   totalValue     FLOAT
 );
 
 CREATE TABLE ProcedureProcedureType (
-  idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure),
-  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
+  idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType) ON DELETE CASCADE,
   PRIMARY KEY (idProcedure, idProcedureType)
 );
 
 CREATE TABLE ProcedureProfessional (
-  idProcedure    INTEGER NOT NULL REFERENCES Procedure (idProcedure),
-  idProfessional INTEGER NOT NULL REFERENCES Professional (idProfessional),
+  idProcedure    INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idProfessional INTEGER NOT NULL REFERENCES Professional (idProfessional) ON DELETE CASCADE,
   remuneration   FLOAT,
   PRIMARY KEY (idProcedure, idProfessional)
 );
