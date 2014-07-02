@@ -8,14 +8,14 @@ $(document).ready(function() {
 
 var updateFormVisibility = function() {
     switch($("select#entitytype").val()) {
-        case 'Privado':
+        case 'Private':
             $("form#formentidade").hide();
             $("form#formprivado").show();
             break;
-        case 'Seguro':
+        case 'Insurance':
             $("form#formprivado").hide();
             $("form#formentidade").show();
-            $("form#formentidade input[name=type]").val("Seguro");
+            $("form#formentidade input[name=type]").val("Insurance");
             break;
         case 'Hospital':
             $("form#formprivado").hide();
@@ -25,8 +25,4 @@ var updateFormVisibility = function() {
         default:
             break;
     }
-}
-
-var setSelectedValue = function(value) {
-
 }

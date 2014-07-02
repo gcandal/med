@@ -23,7 +23,7 @@ DROP TYPE IF EXISTS OrgAuthorizationType CASCADE;
 ------------------------------------------------------------------------
 
 CREATE TYPE ProcedurePaymentStatus AS ENUM ('Received Payment', 'Concluded', 'Payment Pending');
-CREATE TYPE EntityType AS ENUM ('Private', 'Hospital', 'Insurance');
+CREATE TYPE EntityType AS ENUM ('Hospital', 'Insurance');
 CREATE TYPE OrgAuthorizationType AS ENUM ('Admin', 'Visible', 'NotVisible');
 
 ------------------------------------------------------------------------
@@ -83,7 +83,8 @@ CREATE TABLE EntityPayer (
   contractEnd   DATE,
   type          EntityType,
   nif           NIF         NOT NULL,
-  valuePerK     REAL
+  valuePerK     REAL,
+  CHECK (contractStart < contractEnd)
 );
 
 CREATE TABLE Speciality (
@@ -135,3 +136,9 @@ CREATE TABLE KSpeciality (
   k               INTEGER NOT NULL,
   PRIMARY KEY (idSpeciality, idProcedureType)
 );
+
+INSERT INTO Account VALUES (1, 'a', 'a@a.pt', '445fff776df2293d242b261ba0f0d35be6c5b5a5110394fe8942a21e4d7af759fa277f608c3553ee7b3f8f64fce174b31146746ca8ef67dd37eedf70fe79ef9d', 'bea95c126335da5b92c91de01635311ede91a58f0ca0d9cb0344462333c35c9ef12977e976e2e8332861cff2c4efa42c653214b626ed96a76ba19ed0e414b71a', '123456789');
+INSERT INTO PrivatePayer VALUES (1, 1, 'Aquele Mano');
+INSERT INTO EntityPayer VALUES (1, 1, 'Seguro', NULL, NULL, 'Insurance', '123456789', NULL);
+INSERT INTO EntityPayer VALUES (2, 1, 'Hospital', '2014-07-01', '2014-07-02', 'Hospital', '123456789', 10);
+INSERT INTO Account VALUES (2, 'b', 'b@b.pt', '6b9f904771f21b6d9d017582d9a001c41eef2dd5128ff80fd1985d8f1f2e62fe5e23b4e77c16adea3e86eaf8353acc55e93f982419c9f87356e3a805ef7fae16', 'beb281b875e9c11fb6f8290fb7952e6da45dcd50f903299b374c6d8c816eca7dfa66c9d2b70bd3900a0b9c666eaf656505739c370ca2f2a788c33e1ff16a4736', '987654321');
