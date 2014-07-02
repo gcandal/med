@@ -19,13 +19,14 @@ function getUserByEmail($email)
     return $stmt->fetch();
 }
 
-function createAccount($email, $password, $name, $salt)
+function createAccount($email, $password, $name, $salt, $licenseid)
 {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO Account(password, name, email, salt)
-                            VALUES (:password, :name, :email, :salt)");
+    $stmt = $conn->prepare("INSERT INTO Account(password, name, email, salt, licenseid)
+                            VALUES (:password, :name, :email, :salt, :licenseid)");
 
-    $stmt->execute(array("password" => hash('sha512', $password . $salt), "name" => $name, "email" => $email, "salt" => $salt));
+    $stmt->execute(array("password" => hash('sha512', $password . $salt), "name" => $name,
+                    "email" => $email, "salt" => $salt, "licenseid" => $licenseid));
     return $stmt->fetch() == true;
 }
 
@@ -65,8 +66,6 @@ function editEmail($email, $new_email) {
     global $conn;
     $stmt = $conn->prepare("UPDATE account SET email = :newemail
                             WHERE email = :email");
-
-
 
     $stmt->execute(array("newemail" => $new_email, "email" => $email));
     return $stmt->fetch() == true;

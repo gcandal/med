@@ -4,7 +4,8 @@ DROP TABLE IF EXISTS Organization CASCADE;
 DROP TABLE IF EXISTS OrgAuthorization CASCADE;
 DROP TABLE IF EXISTS PrivatePayer CASCADE;
 DROP TABLE IF EXISTS EntityPayer CASCADE;
-DROP TABLE IF EXISTS Speciality CASCADE;
+DROP TABLE IF EXISTS Speciality
+CASCADE;
 DROP TABLE IF EXISTS Professional CASCADE;
 DROP TABLE IF EXISTS ProcedureType CASCADE;
 DROP TABLE IF EXISTS Procedure CASCADE;
@@ -13,6 +14,7 @@ DROP TABLE IF EXISTS ProcedureProcedureType CASCADE;
 DROP TABLE IF EXISTS KSpeciality CASCADE;
 DROP DOMAIN IF EXISTS Email CASCADE;
 DROP DOMAIN IF EXISTS NIF CASCADE;
+DROP DOMAIN IF EXISTS LicenseId CASCADE;
 DROP TYPE IF EXISTS ProcedurePaymentStatus CASCADE;
 DROP TYPE IF EXISTS EntityType CASCADE;
 DROP TYPE IF EXISTS OrgAuthorizationType CASCADE;
@@ -33,6 +35,10 @@ CREATE DOMAIN NIF VARCHAR(9)
 CONSTRAINT validNIF
 CHECK (VALUE ~ '\d{9}');
 
+CREATE DOMAIN LicenseId VARCHAR(9)
+CONSTRAINT validLicenseId
+CHECK (VALUE ~ '\d{9}');
+
 ------------------------------------------------------------------------
 
 CREATE TABLE Account (
@@ -40,7 +46,8 @@ CREATE TABLE Account (
   name      VARCHAR(40) NOT NULL,
   email     Email       NOT NULL UNIQUE,
   password  CHAR(128)   NOT NULL,
-  salt      CHAR(128)   NOT NULL
+  salt      CHAR(128)   NOT NULL,
+  licenseId LicenseId   NOT NULL UNIQUE
 );
 
 CREATE TABLE LoginAttempts (
@@ -87,9 +94,9 @@ CREATE TABLE Speciality (
 CREATE TABLE Professional (
   idProfessional SERIAL PRIMARY KEY,
   idSpeciality   INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
-  name           VARCHAR(40), -- Ou um, ou outro
-  idAccount      INTEGER REFERENCES Account (idAccount),
-  nif            NIF     NOT NULL
+  name           VARCHAR(40),
+  nif            NIF     NOT NULL,
+  licenseId      LicenseId UNIQUE
 );
 
 CREATE TABLE ProcedureType (
@@ -104,7 +111,8 @@ CREATE TABLE Procedure (
   idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outor
   idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
   date           DATE                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  code           CHAR(32)               NOT NULL DEFAULT 'Nada'
+  code           CHAR(32)               NOT NULL DEFAULT 'Nada',
+  totalValue     FLOAT
 );
 
 CREATE TABLE ProcedureProcedureType (

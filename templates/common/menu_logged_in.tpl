@@ -1,4 +1,3 @@
-<p>{$USERNAME}</p>
 <p>{$EMAIL}</p>
 
 {foreach $SUCCESS_MESSAGES as $success}
@@ -14,7 +13,15 @@
 </form>
 
 <form action="{$BASE_URL}pages/procedures/payers.php">
-    <button type="submit">Ver Entidades</button>
+    <button type="submit">Ver Pagadores</button>
+</form>
+
+<form action="{$BASE_URL}pages/organizations/organizations.php">
+    <button type="submit">Ver Organizações</button>
+</form>
+
+<form action="{$BASE_URL}pages/organizations/addorganization.php">
+    <button type="submit">Adicionar Organização</button>
 </form>
 
 <form action="{$BASE_URL}pages/procedures/addprocedure.php">
@@ -22,5 +29,5 @@
 </form>
 
 <form action="{$BASE_URL}pages/procedures/addpayer.php">
-    <button type="submit">Adicionar Entidade</button>
+    <button type="submit">Adicionar Pagador</button>
 </form>

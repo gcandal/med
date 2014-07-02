@@ -19,6 +19,11 @@
             <span>{$FIELD_ERRORS.email}</span><br/>
         </label>
         <label>
+            Cédula Médica:
+            <input type="text" name="licenseid" placeholder="Cédula Médica" value="{$FORM_VALUES.licenseid}" required/>
+            <span>{$FIELD_ERRORS.licenseid}</span><br/>
+        </label>
+        <label>
             Password:
             <input type="password" name="password" placeholder="Password" required/>
             <span>{$FIELD_ERRORS.password}</span><br/>

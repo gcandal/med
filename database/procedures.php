@@ -96,7 +96,7 @@ function getEntityPayers($idAccount)
 
     $stmt = $conn->prepare("SELECT *
                             FROM entitypayer
-                            WHERE identitypayer = :idAccount ORDER BY name");
+                            WHERE idaccount = :idAccount ORDER BY name");
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();
@@ -108,7 +108,7 @@ function getPrivatePayers($idAccount)
 
     $stmt = $conn->prepare("SELECT *
                             FROM privatepayer
-                            WHERE idprivatepayer = :idAccount ORDER BY name");
+                            WHERE idaccount = :idAccount ORDER BY name");
     $stmt->execute(array("idAccount" => $idAccount));
 
     return $stmt->fetchAll();

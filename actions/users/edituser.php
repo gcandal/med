@@ -1,8 +1,8 @@
 <?php
 include_once('../../config/init.php');
-include_once($BASE_DIR .'database/users.php');
+include_once($BASE_DIR . 'database/users.php');
 
-if(!$_SESSION['email']) {
+if (!$_SESSION['email']) {
     header('Location: ' . $BASE_URL);
 
     exit;
@@ -11,7 +11,7 @@ if(!$_SESSION['email']) {
 $email = $_SESSION['email'];
 $password = $_POST['oldpassword'];
 
-if(checkBrute($email)) {
+if (checkBrute($email)) {
     $_SESSION['error_messages'][] = 'Bruteforce detetado, conta bloqueada';
 
     header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -39,13 +39,13 @@ $new_email = $_POST['email'];
 $new_password = $_POST['password'];
 $new_passwordconfirm = $_POST['passwordconfirm'];
 
-if($new_password !== $new_passwordconfirm) {
+if ($new_password !== $new_passwordconfirm) {
     $_SESSION['field_errors']['passwordconfirm'] = 'As palavras-passe não coincidem';
     $_SESSION['form_values'] = $_POST;
 
     header("Location: $BASE_URL" . 'pages/users/edituser.php');
     exit;
-} elseif($new_password) {
+} elseif ($new_password) {
     $salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), TRUE));
 
     try {
@@ -56,9 +56,8 @@ if($new_password !== $new_passwordconfirm) {
     }
 }
 
-if($new_email) {
+if ($new_email) {
     try {
-
         editEmail($email, $new_email);
         $_SESSION['success_messages'][] = 'Email edited successfully ';
         $_SESSION['email'] = $new_email;
