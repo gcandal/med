@@ -104,6 +104,7 @@ CREATE TABLE Professional (
 CREATE TABLE ProcedureType (
   idProcedureType SERIAL PRIMARY KEY,
   name            VARCHAR(80) NOT NULL
+  defaultK        INTEGER NOT NULL
 );
 
 CREATE TABLE Procedure (
