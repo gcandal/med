@@ -103,15 +103,43 @@ function editOrganizationName($name, $idorganization)
     $stmt->execute(array("name" => $name, "idorganization" => $idorganization));
 }
 
-function inviteForOrganization($idorganization, $idinviting, $idinvited, $foradmin)
+function inviteForOrganization($idorganization, $idinviting, $licenseid, $foradmin)
 {
+    /*
     global $conn;
+    $stmt = $conn->prepare("SELECT idaccount FROM Account WHERE licenseid = :licenseid");
+    $stmt->execute(array("licenseid" => $licenseid));
+    $result = $stmt->fetch();
+
+    if(!$result['idaccount'])
+        return;
+
+    $idinvited = $result['idaccount'];
 
     $stmt = $conn->prepare("INSERT INTO OrgInvitation(idorganization, idinvitingaccount, idinvitedaccount, foradmin, date)
                             VALUES (:idorganization, :idinvitingaccount, :idinvitedaccount, :foradmin, DEFAULT)");
 
     $stmt->execute(array("idorganization" => $idorganization, "idinvitingaccount" => $idinviting,
-                          "idinvitedaccount" => $idinvited, "" => $foradmin));
+        "idinvitedaccount" => $idinvited, "foradmin" => $foradmin));
+    */
+
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO OrgInvitation(idorganization, idinvitingaccount, licenseIdInvited, foradmin, date)
+                            VALUES (:idorganization, :idinvitingaccount, :licenseIdInvited, :foradmin, DEFAULT)");
+
+    $stmt->execute(array("idorganization" => $idorganization, "idinvitingaccount" => $idinviting,
+        "licenseIdInvited" => $licenseid, "foradmin" => $foradmin));
+}
+
+function editOrganizationVisibility($idorganization, $accountid, $visibility)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("UPDATE orgauthorization SET orgauthorization = :visibility
+                            WHERE idaccount = :idAccount AND idorganization = :idOrganization");
+
+    $stmt->execute(array("idOrganization" => $idorganization, "idAccount" => $accountid,
+        "visibility" => $visibility));
 }
 
 ?>

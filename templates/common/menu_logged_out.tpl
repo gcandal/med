@@ -1,3 +1,7 @@
+{foreach $SUCCESS_MESSAGES as $success}
+    <p>{$success}</p>
+{/foreach}
+
 {foreach $ERROR_MESSAGES as $error}
     <p>{$error}</p>
 {/foreach}

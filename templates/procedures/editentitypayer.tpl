@@ -4,9 +4,8 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-
     <form id="formentidade" method="post" action="{$BASE_URL}actions/procedures/editentitypayer.php">
-        <input type="hidden" name="identitypayer" value="{$identitypayer}" />
+        <input type="hidden" name="identitypayer" value="{$identitypayer}"/>
 
         <label>
             Nome:
@@ -26,7 +25,7 @@
         <label>
             NIF:
             <input type="number" min="0" name="nif" placeholder="NIF"
-                   value="{$FORM_VALUES.nif}"/>
+                   value="{$FORM_VALUES.nif}" {literal}pattern="\d{9}"{/literal}/>
             <span>{$FIELD_ERRORS.nif}</span>
         </label>
         <label>

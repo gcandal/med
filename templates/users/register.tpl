@@ -6,7 +6,6 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-
     <form method="post" action="{$BASE_URL}actions/users/register.php">
         <label>
             Nome:
@@ -20,7 +19,8 @@
         </label>
         <label>
             Cédula Médica:
-            <input type="text" name="licenseid" placeholder="Cédula Médica" value="{$FORM_VALUES.licenseid}" required/>
+            <input type="text" name="licenseid" placeholder="Cédula Médica" value="{$FORM_VALUES.licenseid}"
+                   {literal}pattern="\d{9}"{/literal} required/>
             <span>{$FIELD_ERRORS.licenseid}</span><br/>
         </label>
         <label>
@@ -33,7 +33,8 @@
             <input type="password" name="passwordconfirm" placeholder="Confirmar Password" required/>
             <span>{$FIELD_ERRORS.passwordconfirm}</span><br/>
         </label>
-        <button type="submit">Registar</button><br>
+        <button type="submit">Registar</button>
+        <br>
     </form>
 {/if}
 

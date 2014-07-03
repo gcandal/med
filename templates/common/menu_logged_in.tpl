@@ -4,6 +4,10 @@
     <p>{$success}</p>
 {/foreach}
 
+{foreach $ERROR_MESSAGES as $error}
+    <p>{$error}</p>
+{/foreach}
+
 <form action="{$BASE_URL}actions/users/logout.php">
     <button type="submit">Logout</button>
 </form>

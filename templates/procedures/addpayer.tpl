@@ -4,20 +4,17 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-
     <select id="entitytype">
         <option value="Hospital">Hospital</option>
         <option value="Insurance">Seguro</option>
         <option value="Private">Privado</option>
     </select>
-
     {if $FORM_VALUES.type}
-    <script>
+        <script>
             $("select#entitytype").val("{$FORM_VALUES.type}");
-    </script>
+        </script>
     {/if}
     <script src="{$BASE_URL}javascript/addpayer.js"></script>
-
     <form id="formentidade" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
         <input type="hidden" name="type" value="Insurance" required/>
 
@@ -39,7 +36,7 @@
         <label>
             NIF:
             <input type="number" min="0" name="nif" placeholder="NIF" required
-                   value="{$FORM_VALUES.nif}"/>
+                   value="{$FORM_VALUES.nif}" {literal}pattern="\d{9}"{/literal}/>
             <span>{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
@@ -51,7 +48,6 @@
         <button type="submit">Adicionar</button>
         <br>
     </form>
-
     <form id="formprivado" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
         <input type="hidden" name="type" value="Private" required/>
 

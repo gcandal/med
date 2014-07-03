@@ -12,11 +12,12 @@ if (!$_SESSION['email']) {
 
 if ($_POST['licenseid']) {
     $licenseid = $_POST['licenseid'];
-    $accountId = $_SESSION['idaccount'];
+    $idinviting = $_SESSION['idaccount'];
     $idorganization = $_POST['idorganization'];
+    $foradmin = 'FALSE';
 
     try {
-        if (!isAdministrator($accountId, $idorganization)) {
+        if (!isAdministrator($idinviting, $idorganization)) {
             $_SESSION['error_messages'][] = 'Só os administradores podem convidar para uma organização';
 
             header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization='.$idorganization);
@@ -24,31 +25,23 @@ if ($_POST['licenseid']) {
         }
     } catch (PDOException $e) {
         $_SESSION['error_messages'][] = 'Erro a convidar para organização ' . $e->getMessage();
-        $_SESSION['form_values'] = $_POST;
-        $_SESSION['idorganization'] = $idorganization;
 
-        header("Location: $BASE_URL" . 'pages/organizations/editorganization.php');
+        header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization='.$idorganization);
         exit;
     }
 
     try {
-        editOrganizationName($name, $idorganization);
+        inviteForOrganization($idorganization, $idinviting, $licenseid, $foradmin);
     } catch (PDOException $e) {
 
-        if (strpos($e->getMessage(), 'organization_name_key') !== false) {
-            $_SESSION['error_messages'][] = 'Já existe uma organização com este nome.';
-            $_SESSION['field_errors']['name'] = 'Já existe uma organização com este nome.';
-        } else $_SESSION['error_messages'][] = 'Erro a editar entidade ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar entidade ' . $e->getMessage();
 
-        $_SESSION['form_values'] = $_POST;
-        $_SESSION['idorganization'] = $idorganization;
-
-        header("Location: $BASE_URL" . 'pages/organizations/editorganization.php');
+        header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization='.$idorganization);
         exit;
     }
 }
 
-$_SESSION['success_messages'][] = 'Organização apagada com sucesso';
+$_SESSION['success_messages'][] = 'Membro convidado com sucesso';
 
 header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization='.$idorganization);
 ?>
