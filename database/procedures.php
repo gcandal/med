@@ -1,20 +1,49 @@
 <?php
 
-    function getProcedures($idAccount) {
+    function getProcedures($idAccount)
+    {
         global $conn;
         $stmt = $conn->prepare("SELECT * FROM PROCEDURE WHERE idAccount = ?");
         $stmt->execute(array($idAccount));
+
         return $stmt->fetchAll();
     }
 
-    function getProcedureCollaborators($idProcedure) {
+    function isProcedure($idProcedure)
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT * FROM PROCEDURE WHERE idProcedure = ?");
+        $stmt->execute(array($idProcedure));
+
+        return $stmt->fetch() == true;
+    }
+
+    function isEntityPayer($idEntityPayer)
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT * FROM ENTITYPAYER WHERE idEntityPayer = ?");
+        $stmt->execute(array($idEntityPayer));
+
+        return $stmt->fetch() == true;
+    }
+
+    function isPrivatePayer($idPrivatePayer)
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT * FROM PRIVATEPAYER WHERE idPrivatePayer = ?");
+        $stmt->execute(array($idPrivatePayer));
+
+        return $stmt->fetch() == true;
+    }
+
+    function getProcedureCollaborators($idProcedure)
+    {
         global $conn;
         $stmt = $conn->prepare("SELECT * FROM PROCEDUREPROFESSIONAL WHERE idProcedure = ?");
         $stmt->execute(array($idProcedure));
+
         return $stmt->fetchAll();
     }
-
-
 
     function createProcedure($paymentStatus, $idPrivatePayer, $idEntityPayer)
     {
@@ -37,31 +66,87 @@
     function deleteProcedure($idProcedure)
     {
         global $conn;
-        $stmt = $conn->prepare("DELETE FROM Procedure WHERE idprocedure = ? CASCADE;");
+        $stmt = $conn->prepare("DELETE FROM Procedure WHERE idprocedure = ?;");
         $stmt->execute(array($idProcedure));
 
         return $stmt->fetch() == true;
     }
 
-    function editProcedureBase($idProcedure, $paymentStatus, $idPrivatePayer, $idEntityPayer, $date, $totalValue)
+    function editProcedurePaymentStatus($idProcedure, $paymentStatus)
     {
         global $conn;
-        if ($idPrivatePayer == 0 && $idEntityPayer != 0) {
-            $stmt = $conn->prepare("UPDATE PROCEDURE
-                                    SET paymentstatus=:paymentStatus, idEntityPayer=:idEntityPayer, date=:date, totalValue=:totalValue
-                                    WHERE $idProcedure=:idProcedure;");
-            $stmt->execute(array(":idProcedure" => $idProcedure, ":paymentStatus" => $paymentStatus,
-                ":idEntityPayer" => $idEntityPayer, ":date" => $date, ":totalValue" => $totalValue));
-        } else if ($idPrivatePayer != 0 && $idEntityPayer == 0) {
-            $stmt = $conn->prepare("UPDATE PROCEDURE
-                                    SET paymentstatus=:paymentStatus, idPrivatePayer=:idPrivatePayer, date=:date,
-                                    totalValue=:totalValue
-                                    WHERE $idProcedure=:idProcedure;");
-            $stmt->execute(array(":idProcedure" => $idProcedure, ":paymentStatus" => $paymentStatus,
-                ":idPrivatePayer" => $idPrivatePayer, ":date" => $date, ":totalValue" => $totalValue));
-        }
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET paymentstatus = ?
+                                WHERE $idProcedure = ?;");
+        $stmt->execute(array($paymentStatus, $idProcedure));
 
         return $stmt->fetch() == true;
+    }
+
+    function editProcedurePrivatePayer($idProcedure, $idPrivatePayer)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET idprivatepayer = ?
+                                WHERE $idProcedure = ?;");
+        $stmt->execute(array($idPrivatePayer, $idProcedure));
+
+        return $stmt->fetch() == true;
+    }
+
+    function editProcedureEntityPayer($idProcedure, $idEntityPayer)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET identitypayer = ?
+                                WHERE $idProcedure = ?;");
+        $stmt->execute(array($idEntityPayer, $idProcedure));
+
+        return $stmt->fetch() == true;
+    }
+
+    function editProcedureDate($idProcedure, $date)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET date = ?
+                                WHERE $idProcedure = ?;");
+        $stmt->execute(array($date, $idProcedure));
+
+        return $stmt->fetch() == true;
+    }
+
+    function editProcedureTotalValue($idProcedure, $totalValue)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET totalValue = ?
+                                WHERE $idProcedure = ?;");
+        $stmt->execute(array($totalValue, $idProcedure));
+
+        return $stmt->fetch() == true;
+    }
+
+    function removeSubProcedure($idProcedure, $idProcedureType)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("DELETE FROM PROCEDUREPROCEDURETYPE WHERE idprocedure = ? AND idproceduretype = ?");
+
+        $stmt->execute(array($idProcedure, $idProcedureType));
+
+        return $stmt->fetch();
+    }
+
+    function removeProfessionalFromProcedure($idProcedure, $idProfessional)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("DELETE FROM PROCEDUREPROFESSIONAL WHERE idprocedure = ? AND idprofessional = ?");
+
+        $stmt->execute(array($idProcedure, $idProfessional));
+
+        return $stmt->fetch();
     }
 
     function getProcedureTypes()
