@@ -10,20 +10,20 @@ if (!$_SESSION['email']) {
 }
 
 
-if ($_POST['name']) {
-    $name = $_POST['name'];
+if ($_POST['licenseid']) {
+    $licenseid = $_POST['licenseid'];
     $accountId = $_SESSION['idaccount'];
     $idorganization = $_POST['idorganization'];
 
     try {
         if (!isAdministrator($accountId, $idorganization)) {
-            $_SESSION['error_messages'][] = 'Só os administradores podem editar uma organização';
+            $_SESSION['error_messages'][] = 'Só os administradores podem convidar para uma organização';
 
             header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization='.$idorganization);
             exit;
         }
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar organização ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a convidar para organização ' . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
         $_SESSION['idorganization'] = $idorganization;
 
@@ -48,7 +48,7 @@ if ($_POST['name']) {
     }
 }
 
-$_SESSION['success_messages'][] = 'Organização editada com sucesso';
+$_SESSION['success_messages'][] = 'Organização apagada com sucesso';
 
 header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization='.$idorganization);
 ?>

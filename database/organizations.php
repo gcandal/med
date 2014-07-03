@@ -1,4 +1,5 @@
 <?php
+
 function getOrganizations($idAccount)
 {
     global $conn;
@@ -43,11 +44,23 @@ function createOrganization($name, $accountId)
     $conn->commit();
 }
 
+function deleteOrganization($idOrganization)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("DELETE FROM organization
+                            WHERE idOrganization = :idOrganization");
+
+    $stmt->execute(array("idOrganization" => $idOrganization));
+
+    return $stmt->fetch();
+}
+
 function getMembersFromOrganization($idorganization)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT name, licenseid
+    $stmt = $conn->prepare("SELECT name, licenseid, orgauthorization
                             FROM account, orgauthorization
                             WHERE orgauthorization.idOrganization = :idorganization
                             AND account.idAccount = orgauthorization.idAccount");
@@ -69,6 +82,18 @@ function isAdministrator($idAccount, $idOrganization)
     return $stmt->fetch() == true;
 }
 
+function isMember($idAccount, $idOrganization)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT idaccount
+                            FROM orgauthorization
+                            WHERE idaccount = :idAccount AND idorganization = :idOrganization");
+    $stmt->execute(array("idOrganization" => $idOrganization, "idAccount" => $idAccount));
+
+    return $stmt->fetch() == true;
+}
+
 
 function editOrganizationName($name, $idorganization)
 {
@@ -76,8 +101,17 @@ function editOrganizationName($name, $idorganization)
     $stmt = $conn->prepare("UPDATE organization SET name = :name
                             WHERE idorganization = :idorganization");
     $stmt->execute(array("name" => $name, "idorganization" => $idorganization));
+}
 
-    return $stmt->fetch() == true;
+function inviteForOrganization($idorganization, $idinviting, $idinvited, $foradmin)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("INSERT INTO OrgInvitation(idorganization, idinvitingaccount, idinvitedaccount, foradmin, date)
+                            VALUES (:idorganization, :idinvitingaccount, :idinvitedaccount, :foradmin, DEFAULT)");
+
+    $stmt->execute(array("idorganization" => $idorganization, "idinvitingaccount" => $idinviting,
+                          "idinvitedaccount" => $idinvited, "" => $foradmin));
 }
 
 ?>
