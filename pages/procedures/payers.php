@@ -1,18 +1,18 @@
 <?php
-include_once('../../config/init.php');
-include_once($BASE_DIR.'database/procedures.php');
+    include_once('../../config/init.php');
+    include_once($BASE_DIR . 'database/procedures.php');
 
-if(!$_SESSION['email']) {
-    $_SESSION['error_messages'][] = 'Tem que fazer login';
-    header('Location: ' . $BASE_URL);
+    if (!$_SESSION['email']) {
+        $_SESSION['error_messages'][] = 'Tem que fazer login';
+        header('Location: ' . $BASE_URL);
 
-    exit;
-}
+        exit;
+    }
 
-$idaccount = $_SESSION['idaccount'];
-$entities['Entidade'] = getEntityPayers($idaccount);
-$entities['Privado'] = getPrivatePayers($idaccount);
+    $idaccount = $_SESSION['idaccount'];
+    $entities['Entidade'] = getEntityPayers($idaccount);
+    $entities['Privado'] = getPrivatePayers($idaccount);
 
-$smarty->assign('ENTITIES', $entities);
-$smarty->display('procedures/payers.tpl');
+    $smarty->assign('ENTITIES', $entities);
+    $smarty->display('procedures/payers.tpl');
 ?>

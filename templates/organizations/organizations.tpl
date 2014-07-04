@@ -4,7 +4,6 @@
     <h1>Organizações</h1>
     {foreach $ORGANIZATIONS as $organization}
         <p>Nome: {$organization.name}</p>
-
         {if $organization.orgauthorization == 'Admin'}
             <p>Autorização: Administrador</p>
         {else}
@@ -27,7 +26,6 @@
                 <button type="submit">Gravar alteração</button>
             </form>
         {/if}
-
         <form action="{$BASE_URL}pages/organizations/organization.php" method="get">
             <input type="hidden" name="idorganization" value="{$organization.idorganization}"/>
             <button type="submit">Ver detalhes</button>

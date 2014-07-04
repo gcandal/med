@@ -4,9 +4,8 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-
     <form method="post" action="{$BASE_URL}actions/organizations/editorganization.php">
-        <input type="hidden" name="idorganization" value="{$idorganization}" />
+        <input type="hidden" name="idorganization" value="{$idorganization}"/>
 
         <label>
             Nome:

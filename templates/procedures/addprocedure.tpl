@@ -40,15 +40,13 @@
 
         <label>
             Data:
-            <input type="date" name="date" placeholder="Data do Procedimento"
-                   value="{$FORM_VALUES.date}"/>
+            <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.date}"/>
         </label>
         <button type="submit">Submeter</button>
         <br>
         <hr>
         <p>
-            Sub-Procedimentos
-        </p>
+            Sub-Procedimentos </p>
         <span id="subProcedures">
             <input type="hidden" id="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>

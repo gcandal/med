@@ -1,7 +1,7 @@
 <?php
-include_once('../../config/init.php');
+    include_once('../../config/init.php');
 
-session_destroy();
+    session_destroy();
 
-header('Location: ' . $BASE_URL);
+    header('Location: ' . $BASE_URL);
 ?>

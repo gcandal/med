@@ -1,5 +1,5 @@
 <?php
-include_once('../../config/init.php');
+    include_once('../../config/init.php');
 
-$smarty->display('users/edituser.tpl');
+    $smarty->display('users/edituser.tpl');
 ?>

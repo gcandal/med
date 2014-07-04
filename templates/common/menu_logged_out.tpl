@@ -15,7 +15,8 @@
         Password:
         <input type="password" name="password" placeholder="Password" required/><br>
     </label>
-    <button type="submit">Entrar</button><br>
+    <button type="submit">Entrar</button>
+    <br>
 </form>
 
 <form action="{$BASE_URL}pages/users/register.php">

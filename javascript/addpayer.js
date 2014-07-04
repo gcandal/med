@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     updateFormVisibility();
 
     $("select#entitytype").change(function () {
@@ -6,8 +6,8 @@ $(document).ready(function() {
     })
 });
 
-var updateFormVisibility = function() {
-    switch($("select#entitytype").val()) {
+var updateFormVisibility = function () {
+    switch ($("select#entitytype").val()) {
         case 'Private':
             $("form#formentidade").hide();
             $("form#formprivado").show();

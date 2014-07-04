@@ -4,7 +4,6 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-
     <form method="post" action="{$BASE_URL}actions/organizations/addorganization.php">
         <label>
             Nome:

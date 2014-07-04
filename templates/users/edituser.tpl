@@ -6,7 +6,6 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-
     <form method="post" action="{$BASE_URL}actions/users/edituser.php">
         <label>
             Novo Email:
@@ -30,7 +29,8 @@
             <span>{$FIELD_ERRORS.oldpassword}</span><br/>
         </label>
 
-        <button type="submit">Editar</button><br>
+        <button type="submit">Editar</button>
+        <br>
     </form>
 {/if}
 

@@ -105,7 +105,7 @@ CREATE TABLE Professional (
 CREATE TABLE ProcedureType (
   idProcedureType SERIAL PRIMARY KEY,
   name            VARCHAR(80) NOT NULL,
-  defaultK        INTEGER NOT NULL
+  K INTEGER NOT NULL
 );
 
 CREATE TABLE Procedure (
@@ -114,7 +114,7 @@ CREATE TABLE Procedure (
   idAccount      INTEGER REFERENCES Account (idAccount) ON DELETE CASCADE,
   idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
   idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
-  date           DATE                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date DATE NOT NULL,
   code           CHAR(32)               NOT NULL DEFAULT 'Payment Pending',
   totalValue     FLOAT
 );
