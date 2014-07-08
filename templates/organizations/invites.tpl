@@ -17,6 +17,15 @@
             <form action="{$BASE_URL}actions/organizations/acceptinvite.php" method="post">
                 <input type="hidden" name="idorganization" value="{$invite.idorganization}"/>
                 <input type="hidden" name="idinvitingaccount" value="{$invite.idinvitingaccount}"/>
+                <select name="orgauthorization">
+                    {if $invite.foradmin}
+                        <option value="AdminVisible">Visível</option>
+                        <option value="AdminNotVisible">Invisível</option>
+                    {else}
+                        <option value="NotVisible">Invisível</option>
+                        <option value="Visible">Visível</option>
+                    {/if}
+                </select>
                 <button type="submit">Aceitar</button>
             </form>
             <form action="{$BASE_URL}actions/organizations/rejectinvite.php" method="post">

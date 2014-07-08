@@ -176,6 +176,19 @@ function rejectInvite($idOrganization, $idInvitingAccount, $licenseIdInvited)
         "licenseIdInvited" => $licenseIdInvited));
 }
 
+function acceptInvite($idOrganization, $idInvitingAccount, $licenseIdInvited, $idAccount, $orgAuthorization)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("INSERT INTO OrgAuthorization(idOrganization, idAccount, orgAuthorization)
+                            VALUES (:idOrganization, :idAccount, :orgAuthorization)");
+
+    $stmt->execute(array("idOrganization" => $idOrganization, "orgAuthorization" => $orgAuthorization,
+        "idAccount" => $idAccount));
+
+    deleteInvite($idOrganization, $idInvitingAccount, $licenseIdInvited);
+}
+
 function cleanInvites() {
     global $conn;
 
