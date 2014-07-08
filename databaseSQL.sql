@@ -91,8 +91,7 @@ CREATE TABLE EntityPayer (
 
 CREATE TABLE Speciality (
   idSpeciality SERIAL PRIMARY KEY,
-  name         VARCHAR(50) UNIQUE NOT NULL,
-  defaultK     INTEGER            NOT NULL
+  name VARCHAR(50)
 );
 
 CREATE TABLE Professional (
@@ -133,6 +132,13 @@ CREATE TABLE ProcedureProcedureType (
   PRIMARY KEY (idProcedure, idProcedureType)
 );
 
+CREATE TABLE ProcedureProfessional (
+  idProcedure    INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idProfessional INTEGER NOT NULL REFERENCES Professional (idProfessional) ON DELETE CASCADE,
+  remuneration   FLOAT,
+  PRIMARY KEY (idProcedure, idProfessional)
+);
+
 CREATE TABLE OrgInvitation (
   idOrganization    INTEGER   NOT NULL REFERENCES Organization (idOrganization) ON DELETE CASCADE,
   idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
@@ -143,7 +149,7 @@ CREATE TABLE OrgInvitation (
   PRIMARY KEY (idOrganization, idInvitingAccount, licenseIdInvited)
 );
 
-INSERT INTO Speciality VALUES (DEFAULT, 'AltaCena', 1);
+INSERT INTO Speciality VALUES (DEFAULT, 'AltaCena');
 INSERT INTO Organization VALUES (DEFAULT, 'Org');
 
 INSERT INTO Account VALUES (DEFAULT, 'a', 'a@a.pt',
@@ -172,3 +178,9 @@ INSERT INTO Account VALUES (DEFAULT, 'c', 'c@c.pt',
                             'b13188a1fb01f1b9c41e9229dacf2c030d6ea18bd14c0d462dc488e5bbe7fb28d7a33ac16a8bc5989ea7e1af2d4a0476cfeea2b3e4c82253cd70e42688e60988',
                             '6deba07b456d9594d85baa07c911bd7ae9ca659ed2b16760d78b6c443252ac0d2357b8363780b1dc47eccc49b12989a61da2727d4519b241a5eb5768046a72e1',
                             '012345678');
+
+INSERT INTO ProcedureType VALUES (DEFAULT, 'Queratoscopia fotográfica', 15);
+INSERT INTO ProcedureType VALUES (DEFAULT, 'Glotografia', 10);
+INSERT INTO ProcedureType VALUES (DEFAULT, 'Vectocardiograma', 20);
+INSERT INTO ProcedureType VALUES (DEFAULT, 'Drenagem de abcesso', 15);
+INSERT INTO ProcedureType VALUES (DEFAULT, 'Correcção de triquíase e distriquiase', 80);
