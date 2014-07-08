@@ -24,6 +24,10 @@
     <button type="submit">Ver Organizações</button>
 </form>
 
+<form action="{$BASE_URL}pages/organizations/invites.php">
+    <button type="submit">Ver Convites</button>
+</form>
+
 <form action="{$BASE_URL}pages/organizations/addorganization.php">
     <button type="submit">Adicionar Organização</button>
 </form>

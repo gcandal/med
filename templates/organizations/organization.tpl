@@ -7,8 +7,10 @@
         <p>Cédula: {$member.licenseid}</p>
         <p>
             Autorização:
-            {if $member.orgauthorization == 'Admin'}
-                Administrador
+            {if $member.orgauthorization == 'AdminVisible'}
+                Administrador Visível
+            {elseif $member.orgauthorization == 'AdminNotVisible'}
+                Administrador Invisível
             {elseif $member.orgauthorization == 'Visible'}
                 Visível
             {else}
@@ -17,7 +19,7 @@
         </p>
     {/foreach}
 
-    {if $organization.orgauthorization == 'Admin'}
+    {if $organization.orgauthorization == 'AdminVisible' || $organization.orgauthorization == 'AdminNotVisible'}
         <form action="{$BASE_URL}pages/organizations/editorganization.php" method="get">
             <input type="hidden" name="idorganization" value="{$organization.idorganization}"/>
             <button type="submit">Editar</button>

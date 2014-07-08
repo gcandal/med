@@ -13,7 +13,7 @@ if ($_POST['visibility']) {
     $visibility = $_POST['visibility'];
     $accountId = $_SESSION['idaccount'];
     $idorganization = $_POST['idorganization'];
-
+/*
     try {
         if (isAdministrator($accountId, $idorganization)) {
             $_SESSION['error_messages'][] = 'Os administradores não podem alterar a sua visibilidade';
@@ -27,7 +27,7 @@ if ($_POST['visibility']) {
         header("Location: $BASE_URL" . 'pages/organizations/organizations.php');
         exit;
     }
-
+*/
     try {
         editOrganizationVisibility($idorganization, $accountId, $visibility);
     } catch (PDOException $e) {

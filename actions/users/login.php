@@ -43,8 +43,10 @@
         session_regenerate_id(true);
         $_SESSION['email'] = $current_user['email'];
         $_SESSION['idaccount'] = $current_user['idaccount'];
+        $_SESSION['licenseid'] = $current_user['licenseid'];
 
         $_SESSION['success_messages'][] = 'Login successful';
+        var_dump($_SESSION);
     } else {
         try {
             logAttempt($current_user['idaccount']);

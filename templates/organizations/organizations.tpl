@@ -12,10 +12,16 @@
 
                 <label>
                     Autorização:
-                    <select>
+                    <select name="visibility">
                         {if $organization.orgauthorization == 'Visible'}
                             <option value="Visible">Visível</option>
                             <option value="NotVisible">Invisível</option>
+                        {elseif $organization.orgauthorization == 'AdminVisible'}
+                            <option value="AdminVisible">Visível</option>
+                            <option value="AdminNotVisible">Invisível</option>
+                        {elseif $organization.orgauthorization == 'AdminNotVisible'}
+                            <option value="AdminNotVisible">Invisível</option>
+                            <option value="AdminVisible">Visível</option>
                         {else}
                             <option value="NotVisible">Invisível</option>
                             <option value="Visible">Visível</option>

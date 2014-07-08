@@ -25,7 +25,7 @@ DROP TYPE IF EXISTS OrgAuthorizationType;
 
 CREATE TYPE ProcedurePaymentStatus AS ENUM ('Received Payment', 'Concluded', 'Payment Pending');
 CREATE TYPE EntityType AS ENUM ('Hospital', 'Insurance');
-CREATE TYPE OrgAuthorizationType AS ENUM ('Admin', 'Visible', 'NotVisible');
+CREATE TYPE OrgAuthorizationType AS ENUM ('AdminVisible', 'AdminNotVisible', 'Visible', 'NotVisible');
 
 ------------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ CREATE TABLE Professional (
   name           VARCHAR(40),
   nif            NIF,
   licenseId      LicenseId UNIQUE,
-  createdOn      TIME DEFAULT CURRENT_TIME
+  createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ProcedureType (
@@ -113,16 +113,17 @@ CREATE TABLE ProcedureType (
 
 CREATE TABLE Procedure (
   idProcedure       SERIAL PRIMARY KEY,
-  paymentStatus     ProcedurePaymentStatus NOT NULL DEFAULT 'Payment Pending',
+  paymentStatus     ProcedurePaymentStatus                           NOT NULL DEFAULT 'Payment Pending',
   idAccount         INTEGER REFERENCES Account (idAccount) ON DELETE CASCADE,
   idPrivatePayer    INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
   idEntityPayer     INTEGER REFERENCES EntityPayer (idEntityPayer),
-  idGeneral         INTEGER REFERENCES Professional (idProfessional),
+  idGeneral         INTEGER REFERENCES Professional (idProfessional) NOT NULL,
   idFirstAssistant  INTEGER REFERENCES Professional (idProfessional),
   idSecondAssistant INTEGER REFERENCES Professional (idProfessional),
   idAnesthetist     INTEGER REFERENCES Professional (idProfessional),
-  date              DATE                   NOT NULL,
-  code              CHAR(32)               NOT NULL DEFAULT 'Payment Pending',
+  idInstrumentist   INTEGER REFERENCES Professional (idProfessional),
+  date              DATE                                             NOT NULL,
+  code              CHAR(32)                                         NOT NULL DEFAULT 'Payment Pending',
   totalValue        FLOAT
 );
 
@@ -137,7 +138,8 @@ CREATE TABLE OrgInvitation (
   idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   licenseIdInvited  LicenseId NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
   forAdmin          BOOL      NOT NULL,
-  date              DATE      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  wasRejected       BOOL DEFAULT FALSE,
+  date              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idOrganization, idInvitingAccount, licenseIdInvited)
 );
 
@@ -151,13 +153,13 @@ INSERT INTO Account VALUES (DEFAULT, 'a', 'a@a.pt',
 INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', '135792468');
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Seguro', NULL, NULL, 'Insurance', '123456789', NULL);
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Hospital', '2014-07-01', '2014-07-02', 'Hospital', '123456789', 10);
-INSERT INTO OrgAuthorization VALUES (1, 1, 'Admin');
+INSERT INTO OrgAuthorization VALUES (1, 1, 'AdminVisible');
 INSERT INTO OrgInvitation VALUES (1, 1, '111111111', FALSE);
-INSERT INTO OrgInvitation VALUES (1, 1, '012345678', FALSE);
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, NULL, '19:18:45.623053');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '20:18:45.623053');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '21:18:45.623053');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Novo', NULL, NULL, '22:18:45.623053');
+INSERT INTO OrgInvitation VALUES (1, 1, '012345678', FALSE, FALSE, '2014-06-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, NULL, '2014-06-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-22 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-07-02 20:36:43.206615');
 
 
 INSERT INTO Account VALUES (DEFAULT, 'b', 'b@b.pt',
