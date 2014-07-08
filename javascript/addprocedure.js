@@ -1,29 +1,18 @@
 $(document).ready(function () {
-    updateFormVisibility();
+    updatePayerVisibility();
+    updateFunctionVisibility();
 
     $("select#entityType").change(function () {
-        updateFormVisibility();
+        updatePayerVisibility();
     })
 
-    /*
-     console.log(subProcedureTypes[0].name);
+    $("select#function").change(function () {
+        updateFunctionVisibility();
+    })
 
-     var subProcedures = 1;
-     addSubProcedure();
-
-     $('#addSubProcedure').click(function () {
-     addSubProcedure();
-     i++;
-     });
-
-     $('#removeSubProcedure').click(function () {
-     removeSubProcedure();
-     i--;
-     })
-     */
 });
 
-var updateFormVisibility = function () {
+var updatePayerVisibility = function () {
     switch ($("select#entityType").val()) {
         case 'Privado':
             $("span#privatePayer").show();
@@ -38,24 +27,18 @@ var updateFormVisibility = function () {
     }
 }
 
-/*
-
- var addSubProcedure = function () {
- $('<select name="subProcedure"+i>' + getSubProcedureTypes() + '</select>').fadeIn('slow').appendTo('#subProcedures');
- }
-
- var removeSubProcedure = function () {
- if (i > 1) {
- $('#subProcedures:last').remove();
- }
- }
-
- var getSubProcedureTypes = function () {
- var result = "";
- for (var i = 0; i < subProcedureTypes.length; i++) {
- result += '<option value = "' + subProcedureTypes[i].idproceduretype + '">' + subProcedureTypes[i].name + '</select>';
- }
- return result;
- }
-
- */
+var updateFunctionVisibility = function () {
+    switch ($("select#function").val()) {
+        case 'Chefe':
+            $("span#chefe").show();
+            $("span#assistente").hide();
+            break;
+        case 'Assistente':
+        case 'Anestesista':
+            $("span#chefe").hide();
+            $("span#assistente").show();
+            break;
+        default:
+            break;
+    }
+}

@@ -10,6 +10,17 @@
         return $stmt->fetch() == true;
     }
 
+    function getUserById($id)
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT *
+                                FROM Account
+                                WHERE idaccount = ?");
+        $stmt->execute(array($id));
+
+        return $stmt->fetch();
+    }
+
     function getUserByEmail($email)
     {
         global $conn;
