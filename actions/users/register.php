@@ -17,12 +17,22 @@
     $passwordconfirm = $_POST['passwordconfirm'];
 
     if (strlen($name) > 40) {
+        $_SESSION['error_messages'][] = 'Nome demasiado grande';
         $_SESSION['field_errors']['name'] = 'O nome só pode ter até 40 caratéres';
         $_SESSION['form_values'] = $_POST;
 
         header("Location: $BASE_URL" . 'pages/users/register.php');
         exit;
     }
+
+if (strlen($email) > 254) {
+    $_SESSION['error_messages'][] = 'Email demasiado grande';
+    $_SESSION['field_errors']['email'] = 'O email só pode ter até 254 caratéres';
+    $_SESSION['form_values'] = $_POST;
+
+    header("Location: $BASE_URL" . 'pages/users/register.php');
+    exit;
+}
 
     if ($password !== $passwordconfirm) {
         $_SESSION['field_errors']['passwordconfirm'] = 'As palavras-passe não coincidem';
@@ -51,6 +61,7 @@
 
         $_SESSION['form_values'] = $_POST;
         header("Location: $BASE_URL" . 'pages/users/register.php');
+
         exit;
     }
 

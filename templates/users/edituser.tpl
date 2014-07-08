@@ -9,7 +9,8 @@
     <form method="post" action="{$BASE_URL}actions/users/edituser.php">
         <label>
             Novo Email:
-            <input type="email" name="email" placeholder="{$EMAIL}" value="{$FORM_VALUES.email}"/>
+            <input type="email" name="email" placeholder="{$EMAIL}" value="{$FORM_VALUES.email}"
+                   maxlength="254"/>
             <span>{$FIELD_ERRORS.email}</span><br/>
         </label>
         <label>

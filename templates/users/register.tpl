@@ -9,18 +9,20 @@
     <form method="post" action="{$BASE_URL}actions/users/register.php">
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required/>
-            <span>{$FIELD_ERRORS.username}</span>
+            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
+                   maxlength="40"/>
+            <span>{$FIELD_ERRORS.name}</span>
         </label>
         <label>
             Email:
-            <input type="email" name="email" placeholder="Email" value="{$FORM_VALUES.email}" required/>
+            <input type="email" name="email" placeholder="Email" value="{$FORM_VALUES.email}" required
+                   maxlength="254"/>
             <span>{$FIELD_ERRORS.email}</span><br/>
         </label>
         <label>
             Cédula Médica:
             <input type="text" name="licenseid" placeholder="Cédula Médica" value="{$FORM_VALUES.licenseid}"
-                   {literal}pattern="\d{9}"{/literal} required/>
+                   {literal}pattern="\d{9}"{/literal} maxlength="9" required/>
             <span>{$FIELD_ERRORS.licenseid}</span><br/>
         </label>
         <label>

@@ -104,24 +104,6 @@
 
     function inviteForOrganization($idorganization, $idinviting, $licenseid, $foradmin)
     {
-        /*
-        global $conn;
-        $stmt = $conn->prepare("SELECT idaccount FROM Account WHERE licenseid = :licenseid");
-        $stmt->execute(array("licenseid" => $licenseid));
-        $result = $stmt->fetch();
-
-        if(!$result['idaccount'])
-            return;
-
-        $idinvited = $result['idaccount'];
-
-        $stmt = $conn->prepare("INSERT INTO OrgInvitation(idorganization, idinvitingaccount, idinvitedaccount, foradmin, date)
-                                VALUES (:idorganization, :idinvitingaccount, :idinvitedaccount, :foradmin, DEFAULT)");
-
-        $stmt->execute(array("idorganization" => $idorganization, "idinvitingaccount" => $idinviting,
-            "idinvitedaccount" => $idinvited, "foradmin" => $foradmin));
-        */
-
         global $conn;
         $stmt = $conn->prepare("INSERT INTO OrgInvitation(idorganization, idinvitingaccount, licenseIdInvited, foradmin, date)
                             VALUES (:idorganization, :idinvitingaccount, :licenseIdInvited, :foradmin, DEFAULT)");

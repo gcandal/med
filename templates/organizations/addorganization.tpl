@@ -7,7 +7,8 @@
     <form method="post" action="{$BASE_URL}actions/organizations/addorganization.php">
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"/>
+            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
+                   maxlength="40" />
             <span>{$FIELD_ERRORS.name}</span>
         </label>
         <button type="submit">Adicionar</button>

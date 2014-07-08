@@ -9,7 +9,8 @@
 
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"/>
+            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"
+                   maxlength="40" />
             <span>{$FIELD_ERRORS.name}</span>
         </label>
         <button type="submit">Editar</button>

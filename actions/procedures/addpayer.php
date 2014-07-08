@@ -27,7 +27,17 @@
             exit;
         }
 
+        if (!$_POST['nif']) {
+            $_SESSION['error_messages'][] = 'Alguns campos em falta';
+            $_SESSION['field_errors']['nif'] = 'NIF é obrigatório';
+            $_SESSION['form_values'] = $_POST;
+
+            header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+            exit;
+        }
+
         $name = $_POST['name'];
+        $nif = $_POST['nif'];
         $accountId = $_SESSION['idaccount'];
 
         if (checkDuplicateEntityName($accountId, $name)) {
@@ -40,9 +50,13 @@
         }
 
         try {
-            createPrivatePayer($name, $accountId);
+            createPrivatePayer($name, $accountId, $nif);
         } catch (PDOException $e) {
-            $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+            if (strpos($e->getMessage(), 'validnif') !== false) {
+                $_SESSION['error_messages'][] = 'NIF inválido';
+                $_SESSION['field_errors']['nif'] = 'NIF inválido';
+            } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+
             $_SESSION['form_values'] = $_POST;
 
             header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');

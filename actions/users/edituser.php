@@ -57,6 +57,14 @@
     }
 
     if ($new_email) {
+
+        if (strlen($new_email) > 254) {
+            $_SESSION['error_messages'][] = 'Email demasiado grande';
+
+            header("Location: " . $BASE_URL);
+            exit;
+        }
+
         try {
             editEmail($email, $new_email);
             $_SESSION['success_messages'][] = 'Email edited successfully ';

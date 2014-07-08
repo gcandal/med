@@ -33,11 +33,11 @@ CREATE DOMAIN Email VARCHAR(254)
 CONSTRAINT validEmail
 CHECK (VALUE ~ '^[a-zA-Z0-9._%+-]+\@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$');
 
-CREATE DOMAIN NIF VARCHAR(9)
+CREATE DOMAIN NIF CHAR(9)
 CONSTRAINT validNIF
 CHECK (VALUE ~ '\d{9}');
 
-CREATE DOMAIN LicenseId VARCHAR(9)
+CREATE DOMAIN LicenseId CHAR(9)
 CONSTRAINT validLicenseId
 CHECK (VALUE ~ '\d{9}');
 
@@ -73,7 +73,8 @@ CREATE TABLE OrgAuthorization (
 CREATE TABLE PrivatePayer (
   idPrivatePayer SERIAL PRIMARY KEY,
   idAccount      INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
-  name           VARCHAR(40) NOT NULL
+  name           VARCHAR(40) NOT NULL,
+  nif            NIF         NOT NULL
 );
 
 CREATE TABLE EntityPayer (
@@ -90,33 +91,39 @@ CREATE TABLE EntityPayer (
 
 CREATE TABLE Speciality (
   idSpeciality SERIAL PRIMARY KEY,
-  name         VARCHAR(50),
-  defaultK     INTEGER NOT NULL
+  name         VARCHAR(50) UNIQUE NOT NULL,
+  defaultK     INTEGER            NOT NULL
 );
 
 CREATE TABLE Professional (
   idProfessional SERIAL PRIMARY KEY,
   idSpeciality   INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
+  idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
   name           VARCHAR(40),
-  nif            NIF     NOT NULL,
-  licenseId      LicenseId UNIQUE
+  nif            NIF,
+  licenseId      LicenseId UNIQUE,
+  createdOn      TIME DEFAULT CURRENT_TIME
 );
 
 CREATE TABLE ProcedureType (
   idProcedureType SERIAL PRIMARY KEY,
   name            VARCHAR(80) NOT NULL,
-  K INTEGER NOT NULL
+  K               INTEGER     NOT NULL
 );
 
 CREATE TABLE Procedure (
-  idProcedure    SERIAL PRIMARY KEY,
-  paymentStatus  ProcedurePaymentStatus NOT NULL DEFAULT 'Payment Pending',
-  idAccount      INTEGER REFERENCES Account (idAccount) ON DELETE CASCADE,
-  idPrivatePayer INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
-  idEntityPayer  INTEGER REFERENCES EntityPayer (idEntityPayer),
-  date DATE NOT NULL,
-  code           CHAR(32)               NOT NULL DEFAULT 'Payment Pending',
-  totalValue     FLOAT
+  idProcedure       SERIAL PRIMARY KEY,
+  paymentStatus     ProcedurePaymentStatus NOT NULL DEFAULT 'Payment Pending',
+  idAccount         INTEGER REFERENCES Account (idAccount) ON DELETE CASCADE,
+  idPrivatePayer    INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
+  idEntityPayer     INTEGER REFERENCES EntityPayer (idEntityPayer),
+  idGeneral         INTEGER REFERENCES Professional (idProfessional),
+  idFirstAssistant  INTEGER REFERENCES Professional (idProfessional),
+  idSecondAssistant INTEGER REFERENCES Professional (idProfessional),
+  idAnesthetist     INTEGER REFERENCES Professional (idProfessional),
+  date              DATE                   NOT NULL,
+  code              CHAR(32)               NOT NULL DEFAULT 'Payment Pending',
+  totalValue        FLOAT
 );
 
 CREATE TABLE ProcedureProcedureType (
@@ -125,41 +132,33 @@ CREATE TABLE ProcedureProcedureType (
   PRIMARY KEY (idProcedure, idProcedureType)
 );
 
-CREATE TABLE ProcedureProfessional (
-  idProcedure    INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
-  idProfessional INTEGER NOT NULL REFERENCES Professional (idProfessional) ON DELETE CASCADE,
-  remuneration   FLOAT,
-  PRIMARY KEY (idProcedure, idProfessional)
-);
-
-CREATE TABLE KSpeciality (
-  idSpeciality    INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
-  idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType),
-  k               INTEGER NOT NULL,
-  PRIMARY KEY (idSpeciality, idProcedureType)
-);
-
 CREATE TABLE OrgInvitation (
-  idOrganization    INTEGER NOT NULL REFERENCES Organization (idOrganization) ON DELETE CASCADE,
-  idInvitingAccount INTEGER NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  idOrganization    INTEGER   NOT NULL REFERENCES Organization (idOrganization) ON DELETE CASCADE,
+  idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   licenseIdInvited  LicenseId NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
-  forAdmin          BOOL    NOT NULL,
-  date              DATE    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  forAdmin          BOOL      NOT NULL,
+  date              DATE      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idOrganization, idInvitingAccount, licenseIdInvited)
 );
 
+INSERT INTO Speciality VALUES (DEFAULT, 'AltaCena', 1);
 INSERT INTO Organization VALUES (DEFAULT, 'Org');
 
 INSERT INTO Account VALUES (DEFAULT, 'a', 'a@a.pt',
                             '445fff776df2293d242b261ba0f0d35be6c5b5a5110394fe8942a21e4d7af759fa277f608c3553ee7b3f8f64fce174b31146746ca8ef67dd37eedf70fe79ef9d',
                             'bea95c126335da5b92c91de01635311ede91a58f0ca0d9cb0344462333c35c9ef12977e976e2e8332861cff2c4efa42c653214b626ed96a76ba19ed0e414b71a',
                             '123456789');
-INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano');
+INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', '135792468');
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Seguro', NULL, NULL, 'Insurance', '123456789', NULL);
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Hospital', '2014-07-01', '2014-07-02', 'Hospital', '123456789', 10);
 INSERT INTO OrgAuthorization VALUES (1, 1, 'Admin');
-INSERT INTO OrgInvitation VALUES(1, 1, '111111111', false);
-INSERT INTO OrgInvitation VALUES(1, 1, '012345678', false);
+INSERT INTO OrgInvitation VALUES (1, 1, '111111111', FALSE);
+INSERT INTO OrgInvitation VALUES (1, 1, '012345678', FALSE);
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, NULL, '19:18:45.623053');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '20:18:45.623053');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '21:18:45.623053');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Novo', NULL, NULL, '22:18:45.623053');
+
 
 INSERT INTO Account VALUES (DEFAULT, 'b', 'b@b.pt',
                             '6b9f904771f21b6d9d017582d9a001c41eef2dd5128ff80fd1985d8f1f2e62fe5e23b4e77c16adea3e86eaf8353acc55e93f982419c9f87356e3a805ef7fae16',

@@ -20,7 +20,8 @@
 
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required/>
+            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
+                   maxlength="40"/>
             <span>{$FIELD_ERRORS.name}</span>
         </label>
         <label>
@@ -35,7 +36,7 @@
         <label>
             NIF:
             <input type="number" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
-                   {literal}pattern="\d{9}"{/literal}/>
+                   {literal}pattern="\d{9}"{/literal} maxlength="9"/>
             <span>{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
@@ -51,8 +52,16 @@
 
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"/>
+            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
+                   maxlength="40" />
             <span>{$FIELD_ERRORS.name}</span>
+        </label>
+
+        <label>
+            NIF:
+            <input type="number" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
+                   {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+            <span>{$FIELD_ERRORS.nif}</span>
         </label>
         <button type="submit">Adicionar</button>
     </form>

@@ -9,9 +9,16 @@
 
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"/>
+            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
             <span>{$FIELD_ERRORS.name}</span>
         </label>
+        <label>
+            NIF:
+            <input type="number" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
+                   {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+            <span>{$FIELD_ERRORS.nif}</span>
+        </label>
+
         <button type="submit">Editar</button>
     </form>
 {else}
