@@ -29,14 +29,14 @@ var updatePayerVisibility = function () {
 
 var updateFunctionVisibility = function () {
     switch ($("select#function").val()) {
-        case 'Chefe':
-            $("span#chefe").show();
-            $("span#assistente").hide();
+        case 'Principal':
+            $("span#principal").show();
+            $("span#ajudante").hide();
             break;
-        case 'Assistente':
+        case 'Ajudante':
         case 'Anestesista':
-            $("span#chefe").hide();
-            $("span#assistente").show();
+            $("span#principal").hide();
+            $("span#ajudante").show();
             break;
         default:
             break;

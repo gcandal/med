@@ -58,13 +58,13 @@
         <label>
             Função a Desempenhar:
             <select id="function">
-                <option value="Chefe">Chefe</option>
-                <option value="Assistente">Assistente</option>
+                <option value="Principal">Cirurgião Principal</option>
+                <option value="Ajudante">Ajudante</option>
                 <option value="Anestesista">Anestesista</option>
             </select>
         </label>
 
-        <span id="chefe">
+        <span id="principal">
             <p>Colaboradores</p>
             <table class="colabTable" border="1">
                 <tr>
@@ -76,14 +76,14 @@
                 </tr>
                 <tr>
                     <td><input type="text" name="firstAssistantName" value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
-                    <td>1º Assistente</td>
+                    <td>1º Ajudante</td>
                     <td><input type="text" name="firstAssistantNIF" value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
                     <td>20%</td>
                     <td><input type="text" name="firstAssistantRemun" readonly></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="secondAssistantName" value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
-                    <td>2º Assistente</td>
+                    <td>2º Ajudante</td>
                     <td><input type="text" name="secondAssistantNIF" value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
                     <td>10%</td>
                     <td><input type="text" name="SecondAssistantRemun" readonly></td>
@@ -106,7 +106,7 @@
             </table>
         </span>
 
-        <span id="assistente">
+        <span id="ajudante">
             <p>Responsável</p>
                 <table class="colabTable" border="1">
                     <tr>
