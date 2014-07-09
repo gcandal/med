@@ -5,6 +5,8 @@
         <p>{$error}</p>
     {/foreach}
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
+    <p>Dados do Procedimento</p>
+    <hr>
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/addprocedure.php">
         <label>
             Estado de pagamento:
@@ -26,6 +28,10 @@
             <label>
                 NIF:
                 <input type="text" name="privatePayerNIF" placeholder="123456789" value="{$FORM_VALUES.NIF}"/>
+            </label>
+            <label>
+                Valor por K:
+                <input type="text" name="valuePerK" placeholder="2" value="{$FORM_VALUES.VALUEPERK}"/>
             </label>
         </span>
 
@@ -58,61 +64,66 @@
             </select>
         </label>
 
-        <p>Colaboradores</p>
-
         <span id="chefe">
+            <p>Colaboradores</p>
             <table class="colabTable" border="1">
                 <tr>
                     <th>Nome</th>
-                    <th>Especialidade</th>
                     <th>Função</th>
-                    <th>Cédula</th>
-                    <th>Telefone/Telemóvel</th>
-                    <th>Email</th>
-                    <th>K</th>
+                    <th>NIF</th>
+                    <th>Percentagem de K</th>
                     <th>Remuneração</th>
                 </tr>
                 <tr>
                     <td><input type="text" name="firstAssistantName" value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
-                    <td>
-                        <select name="firstAssistantSpeciality" id="specialities">
-                        </select>
-                    </td>
                     <td>1º Assistente</td>
-                    <td>Row:1 Cell:4</td>
-                    <td>Row:1 Cell:5</td>
+                    <td><input type="text" name="firstAssistantNIF" value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
+                    <td>20%</td>
+                    <td><input type="text" name="firstAssistantRemun" readonly></td>
                 </tr>
                 <tr>
-                    <td>Row:2 Cell:1</td>
-                    <td>
-                        <select name="secondAssistantSpeciality" id="specialities">
-                        </select>
-                    </td>
+                    <td><input type="text" name="secondAssistantName" value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                     <td>2º Assistente</td>
-                    <td>Row:2 Cell:4</td>
-                    <td>Row:2 Cell:5</td>
+                    <td><input type="text" name="secondAssistantNIF" value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
+                    <td>10%</td>
+                    <td><input type="text" name="SecondAssistantRemun" readonly></td>
                 </tr>
                 <tr>
-                    <td>Row:3 Cell:1</td>
-                    <td>
-                        -
-                    </td>
+                    <td><input type="text" name="instrumentistName" value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                     <td>Instrumentista</td>
-                    <td>Row:3 Cell:4</td>
-                    <td>Row:3 Cell:5</td>
+                    <td><input type="text" name="instrumentistNIF" value="{$FORM_VALUES.INSTRUMENTISTNIF}"/></td>
+                    <td>10%</td>
+                    <td><input type="text" name="instrumentistRemun" readonly></td>
                 </tr>
                 <tr>
-                    <td>Row:4 Cell:1</td>
-                    <td>
-                        <select>
-                            <option>Anestesista</option>
-                        </select>
-                    </td>
+                    <td><input type="text" name="anesthetistName" value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                     <td>Anestesista</td>
-                    <td>Row:4 Cell:4</td>
-                    <td>Row:4 Cell:5</td>
+                    <td><input type="text" name="anesthetistNIF" value="{$FORM_VALUES.ANESTHETISTNIF}"/></td>
+                    <td><input type="number" name="firstAssistantK" value="{$FORM_VALUES.FIRSTASSISTANTK}" min="25"/>%
+                    </td>
+                    <td><input type="text" name="anesthetistRemun" readonly></td>
                 </tr>
             </table>
+        </span>
+
+        <span id="assistente">
+            <p>Responsável</p>
+                <table class="colabTable" border="1">
+                    <tr>
+                        <th>Nome</th>
+                        <th>NIF</th>
+                        <th>Cédula</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="accountableName" value="{$FORM_VALUES.ACCOUNTABLENAME}"/></td>
+                        <td><input type="text" name="accountableNIF" value="{$FORM_VALUES.ACCOUNTABLENIF}"</td>
+                        <td><input type="text" name="accountableLicense" value="{$FORM_VALUES.ACCOUNTABLELICENCE}"</td>
+                        <td><input type="text" name="accountableEmail" value="{$FORM_VALUES.ACCOUNTABLEEMAIL}"</td>
+                        <td><input type="text" name="accountbalePhone" value="{$FORM_VALUES.ACCOUNTABLEPHONE}"></td>
+                    </tr>
+                </table>
         </span>
         <br>
         <hr>
@@ -132,10 +143,10 @@
     <script type="text/javascript">
         var subProcedures = 1;
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
-        var specialities = {$SPECIALITIES|json_encode};
+        /*var specialities = {$SPECIALITIES|json_encode};
 
+         fillSpecialities();*/
         $(document).ready(function () {
-            fillSpecialities();
 
             addSubProcedure();
 
@@ -154,7 +165,6 @@
             })
 
         });
-
         var getSubProcedureTypes = function () {
             var result = "";
             for (var i = 0; i < subProcedureTypes.length; i++) {
@@ -179,6 +189,7 @@
                     '</select><br>').fadeIn('slow').appendTo('#subProcedures');
 
         }
+
         var removeSubProcedure = function () {
             if (subProcedures > 1) {
                 $('#subProcedures br:last').remove();
@@ -186,6 +197,7 @@
                 subProcedures--;
             }
         }
+
     </script>
 {else}
     <p>Tem que fazer login!</p>

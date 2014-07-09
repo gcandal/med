@@ -96,7 +96,7 @@ CREATE TABLE Speciality (
 
 CREATE TABLE Professional (
   idProfessional SERIAL PRIMARY KEY,
-  idSpeciality   INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
+  idSpeciality INTEGER REFERENCES Speciality (idSpeciality),
   idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
   name           VARCHAR(40),
   nif            NIF,
@@ -123,8 +123,8 @@ CREATE TABLE Procedure (
   idInstrumentist   INTEGER REFERENCES Professional (idProfessional),
   date              DATE                                             NOT NULL,
   code              CHAR(32)                                         NOT NULL DEFAULT 'Payment Pending',
-  assignedK         INTEGER DEFAULT 0,
-  totalValue        FLOAT
+  valuePerK    FLOAT,
+  wasAssistant BOOL NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE ProcedureProcedureType (

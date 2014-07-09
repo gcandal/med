@@ -12,13 +12,13 @@
 
     $idaccount = $_SESSION['idaccount'];
     $username = getUserById($idaccount);
-    $specialities = getSpecialities();
+    //$specialities = getSpecialities();
     $entities['Entidade'] = getEntityPayers($idaccount);
     $entities['Privado'] = getPrivatePayers($idaccount);
     $procedureTypes = getProcedureTypes();
     $smarty->assign('USERNAME', $username);
     $smarty->assign('ENTITIES', $entities);
     $smarty->assign('PROCEDURETYPES', $procedureTypes);
-    $smarty->assign('SPECIALITIES', $specialities);
+    //$smarty->assign('SPECIALITIES', $specialities);
     $smarty->display('procedures/addprocedure.tpl');
 ?>
