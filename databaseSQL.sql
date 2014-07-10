@@ -23,7 +23,7 @@ DROP TYPE IF EXISTS OrgAuthorizationType;
 
 ------------------------------------------------------------------------
 
-CREATE TYPE ProcedurePaymentStatus AS ENUM ('Received Payment', 'Concluded', 'Payment Pending');
+CREATE TYPE ProcedurePaymentStatus AS ENUM ('Recebido', 'Pago', 'Pendente');
 CREATE TYPE EntityType AS ENUM ('Hospital', 'Insurance');
 CREATE TYPE OrgAuthorizationType AS ENUM ('AdminVisible', 'AdminNotVisible', 'Visible', 'NotVisible');
 
@@ -96,7 +96,7 @@ CREATE TABLE Speciality (
 
 CREATE TABLE Professional (
   idProfessional SERIAL PRIMARY KEY,
-  idSpeciality INTEGER REFERENCES Speciality (idSpeciality),
+  idSpeciality   INTEGER REFERENCES Speciality (idSpeciality),
   idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
   name           VARCHAR(40),
   nif            NIF,
@@ -112,7 +112,7 @@ CREATE TABLE ProcedureType (
 
 CREATE TABLE Procedure (
   idProcedure       SERIAL PRIMARY KEY,
-  paymentStatus     ProcedurePaymentStatus                           NOT NULL DEFAULT 'Payment Pending',
+  paymentStatus     ProcedurePaymentStatus                           NOT NULL DEFAULT 'Pendente',
   idAccount         INTEGER REFERENCES Account (idAccount) ON DELETE CASCADE,
   idPrivatePayer    INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
   idEntityPayer     INTEGER REFERENCES EntityPayer (idEntityPayer),
@@ -122,9 +122,10 @@ CREATE TABLE Procedure (
   idAnesthetist     INTEGER REFERENCES Professional (idProfessional),
   idInstrumentist   INTEGER REFERENCES Professional (idProfessional),
   date              DATE                                             NOT NULL,
-  code              CHAR(32)                                         NOT NULL DEFAULT 'Payment Pending',
-  valuePerK    FLOAT,
-  wasAssistant BOOL NOT NULL DEFAULT FALSE
+  code              CHAR(32)                                         NOT NULL DEFAULT 'Pendente',
+  valuePerK         FLOAT,
+  wasAssistant      BOOL                                             NOT NULL DEFAULT FALSE,
+  totalValue        FLOAT DEFAULT 0
 );
 
 CREATE TABLE ProcedureProcedureType (

@@ -12,10 +12,33 @@
     function getProcedures($idAccount)
     {
         global $conn;
-        $stmt = $conn->prepare("SELECT * FROM PROCEDURE WHERE idAccount = ?");
+        $stmt = $conn->prepare("SELECT * FROM PROCEDURE WHERE idAccount = ? ORDER BY date DESC");
         $stmt->execute(array($idAccount));
 
-        return $stmt->fetchAll();
+        $procedures = $stmt->fetchAll();
+
+        foreach ($procedures as $procedure) {
+            if ($procedure . idprivatepayer != 0) {
+                $procedure['payerName'] = getPrivatePayer($procedure . idprivatepayer);
+                $procedure['idpayer'] = $procedure . idprivatepayer;
+            } else if ($procedure . identitypayer != 0) {
+                $procedure['payerName'] = getEntityPayer($procedure . identitypayer);
+                $procedure['idpayer'] = $procedure . identitypayer;
+            } else {
+                $procedure['payerName'] = 'Não Definido';
+                $procedure['idpayer'] = 0;
+            }
+        }
+    }
+
+    function getNumberOfOpenProcedures($idAccount)
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT COUNT(*) AS number FROM PROCEDURE WHERE idAccount = ?
+                                AND (paymentstatus = 'Recebido' OR paymentstatus = 'Pendente');");
+        $stmt->execute(array($idAccount));
+
+        return $stmt->fetch();
     }
 
     function isProcedure($idProcedure)
@@ -59,13 +82,13 @@
         global $conn;
         if ($idPrivatePayer == 0 && $idEntityPayer != 0) {
             $code = hash('sha256', $paymentStatus + $idEntityPayer + date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
-            $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idEntityPayer, date, code)
-                            VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code);");
+            $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, idEntityPayer, date, code)
+                            VALUES(:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code);");
             $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
         } else if ($idPrivatePayer != 0 && $idEntityPayer == 0) {
             $code = hash('sha256', $paymentStatus + $idPrivatePayer + date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
-            $stmt = $conn->prepare("INSERT INTO PROCEDURE (paymentstatus, idPrivatePayer, date, code)
-                            VALUES (:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code);");
+            $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, idPrivatePayer, date, code)
+                            VALUES(:paymentStatus, :idEntityPayer, CURRENT_TIMESTAMP, :code);");
             $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
         }
 
@@ -176,8 +199,8 @@
         $conn->beginTransaction();
 
         foreach ($subProcedures as $subProcedure) {
-            $stmt = $conn->prepare("INSERT INTO PROCEDUREPROCEDURETYPE (idprocedure, idproceduretype)
-                              VALUES (:idProcedure, :idProcedureType)");
+            $stmt = $conn->prepare("INSERT INTO PROCEDUREPROCEDURETYPE(idprocedure, idproceduretype)
+                              VALUES(:idProcedure, :idProcedureType)");
 
             $stmt->execute(array(":idProcedure" => $subProcedure['idProcedure'], ":idProcedureType" => $subProcedure["idProcedureType"]));
         }
@@ -194,12 +217,12 @@
         foreach ($professionals as $professional) {
             if (isset($professional['nonDefault'])) {
                 $stmt = $conn->prepare("INSERT INTO PROCEDUREPROFESSIONAL(idprocedure, idprofessional, nondefault)
-                                    VALUES (:idProcedure, :idProfessional, :nonDefault)");
+                                    VALUES(:idProcedure, :idProfessional, :nonDefault)");
                 $stmt->execute(array(":idProcedure" => $professional['idProcedure'], ":idProfessional" => $professional['idProfessional'], ":nonDefault" => $professional['nonDefault']));
 
             } else {
                 $stmt = $conn->prepare("INSERT INTO PROCEDUREPROFESSIONAL(idprocedure, idprofessional)
-                                    VALUES (:idProcedure, :idProfessional)");
+                                    VALUES(:idProcedure, :idProfessional)");
                 $stmt->execute(array(":idProcedure" => $professional['idProcedure'], ":idProfessional" => $professional['idProfessional']));
             }
 
@@ -212,7 +235,7 @@
     {
         global $conn;
         $stmt = $conn->prepare("INSERT INTO EntityPayer(name, contractstart, contractend, type, nif, valueperk, idaccount)
-                            VALUES (:name, :contractstart, :contractend, :type, :nif, :valueperk, :idaccount)");
+                            VALUES(:name, :contractstart, :contractend, :type, :nif, :valueperk, :idaccount)");
 
         $stmt->execute(array("name" => $name, "contractstart" => $contractstart, "contractend" => $contractend, "type" => $type, "nif" => $nif, "valueperk" => $valueperk, "idaccount" => $idaccount));
 
@@ -222,7 +245,7 @@
     function createPrivatePayer($name, $accountId, $nif)
     {
         global $conn;
-        $stmt = $conn->prepare("INSERT INTO PrivatePayer(name, idaccount, nif) VALUES (:name, :accountId, :nif)");
+        $stmt = $conn->prepare("INSERT INTO PrivatePayer(name, idaccount, nif) VALUES(:name, :accountId, :nif)");
         $stmt->execute(array("name" => $name, "accountId" => $accountId, "nif" => $nif));
 
         return $stmt->fetch() == true;
@@ -232,24 +255,44 @@
     {
         global $conn;
 
-        $stmt = $conn->prepare("SELECT *
-                            FROM entitypayer
+        $stmt = $conn->prepare("SELECT * FROM entitypayer
                             WHERE idaccount = :idAccount ORDER BY name");
         $stmt->execute(array("idAccount" => $idAccount));
 
         return $stmt->fetchAll();
     }
 
+    function getEntityPayer($idEntityPayer)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("SELECT * FROM entitypayer
+                            WHERE identitypayer = ?");
+        $stmt->execute(array($idEntityPayer));
+
+        return $stmt->fetch();
+    }
+
     function getPrivatePayers($idAccount)
     {
         global $conn;
 
-        $stmt = $conn->prepare("SELECT *
-                            FROM privatepayer
+        $stmt = $conn->prepare("SELECT * FROM privatepayer
                             WHERE idaccount = :idAccount ORDER BY name");
         $stmt->execute(array("idAccount" => $idAccount));
 
         return $stmt->fetchAll();
+    }
+
+    function getPrivatePayer($idPrivatePayer)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("SELECT * FROM entitypayer
+                            WHERE identitypayer = ?");
+        $stmt->execute(array($idPrivatePayer));
+
+        return $stmt->fetch();
     }
 
     function checkDuplicateEntityName($idaccount, $name)
@@ -257,13 +300,13 @@
         global $conn;
 
         $stmt = $conn->prepare("SELECT name FROM privatepayer
-                            WHERE idaccount = :idaccount AND name=:name");
+                            WHERE idaccount = :idaccount AND name =:name");
         $stmt->execute(array("idaccount" => $idaccount, "name" => $name));
 
         if (count($stmt->fetchAll()) > 0) return true;
 
         $stmt = $conn->prepare("SELECT name FROM entitypayer
-                            WHERE idaccount = :idaccount AND name=:name");
+                            WHERE idaccount = :idaccount AND name =:name");
         $stmt->execute(array("idaccount" => $idaccount, "name" => $name));
 
         return count($stmt->fetchAll()) > 0;
@@ -342,8 +385,7 @@
     function deleteEntityPayer($accountid, $identitypayer)
     {
         global $conn;
-        $stmt = $conn->prepare("DELETE FROM entitypayer WHERE identitypayer NOT IN (
-                              SELECT
+        $stmt = $conn->prepare("DELETE FROM entitypayer WHERE identitypayer NOT IN(SELECT
                                 identitypayer
                               FROM procedure
                               WHERE idaccount = :accountid
@@ -356,8 +398,7 @@
     function deletePrivatePayer($accountid, $idprivatepayer)
     {
         global $conn;
-        $stmt = $conn->prepare("DELETE FROM privatepayer WHERE idprivatepayer NOT IN (
-                              SELECT
+        $stmt = $conn->prepare("DELETE FROM privatepayer WHERE idprivatepayer NOT IN(SELECT
                                 idprivatepayer
                               FROM procedure
                               WHERE idaccount = :accountid
@@ -370,13 +411,10 @@
     function getRecentProfessionals($idaccount, $speciality, $name)
     {
         global $conn;
-        $stmt = $conn->prepare("SELECT Professional.name, Professional.nif, Professional.licenseid
+        $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid
                             FROM Speciality, Professional
-                            WHERE Speciality.name = :speciality
-                            AND Professional.idSpeciality = Speciality.idSpeciality
-                            AND Professional.idAccount = :idAccount
-                            AND Professional.name LIKE :name
-                            ORDER BY Professional.createdOn DESC
+                            WHERE Speciality . name = :speciality AND Professional . idSpeciality = Speciality . idSpeciality AND Professional . idAccount = :idAccount AND Professional . name LIKE :name
+                            ORDER BY Professional . createdOn DESC
                             LIMIT 3");
         $stmt->execute(array("idAccount" => $idaccount, "speciality" => $speciality, "name" => $name . '%'));
 

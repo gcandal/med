@@ -65,8 +65,8 @@
         </label>
 
         <span id="principal">
-            <p>Colaboradores</p>
-            <table class="colabTable" border="1">
+            <p>Equipa</p>
+            <table class="teamTable" border="1">
                 <tr>
                     <th>Nome</th>
                     <th>Função</th>
@@ -108,7 +108,7 @@
 
         <span id="ajudante">
             <p>Responsável</p>
-                <table class="colabTable" border="1">
+                <table class="teamTable" border="1">
                     <tr>
                         <th>Nome</th>
                         <th>NIF</th>
