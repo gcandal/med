@@ -99,9 +99,28 @@
                     <td><input type="text" name="anesthetistName" value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                     <td>Anestesista</td>
                     <td><input type="text" name="anesthetistNIF" value="{$FORM_VALUES.ANESTHETISTNIF}"/></td>
-                    <td><input type="number" name="firstAssistantK" value="{$FORM_VALUES.FIRSTASSISTANTK}" min="25"/>%
+                    <td>
+                        <select id="anesthetistK">
+                            <option value="25">25%</option>
+                            <option value="30">30%</option>
+                            <option value="table">Tabela OM</option>
+                        </select>
                     </td>
                     <td><input type="text" name="anesthetistRemun" readonly></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td><input type="text" name="totalRemun" readonly></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Pessoal</td>
+                    <td><input type="text" name="personalRemun" readonly></td>
                 </tr>
             </table>
         </span>
