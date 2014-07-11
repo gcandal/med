@@ -1,13 +1,33 @@
 $(document).ready(function () {
     updatePayerVisibility();
     updateFunctionVisibility();
+    addSubProcedure();
+
+    $('#addSubProcedure').click(function () {
+        subProcedures++;
+        addSubProcedure();
+        $('#nSubProcedures').value = subProcedures;
+    });
+
+    $('#removeSubProcedure').click(function () {
+        removeSubProcedure();
+        $('#nSubProcedures').value = subProcedures;
+    });
 
     $("select#entityType").change(function () {
         updatePayerVisibility();
     });
 
+    $("#subProcedures").on('change', '.subProcedure', function () {
+        calculateTotalK();
+    });
+
     $("select#function").change(function () {
         updateFunctionVisibility();
+    });
+
+    $('[name=valuePerK]').bind("paste drop input change cut", function () {
+        calculateTotalK();
     });
 
     $('[name=firstAssistantName]').bind("paste drop input change cut", function () {
@@ -28,6 +48,47 @@ $(document).ready(function () {
 
 
 });
+
+var getSubProcedureTypes = function () {
+    var result = "";
+    for (var i = 0; i < subProcedureTypes.length; i++) {
+        result += '<option value = "' + subProcedureTypes[i].idproceduretype + '">' + subProcedureTypes[i].name + '</option>';
+    }
+    return result;
+};
+
+var addSubProcedure = function () {
+    $('<select name="subProcedure' + subProcedures + '" class="subProcedure">' + getSubProcedureTypes() +
+        '</select><br>').fadeIn('slow').appendTo('#subProcedures');
+    calculateTotalK();
+};
+
+var removeSubProcedure = function () {
+    if (subProcedures > 1) {
+        $('#subProcedures br:last').remove();
+        $('#subProcedures select:last').remove();
+        subProcedures--;
+    }
+    calculateTotalK();
+};
+
+var calculateTotalK = function () {
+    var total = 0;
+
+
+    if (isNumeric($('input[name=valuePerK]').val())) {
+        $('.subProcedure').each(function () {
+            for (var i = 0; i < subProcedureTypes.length; i++) {
+                if ($(this).val() == subProcedureTypes[i].idproceduretype) {
+                    total += subProcedureTypes[i].k;
+                }
+            }
+        });
+    }
+    total *= $('[name=valuePerK]').val();
+    $('input[name=totalRemun]').val(total);
+
+};
 
 var updatePayerVisibility = function () {
     switch ($("select#entityType").val()) {
@@ -61,41 +122,22 @@ var updateFunctionVisibility = function () {
 };
 
 var thereIsAFirstAssistant = function () {
-    if ($('[name=firstAssistantName]').val() != "") {
-        console.log("1a inserted");
-        return true;
-    } else {
-        console.log("1a removed");
-        return false;
-    }
+    return $('[name=firstAssistantName]').val() != "";
 };
 
 var thereIsASecondAssistant = function () {
-    if ($('[name=secondAssistantName]').val() != "") {
-        console.log("2a inserted");
-        return true;
-    } else {
-        console.log("2a removed");
-        return false;
-    }
+    return $('[name=secondAssistantName]').val() != "";
 };
 
 var thereIsAnInstrumentist = function () {
-    if ($('[name=instrumentistName]').val() != "") {
-        console.log("ins inserted");
-        return true;
-    } else {
-        console.log("ins removed");
-        return false;
-    }
+    return $('[name=instrumentistName]').val() != "";
 };
 
 var thereIsAnAnesthetist = function () {
-    if ($('[name=anesthetistName]').val() != "") {
-        console.log("ins inserted");
-        return true;
-    } else {
-        console.log("ins removed");
-        return false;
-    }
+    return $('[name=anesthetistName]').val() != "";
 };
+
+var isNumeric = function (n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
+

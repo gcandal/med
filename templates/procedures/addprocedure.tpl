@@ -4,7 +4,6 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <script src="{$BASE_URL}javascript/addprocedure.js"></script>
     <p>Dados do Procedimento</p>
     <hr>
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/addprocedure.php">
@@ -162,62 +161,9 @@
     <script type="text/javascript">
         var subProcedures = 1;
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
-        /*var specialities = {$SPECIALITIES|json_encode};
-
-         fillSpecialities();*/
-        $(document).ready(function () {
-
-            addSubProcedure();
-
-            $('#addSubProcedure').click(function () {
-                subProcedures++;
-                addSubProcedure();
-                $('#nSubProcedures').value = subProcedures;
-                console.log(subProcedures);
-            });
-
-
-            $('#removeSubProcedure').click(function () {
-                removeSubProcedure();
-                $('#nSubProcedures').value = subProcedures;
-                console.log(subProcedures);
-            })
-
-        });
-        var getSubProcedureTypes = function () {
-            var result = "";
-            for (var i = 0; i < subProcedureTypes.length; i++) {
-                result += '<option value = "' + subProcedureTypes[i].idproceduretype + '">' + subProcedureTypes[i].name + '</option>';
-            }
-            return result;
-            console.log(result);
-        }
-
-        var fillSpecialities = function () {
-            var result = "";
-            for (var i = 0; i < specialities.length; i++) {
-                result += '<option value = "' + specialities[i].idspeciality + '">' + specialities[i].name +
-                        '</option>';
-            }
-            console.log(result);
-            $('select#specialities').append(result);
-        }
-
-        var addSubProcedure = function () {
-            $('<select name="subProcedure' + subProcedures + '" id="subProcedure">' + getSubProcedureTypes() +
-                    '</select><br>').fadeIn('slow').appendTo('#subProcedures');
-
-        }
-
-        var removeSubProcedure = function () {
-            if (subProcedures > 1) {
-                $('#subProcedures br:last').remove();
-                $('#subProcedures select:last').remove();
-                subProcedures--;
-            }
-        }
 
     </script>
+    <script src="{$BASE_URL}javascript/addprocedure.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}
