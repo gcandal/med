@@ -19,7 +19,8 @@ $(document).ready(function () {
     });
 
     $("#subProcedures").on('change', '.subProcedure', function () {
-        calculateTotalK();
+        getTotalRemuneration();
+        adjustPersonalRemuneration();
     });
 
     $("select#function").change(function () {
@@ -27,26 +28,38 @@ $(document).ready(function () {
     });
 
     $('[name=valuePerK]').bind("paste drop input change cut", function () {
-        calculateTotalK();
+        getTotalRemuneration();
+        fillFirstAssistantRemuneration();
+        fillSecondAssistantRemuneration();
+        fillInstrumentistRemuneration();
+        fillAnesthetistRemuneration();
+        adjustPersonalRemuneration();
     });
 
     $('[name=firstAssistantName]').bind("paste drop input change cut", function () {
-        thereIsAFirstAssistant();
+        fillFirstAssistantRemuneration();
+        adjustPersonalRemuneration();
     });
 
     $('[name=secondAssistantName]').bind("paste drop input change cut", function () {
-        thereIsASecondAssistant();
+        fillSecondAssistantRemuneration();
+        adjustPersonalRemuneration();
     });
 
     $('[name=instrumentistName]').bind("paste drop input change cut", function () {
-        thereIsAnInstrumentist();
+        fillInstrumentistRemuneration();
+        adjustPersonalRemuneration();
     });
 
     $('[name=anesthetistName]').bind("paste drop input change cut", function () {
-        thereIsAnAnesthetist();
+        fillAnesthetistRemuneration();
+        adjustPersonalRemuneration();
     });
 
-
+    $('#anesthetistK').change(function () {
+        fillAnesthetistRemuneration();
+        adjustPersonalRemuneration();
+    });
 });
 
 var getSubProcedureTypes = function () {
@@ -60,7 +73,129 @@ var getSubProcedureTypes = function () {
 var addSubProcedure = function () {
     $('<select name="subProcedure' + subProcedures + '" class="subProcedure">' + getSubProcedureTypes() +
         '</select><br>').fadeIn('slow').appendTo('#subProcedures');
-    calculateTotalK();
+    getTotalRemuneration();
+    fillFirstAssistantRemuneration();
+    fillSecondAssistantRemuneration();
+    fillInstrumentistRemuneration();
+    fillAnesthetistRemuneration();
+    adjustPersonalRemuneration();
+
+};
+
+var adjustPersonalRemuneration = function () {
+    var total = $('[name=totalRemun]').val();
+
+    if (thereIsAFirstAssistant()) {
+        total -= $('[name=firstAssistantRemun]').val();
+
+    }
+    if (thereIsASecondAssistant()) {
+        total -= $('[name=secondAssistantRemun]').val();
+
+    }
+    if (thereIsAnInstrumentist()) {
+        total -= $('[name=instrumentistRemun]').val();
+
+    }
+    if (thereIsAnAnesthetist()) {
+        total -= $('[name=anesthetistRemun]').val();
+    }
+
+    $('[name=personalRemun]').val(total);
+};
+
+var fillFirstAssistantRemuneration = function () {
+    if (thereIsAFirstAssistant()) {
+        var remun = $('[name=totalRemun]').val() * 0.2;
+        $('[name=firstAssistantRemun]').val(remun);
+    } else {
+        $('[name=firstAssistantRemun]').val(0);
+    }
+};
+
+var fillSecondAssistantRemuneration = function () {
+    if (thereIsASecondAssistant()) {
+        var remun = $('[name=totalRemun]').val() * 0.1;
+        $('[name=secondAssistantRemun]').val(remun);
+    } else {
+        $('[name=secondAssistantRemun]').val(0);
+    }
+};
+
+var fillInstrumentistRemuneration = function () {
+    if (thereIsAnInstrumentist()) {
+        var remun = $('[name=totalRemun]').val() * 0.1;
+        $('[name=instrumentistRemun]').val(remun);
+    } else {
+        $('[name=instrumentistRemun]').val(0);
+    }
+};
+
+var fillAnesthetistRemuneration = function () {
+    if (thereIsAnAnesthetist()) {
+        var percentage;
+        switch ($('#anesthetistK').val()) {
+            case "25":
+                var remun = $('[name=totalRemun]').val() * 0.25;
+                break;
+            case "30":
+                var remun = $('[name=totalRemun]').val() * 0.30;
+                break;
+            case "table":
+                var totalK = getTotalK();
+                console.log(totalK);
+                var k;
+                if (totalK < 101) {
+                    k = 27;
+                } else if (totalK < 121) {
+                    k = 33;
+                } else if (totalK < 141) {
+                    k = 39;
+                } else if (totalK < 161) {
+                    k = 45;
+                } else if (totalK < 181) {
+                    k = 51;
+                } else if (totalK < 201) {
+                    k = 57;
+                } else if (totalK < 241) {
+                    k = 66;
+                } else if (totalK < 281) {
+                    k = 78;
+                } else if (totalK < 301) {
+                    k = 87;
+                } else if (totalK < 341) {
+                    k = 95;
+                } else if (totalK < 401) {
+                    k = 110;
+                } else if (totalK < 421) {
+                    k = 120;
+                } else if (totalK < 461) {
+                    k = 130;
+                } else if (totalK < 481) {
+                    k = 140;
+                } else if (totalK < 511) {
+                    k = 150;
+                } else if (totalK < 561) {
+                    k = 160;
+                } else if (totalK < 601) {
+                    k = 175;
+                } else if (totalK < 701) {
+                    k = 195;
+                } else if (totalK < 801) {
+                    k = 225;
+                } else if (totalK < 901) {
+                    k = 255;
+                } else {
+                    k = 300;
+                }
+
+                var remun = k * $('input[name=valuePerK]').val();
+                break;
+        }
+        $('[name=anesthetistRemun]').val(remun);
+    } else {
+        $('[name=anesthetistRemun]').val(0);
+    }
 };
 
 var removeSubProcedure = function () {
@@ -69,12 +204,12 @@ var removeSubProcedure = function () {
         $('#subProcedures select:last').remove();
         subProcedures--;
     }
-    calculateTotalK();
+    getTotalRemuneration();
+    adjustPersonalRemuneration();
 };
 
-var calculateTotalK = function () {
+var getTotalRemuneration = function () {
     var total = 0;
-
 
     if (isNumeric($('input[name=valuePerK]').val())) {
         $('.subProcedure').each(function () {
@@ -87,8 +222,23 @@ var calculateTotalK = function () {
     }
     total *= $('[name=valuePerK]').val();
     $('input[name=totalRemun]').val(total);
-
 };
+
+
+function getTotalK() {
+    var total = 0;
+
+    if (isNumeric($('input[name=valuePerK]').val())) {
+        $('.subProcedure').each(function () {
+            for (var i = 0; i < subProcedureTypes.length; i++) {
+                if ($(this).val() == subProcedureTypes[i].idproceduretype) {
+                    total += subProcedureTypes[i].k;
+                }
+            }
+        });
+    }
+    return total;
+}
 
 var updatePayerVisibility = function () {
     switch ($("select#entityType").val()) {

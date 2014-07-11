@@ -30,7 +30,7 @@
             </label>
             <label>
                 Valor por K:
-                <input type="text" name="valuePerK" placeholder="2" value="{$FORM_VALUES.VALUEPERK}"/>
+                <input type="text" name="valuePerK" value="{$FORM_VALUES.VALUEPERK}"/>
             </label>
         </span>
 
@@ -78,21 +78,21 @@
                     <td>1º Ajudante</td>
                     <td><input type="text" name="firstAssistantNIF" value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
                     <td>20%</td>
-                    <td><input type="text" name="firstAssistantRemun" readonly></td>
+                    <td><input type="text" name="firstAssistantRemun" readonly value="0"></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="secondAssistantName" value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                     <td>2º Ajudante</td>
                     <td><input type="text" name="secondAssistantNIF" value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
                     <td>10%</td>
-                    <td><input type="text" name="SecondAssistantRemun" readonly></td>
+                    <td><input type="text" name="secondAssistantRemun" readonly value="0"></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="instrumentistName" value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                     <td>Instrumentista</td>
                     <td><input type="text" name="instrumentistNIF" value="{$FORM_VALUES.INSTRUMENTISTNIF}"/></td>
                     <td>10%</td>
-                    <td><input type="text" name="instrumentistRemun" readonly></td>
+                    <td><input type="text" name="instrumentistRemun" readonly value="0"></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="anesthetistName" value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
@@ -105,21 +105,21 @@
                             <option value="table">Tabela OM</option>
                         </select>
                     </td>
-                    <td><input type="text" name="anesthetistRemun" readonly></td>
+                    <td><input type="text" name="anesthetistRemun" readonly value="0"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>Total</td>
-                    <td><input type="text" name="totalRemun" readonly></td>
+                    <td><input type="text" name="totalRemun" readonly value="0"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>Pessoal</td>
-                    <td><input type="text" name="personalRemun" readonly></td>
+                    <td><input type="text" name="personalRemun" readonly value="0"></td>
                 </tr>
             </table>
         </span>
