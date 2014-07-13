@@ -42,6 +42,7 @@
     if ($current_user['password'] === $password) {
         session_regenerate_id(true);
         $_SESSION['email'] = $current_user['email'];
+        $_SESSION['name'] = $current_user['name'];
         $_SESSION['idaccount'] = $current_user['idaccount'];
         $_SESSION['licenseid'] = $current_user['licenseid'];
 
