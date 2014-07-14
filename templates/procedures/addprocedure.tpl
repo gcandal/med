@@ -20,18 +20,17 @@
             <select id="entityType" required>
                 <option value="Privado">Privado</option>
                 <option value="Entidade">Entidade</option>
+                <option value="Novo Privado">Novo Privado</option>
+                <option value="Nova Entidade">Nova Entidade</option>
             </select>
         </label>
 
         <span id="privatePayer">
-            <label>
-                NIF:
-                <input type="text" name="privatePayerNIF" placeholder="123456789" value="{$FORM_VALUES.NIF}"/>
-            </label>
-            <label>
-                Valor por K:
-                <input type="text" name="valuePerK" value="{$FORM_VALUES.VALUEPERK}"/>
-            </label>
+            <select name="entity" required>
+                {foreach $ENTITIES['Privado'] as $entity}
+                    <option value="{$entity.identitypayer}">{$entity.name}</option>
+                {/foreach}
+            </select>
         </span>
 
         <span id="entityPayer">
@@ -42,9 +41,37 @@
             </select>
         </span>
 
+        <span id="newEntityPayer">
+            <label>
+                NIF:
+                <input type="text" name="privatePayerNIF" placeholder="123456789" value="{$FORM_VALUES.NIF}"/>
+            </label>
+        </span>
+
+        <span id="newPrivatePayer">
+            <label>
+                NIF:
+                <input type="text" name="privatePayerNIF" placeholder="123456789" value="{$FORM_VALUES.NIF}"/>
+            </label>
+            <label>
+                Início de Contrato:
+                <input type="date" name="contractStartDate" placeholder="Data do Procedimento"
+                       value="{$FORM_VALUES.CONTRACTSTARTDATE}"/>
+            </label>
+            <label>
+                Fim de Contrato:
+                <input type="date" name="contractEndDate" placeholder="Data do Procedimento"
+                       value="{$FORM_VALUES.CONTRACTENDDATE}"/>
+            </label>
+        </span>
+
         <label>
+            <label>
+                Valor por K:
+                <input type="text" name="valuePerK" value="{$FORM_VALUES.VALUEPERK}"/>
+            </label>
             Data:
-            <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.date}"/>
+            <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
         </label>
 
         <button type="submit">Submeter</button>
@@ -153,10 +180,9 @@
             <button type="button" id="removeSubProcedure">Remover</button>
             <br>
         </span>
+
         <span id="subProcedures">
         </span>
-        <br>
-        <button type="submit">Submeter</button>
     </form>
     <script type="text/javascript">
         var subProcedures = 1;

@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS OrgAuthorization;
 DROP TABLE IF EXISTS Organization;
 DROP TABLE IF EXISTS ProcedureProcedureType;
 DROP TABLE IF EXISTS KSpeciality;
+DROP TABLE IF EXISTS ProcedureAccount;
 DROP TABLE IF EXISTS ProcedureType;
 DROP TABLE IF EXISTS ProcedureProfessional;
 DROP TABLE IF EXISTS Procedure;
@@ -126,6 +127,12 @@ CREATE TABLE Procedure (
   valuePerK         FLOAT,
   wasAssistant      BOOL                                             NOT NULL DEFAULT FALSE,
   totalValue        FLOAT DEFAULT 0
+);
+
+CREATE TABLE ProcedureAccount (
+  idProcedure INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idAccount   INTEGER NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  PRIMARY KEY (idProcedure, idAccount)
 );
 
 CREATE TABLE ProcedureProcedureType (

@@ -119,6 +119,7 @@ var fillSecondAssistantRemuneration = function () {
         $('[name=secondAssistantRemun]').val(remun);
     } else {
         $('[name=secondAssistantRemun]').val(0);
+        $('[name=secondAssistantRemun]').val(0);
     }
 };
 
@@ -245,10 +246,26 @@ var updatePayerVisibility = function () {
         case 'Privado':
             $("span#privatePayer").show();
             $("span#entityPayer").hide();
+            $("span#newEntityPayer").hide();
+            $("span#newPrivatePayer").hide();
             break;
         case 'Entidade':
             $("span#privatePayer").hide();
             $("span#entityPayer").show();
+            $("span#newEntityPayer").hide();
+            $("span#newPrivatePayer").hide();
+            break;
+        case 'Novo Privado':
+            $("span#privatePayer").hide();
+            $("span#entityPayer").hide();
+            $("span#newEntityPayer").show();
+            $("span#newPrivatePayer").hide();
+            break;
+        case 'Nova Entidade':
+            $("span#privatePayer").hide();
+            $("span#entityPayer").hide();
+            $("span#newEntityPayer").hide();
+            $("span#newPrivatePayer").show();
             break;
         default:
             break;
