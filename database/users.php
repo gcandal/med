@@ -10,6 +10,15 @@
         return $stmt->fetch() == true;
     }
 
+function getNameAndEmailFromLicenseId($licenseId) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT name, email
+                                FROM Account
+                                WHERE licenseId = ?");
+    $stmt->execute(array($licenseId));
+    return $stmt->fetch();
+}
+
     function getUserById($id)
     {
         global $conn;

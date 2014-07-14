@@ -38,7 +38,7 @@ function createOrganization($name, $accountId)
     $stmt->execute(array("name" => $name));
 
     $stmt = $conn->prepare("INSERT INTO OrgAuthorization(idOrganization, idaccount, orgauthorization)
-                            VALUES (currval('Organization_idOrganization_seq'), :accountId, 'Admin')");
+                            VALUES (currval('Organization_idOrganization_seq'), :accountId, 'AdminVisible')");
     $stmt->execute(array("accountId" => $accountId));
 
     $conn->commit();
@@ -76,7 +76,7 @@ function isAdministrator($idAccount, $idOrganization)
     $stmt = $conn->prepare("SELECT idaccount
                             FROM orgauthorization
                             WHERE idaccount = :idAccount AND idorganization = :idOrganization
-                            AND orgAuthorization = 'Admin'");
+                            AND (orgAuthorization = 'AdminVisible' OR orgauthorization = 'AdminNotVisible')");
     $stmt->execute(array("idOrganization" => $idOrganization, "idAccount" => $idAccount));
 
     return $stmt->fetch() == true;
@@ -101,6 +101,8 @@ function editOrganizationName($name, $idorganization)
                             WHERE idorganization = :idorganization");
     $stmt->execute(array("name" => $name, "idorganization" => $idorganization));
 }
+
+
 
 function inviteForOrganization($idorganization, $idinviting, $licenseid, $foradmin)
 {
