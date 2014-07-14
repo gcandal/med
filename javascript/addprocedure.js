@@ -60,6 +60,37 @@ $(document).ready(function () {
         fillAnesthetistRemuneration();
         adjustPersonalRemuneration();
     });
+
+
+    $('#principal table tr:not(:first-child) td:first-child input').autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "http://192.168.56.101/med/actions/procedures/getrecentprofessionals.php",
+                dataType: "json",
+                data: {speciality: 'any', name: request.term},
+                type: 'GET',
+                success: function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.name,
+                            id: item.idProfessional
+                        };
+                    }));
+                },
+                error: function(a, b, c) {
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
+                }
+            });
+        },
+        minLength: 1,
+        select: function(event, ui) {
+            if(ui.item) {
+                console.log($(this).parent().siblings().first().next().val("ah"));
+            }
+        }
+    });
 });
 
 var getSubProcedureTypes = function () {

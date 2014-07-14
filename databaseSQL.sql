@@ -177,7 +177,7 @@ INSERT INTO Account VALUES (DEFAULT, 'c', 'c@c.pt',
                             '6deba07b456d9594d85baa07c911bd7ae9ca659ed2b16760d78b6c443252ac0d2357b8363780b1dc47eccc49b12989a61da2727d4519b241a5eb5768046a72e1',
                             '012345678');
 
-INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'a', '123456789', '987654321', '2014-06-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal', '123456789', '987654321', '2014-06-02 20:36:43.206615');
 
 INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', '135792468');
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Seguro', NULL, NULL, 'Insurance', '123456789', NULL);

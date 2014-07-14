@@ -189,6 +189,12 @@
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
 
     </script>
+
+    <div>
+        <label for="fantasma">Profissional: </label>
+        <input id="fantasma">
+    </div>
+
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
 {else}
     <p>Tem que fazer login!</p>
