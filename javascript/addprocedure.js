@@ -103,8 +103,46 @@ $(document).ready(function () {
         fillAnesthetistRemuneration();
         adjustPersonalRemuneration();
     });
-})
-;
+
+
+    $('#principal table tr:not(:first-child) td:first-child input').autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: baseUrl + "actions/procedures/getrecentprofessionals.php",
+                dataType: "json",
+                data: {speciality: 'any', name: request.term},
+                type: 'GET',
+                success: function(data) {
+                    console.log($.map(data, function(item) {
+                        return {
+                            label: item.name,
+                            value: item['idprofessional']
+                        };
+                    }));
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.name,
+                            nif: item['nif'],
+                            id: item['idprofessional']
+                        };
+                    }));
+                },
+                error: function(a, b, c) {
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
+                }
+            });
+        },
+        minLength: 3,
+        select: function(event, ui) {
+            if(ui.item) {
+                console.log(ui.item);
+                $(this).parent().siblings().first().next().children().first().val(ui.item.nif);
+            }
+        }
+    });
+});
 
 var getSubProcedureTypes = function () {
     var result = "";

@@ -12,6 +12,7 @@ if (!$_SESSION['email']) {
 $idprivatepayer = $_POST['idprivatepayer'];
 $name = $_POST['name'];
 $nif = $_POST['nif'];
+$valueperk = $_POST['valueperk'];
 $accountId = $_SESSION['idaccount'];
 
 if ($name) {
@@ -55,7 +56,20 @@ if ($nif) {
         header("Location: $BASE_URL" . 'pages/procedures/editprivatepayer.php');
         exit;
     }
+}
 
+if ($valueperk) {
+    try {
+        editPrivatePayerValuePerK($accountId, $idprivatepayer, $valueperk);
+    } catch (PDOException $e) {
+        $_SESSION['error_messages'][] = $e->getMessage();
+        $_SESSION['form_values'] = $_POST;
+
+        $_SESSION['idprivatepayer'] = $idprivatepayer;
+
+        header("Location: $BASE_URL" . 'pages/procedures/editprivatepayer.php');
+        exit;
+    }
 }
 
 $_SESSION['success_messages'][] = 'Entidade editada com sucesso';

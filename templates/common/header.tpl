@@ -4,6 +4,9 @@
     <title>ProjetoX</title>
     <meta charset='utf-8'>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/2.1.1/jquery-ui.js"></script>
 </head>
 <body>
 {if $EMAIL}

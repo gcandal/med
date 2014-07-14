@@ -196,6 +196,7 @@
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
+        var baseUrl = {$BASE_URL};
     </script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
 {else}
