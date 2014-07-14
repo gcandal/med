@@ -14,8 +14,51 @@ $(document).ready(function () {
         $('#nSubProcedures').value = subProcedures;
     });
 
+    $('[name=totalType]').change(function () {
+        if ($('[name=totalType]').val() == 'auto') {
+            $("[name=totalRemun]").prop('readonly', true);
+        } else {
+            $("[name=totalRemun]").prop('readonly', false);
+        }
+    });
+
+    $('[name=totalRemun]').bind("paste drop input change cut", function () {
+        getTotalRemuneration();
+        fillFirstAssistantRemuneration();
+        fillSecondAssistantRemuneration();
+        fillInstrumentistRemuneration();
+        fillAnesthetistRemuneration();
+        adjustPersonalRemuneration();
+    });
+
     $("select#entityType").change(function () {
         updatePayerVisibility();
+        getTotalRemuneration();
+        fillFirstAssistantRemuneration();
+        fillSecondAssistantRemuneration();
+        fillInstrumentistRemuneration();
+        fillAnesthetistRemuneration();
+        adjustPersonalRemuneration();
+    });
+
+    $("select[name=entityName]").change(function () {
+        updatePayerVisibility();
+        getTotalRemuneration();
+        fillFirstAssistantRemuneration();
+        fillSecondAssistantRemuneration();
+        fillInstrumentistRemuneration();
+        fillAnesthetistRemuneration();
+        adjustPersonalRemuneration();
+    });
+
+    $("select[name=privateName]").change(function () {
+        updatePayerVisibility();
+        getTotalRemuneration();
+        fillFirstAssistantRemuneration();
+        fillSecondAssistantRemuneration();
+        fillInstrumentistRemuneration();
+        fillAnesthetistRemuneration();
+        adjustPersonalRemuneration();
     });
 
     $("#subProcedures").on('change', '.subProcedure', function () {
@@ -60,7 +103,8 @@ $(document).ready(function () {
         fillAnesthetistRemuneration();
         adjustPersonalRemuneration();
     });
-});
+})
+;
 
 var getSubProcedureTypes = function () {
     var result = "";
@@ -80,6 +124,44 @@ var addSubProcedure = function () {
     fillAnesthetistRemuneration();
     adjustPersonalRemuneration();
 
+};
+
+var fillValuePerK = function (type) {
+    switch (type) {
+        case 'private':
+            $('[name=valuePerK]').val(getPrivateValuePerK());
+            break;
+        case 'entity':
+            $('[name=valuePerK]').val(getEntityValuePerK());
+            break;
+        case 'none':
+            $('[name=valuePerK]').val(0);
+            break;
+        default:
+            break;
+    }
+};
+
+var getPrivateValuePerK = function () {
+    var oneChosen = false;
+    for (var i = 0; i < privatePayers.length; i++) {
+        if (privatePayers[i].idprivatepayer == $('[name=privateName]').val()) {
+            if (isNumeric(privatePayers[i].valueperk))
+                return privatePayers[i].valueperk;
+        }
+    }
+    return 'Valor Indefinido. Edite Privado.';
+};
+
+var getEntityValuePerK = function () {
+    var oneChosen = false;
+    for (var i = 0; i < entityPayers.length; i++) {
+        if (entityPayers[i].identitypayer == $('[name=entityName]').val()) {
+            if (isNumeric(entityPayers[i].valueperk))
+                return entityPayers[i].valueperk;
+        }
+    }
+    return 'Valor Indefinido. Edite Entidade.';
 };
 
 var adjustPersonalRemuneration = function () {
@@ -144,7 +226,6 @@ var fillAnesthetistRemuneration = function () {
                 break;
             case "table":
                 var totalK = getTotalK();
-                console.log(totalK);
                 var k;
                 if (totalK < 101) {
                     k = 27;
@@ -210,19 +291,21 @@ var removeSubProcedure = function () {
 };
 
 var getTotalRemuneration = function () {
-    var total = 0;
+    if ($('[name=totalType]').val() == 'auto') {
+        var total = 0;
 
-    if (isNumeric($('input[name=valuePerK]').val())) {
-        $('.subProcedure').each(function () {
-            for (var i = 0; i < subProcedureTypes.length; i++) {
-                if ($(this).val() == subProcedureTypes[i].idproceduretype) {
-                    total += subProcedureTypes[i].k;
+        if (isNumeric($('input[name=valuePerK]').val())) {
+            $('.subProcedure').each(function () {
+                for (var i = 0; i < subProcedureTypes.length; i++) {
+                    if ($(this).val() == subProcedureTypes[i].idproceduretype) {
+                        total += subProcedureTypes[i].k;
+                    }
                 }
-            }
-        });
+            });
+        }
+        total *= $('[name=valuePerK]').val();
+        $('input[name=totalRemun]').val(total);
     }
-    total *= $('[name=valuePerK]').val();
-    $('input[name=totalRemun]').val(total);
 };
 
 
@@ -248,24 +331,32 @@ var updatePayerVisibility = function () {
             $("span#entityPayer").hide();
             $("span#newEntityPayer").hide();
             $("span#newPrivatePayer").hide();
+            $("[name=valuePerK]").prop('readonly', true);
+            fillValuePerK('private');
             break;
         case 'Entidade':
             $("span#privatePayer").hide();
             $("span#entityPayer").show();
             $("span#newEntityPayer").hide();
             $("span#newPrivatePayer").hide();
+            $("[name=valuePerK]").prop('readonly', true);
+            fillValuePerK('entity');
             break;
         case 'Novo Privado':
             $("span#privatePayer").hide();
             $("span#entityPayer").hide();
             $("span#newEntityPayer").show();
             $("span#newPrivatePayer").hide();
+            $("[name=valuePerK]").prop('readonly', false);
+            fillValuePerK('none');
             break;
         case 'Nova Entidade':
             $("span#privatePayer").hide();
             $("span#entityPayer").hide();
             $("span#newEntityPayer").hide();
             $("span#newPrivatePayer").show();
+            $("[name=valuePerK]").prop('readonly', false);
+            fillValuePerK('none');
             break;
         default:
             break;

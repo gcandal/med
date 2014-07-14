@@ -26,16 +26,16 @@
         </label>
 
         <span id="privatePayer">
-            <select name="entity" required>
+            <select name="privateName" required>
                 {foreach $ENTITIES['Privado'] as $entity}
-                    <option value="{$entity.identitypayer}">{$entity.name}</option>
+                    <option value="{$entity.idprivatepayer}">{$entity.name}</option>
                 {/foreach}
             </select>
         </span>
 
         <span id="entityPayer">
-            <select name="entity" required>
-                {foreach $ENTITIES['Entidade'] as $entity}
+            <select name="entityName" required>
+            {foreach $ENTITIES['Entidade'] as $entity}
                     <option value="{$entity.identitypayer}">{$entity.name}</option>
                 {/foreach}
             </select>
@@ -65,12 +65,15 @@
             </label>
         </span>
 
-        <label>
+        <span id="valuePerK">
             <label>
                 Valor por K:
                 <input type="text" name="valuePerK" value="{$FORM_VALUES.VALUEPERK}"/>
             </label>
-            Data:
+        </span>
+
+        <label>
+        Data:
             <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
         </label>
 
@@ -138,7 +141,11 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>Total</td>
+                    <td>Total
+                        <select name="totalType">
+                            <option value="auto">Por K</option>
+                            <option value="manual">Manual</option>
+                        </select></td>
                     <td><input type="text" name="totalRemun" readonly value="0"></td>
                 </tr>
                 <tr>
@@ -174,7 +181,7 @@
         <hr>
 
         <p>Sub-Procedimentos </p>
-        <span class="subProcedureMenu">
+        <span id="subProcedureMenu">
             <input type="hidden" id="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>
             <button type="button" id="removeSubProcedure">Remover</button>
@@ -187,7 +194,8 @@
     <script type="text/javascript">
         var subProcedures = 1;
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
-
+        var privatePayers = {$ENTITIES['Privado']|json_encode};
+        var entityPayers = {$ENTITIES['Entidade']|json_encode};
     </script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
 {else}

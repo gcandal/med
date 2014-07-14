@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS OrgInvitation;
 DROP TABLE IF EXISTS OrgAuthorization;
 DROP TABLE IF EXISTS Organization;
 DROP TABLE IF EXISTS ProcedureProcedureType;
-DROP TABLE IF EXISTS KSpeciality;
 DROP TABLE IF EXISTS ProcedureAccount;
 DROP TABLE IF EXISTS ProcedureType;
 DROP TABLE IF EXISTS ProcedureProfessional;
@@ -75,7 +74,8 @@ CREATE TABLE PrivatePayer (
   idPrivatePayer SERIAL PRIMARY KEY,
   idAccount      INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   name           VARCHAR(40) NOT NULL,
-  nif            NIF         NOT NULL
+  nif       NIF NOT NULL,
+  valuePerK REAL
 );
 
 CREATE TABLE EntityPayer (
@@ -179,7 +179,7 @@ INSERT INTO Account VALUES (DEFAULT, 'c', 'c@c.pt',
 
 INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'a', '123456789', '987654321', '2014-06-02 20:36:43.206615');
 
-INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', '135792468');
+INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', '135792468', 5);
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Seguro', NULL, NULL, 'Insurance', '123456789', NULL);
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Hospital', '2014-07-01', '2014-07-02', 'Hospital', '123456789', 10);
 INSERT INTO OrgAuthorization VALUES (1, 1, 'AdminVisible');
