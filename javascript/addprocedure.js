@@ -65,15 +65,22 @@ $(document).ready(function () {
     $('#principal table tr:not(:first-child) td:first-child input').autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: "http://192.168.56.101/med/actions/procedures/getrecentprofessionals.php",
+                url: baseUrl + "actions/procedures/getrecentprofessionals.php",
                 dataType: "json",
                 data: {speciality: 'any', name: request.term},
                 type: 'GET',
                 success: function(data) {
+                    console.log($.map(data, function(item) {
+                        return {
+                            label: item.name,
+                            value: item['idprofessional']
+                        };
+                    }));
                     response($.map(data, function(item) {
                         return {
                             label: item.name,
-                            id: item.idProfessional
+                            nif: item['nif'],
+                            id: item['idprofessional']
                         };
                     }));
                 },
@@ -84,10 +91,11 @@ $(document).ready(function () {
                 }
             });
         },
-        minLength: 1,
+        minLength: 3,
         select: function(event, ui) {
             if(ui.item) {
-                console.log($(this).parent().siblings().first().next().val("ah"));
+                console.log(ui.item);
+                $(this).parent().siblings().first().next().children().first().val(ui.item.nif);
             }
         }
     });

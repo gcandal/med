@@ -53,7 +53,7 @@
         <label>
             Nome:
             <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
-                   maxlength="40" />
+                   maxlength="40"/>
             <span>{$FIELD_ERRORS.name}</span>
         </label>
 
@@ -62,6 +62,12 @@
             <input type="number" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
                    {literal}pattern="\d{9}"{/literal} maxlength="9"/>
             <span>{$FIELD_ERRORS.nif}</span>
+        </label>
+
+        <label>
+            Valor por K:
+            <input type="number" min="0" name="valueperk" placeholder="Valor por K" value="{$FORM_VALUES.valueperk}"/>
+            <span>{$FIELD_ERRORS.valueperk}</span>
         </label>
         <button type="submit">Adicionar</button>
     </form>

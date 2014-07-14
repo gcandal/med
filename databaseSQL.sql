@@ -75,7 +75,8 @@ CREATE TABLE PrivatePayer (
   idPrivatePayer SERIAL PRIMARY KEY,
   idAccount      INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   name           VARCHAR(40) NOT NULL,
-  nif            NIF         NOT NULL
+  nif            NIF         NOT NULL,
+  valuePerK     REAL
 );
 
 CREATE TABLE EntityPayer (
@@ -101,7 +102,7 @@ CREATE TABLE Professional (
   idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
   name           VARCHAR(40),
   nif            NIF,
-  licenseId      LicenseId UNIQUE,
+  licenseId      LicenseId,
   createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -178,6 +179,7 @@ INSERT INTO Account VALUES (DEFAULT, 'c', 'c@c.pt',
                             '012345678');
 
 INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal', '123456789', '987654321', '2014-06-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal incompleto', NULL, '987654321', '2014-06-02 20:36:43.206615');
 
 INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', '135792468');
 INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Seguro', NULL, NULL, 'Insurance', '123456789', NULL);
@@ -199,3 +201,51 @@ INSERT INTO ProcedureType VALUES (DEFAULT, 'Glotografia', 10);
 INSERT INTO ProcedureType VALUES (DEFAULT, 'Vectocardiograma', 20);
 INSERT INTO ProcedureType VALUES (DEFAULT, 'Drenagem de abcesso', 15);
 INSERT INTO ProcedureType VALUES (DEFAULT, 'Correcção de triquíase e distriquiase', 80);
+
+INSERT INTO Speciality VALUES (DEFAULT, 'Anatomia Patológica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Anestesiologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Angiologia e Cirurgia Vascular');
+INSERT INTO Speciality VALUES (DEFAULT, 'Cardiologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Cardiologia Pediátrica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Cirurgia Cardiotorácica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Cirurgia Geral');
+INSERT INTO Speciality VALUES (DEFAULT, 'Cirurgia Maxilo-Facial');
+INSERT INTO Speciality VALUES (DEFAULT, 'Cirurgia Pediátrica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Cirurgia Plástica Reconstrutiva e Estética');
+INSERT INTO Speciality VALUES (DEFAULT, 'Dermato-Venereologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Doenças Infecciosas');
+INSERT INTO Speciality VALUES (DEFAULT, 'Endocrinologia e Nutrição');
+INSERT INTO Speciality VALUES (DEFAULT, 'Estomatologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Gastrenterologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Genética Médica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Ginecologia/Obstetrícia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Imunoalergologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Imunohemoterapia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Farmacologia Clínica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Hematologia Clínica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina Desportiva');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina do Trabalho');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina Física e de Reabilitação');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina Geral e Familiar');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina Interna');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina Legal');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina Nuclear');
+INSERT INTO Speciality VALUES (DEFAULT, 'Medicina Tropical');
+INSERT INTO Speciality VALUES (DEFAULT, 'Nefrologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Neurocirurgia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Neurologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Neurorradiologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Oftalmologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Oncologia Médica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Ortopedia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Otorrinolaringologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Patologia Clínica');
+INSERT INTO Speciality VALUES (DEFAULT, 'Pediatria');
+INSERT INTO Speciality VALUES (DEFAULT, 'Pneumologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Psiquiatria');
+INSERT INTO Speciality VALUES (DEFAULT, 'Psiquiatria da Infância e da Adolescência');
+INSERT INTO Speciality VALUES (DEFAULT, 'Radiologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Radioncologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Reumatologia');
+INSERT INTO Speciality VALUES (DEFAULT, 'Saúde Pública');
+INSERT INTO Speciality VALUES (DEFAULT, 'Urologia');

@@ -242,11 +242,13 @@ function createEntityPayer($name, $contractstart, $contractend, $type, $nif, $va
     return $stmt->fetch() == true;
 }
 
-function createPrivatePayer($name, $accountId, $nif)
+function createPrivatePayer($name, $accountId, $nif, $valuePerK)
 {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO PrivatePayer(name, idaccount, nif) VALUES(:name, :accountId, :nif)");
-    $stmt->execute(array("name" => $name, "accountId" => $accountId, "nif" => $nif));
+    $stmt = $conn->prepare("INSERT INTO PrivatePayer(name, idaccount, nif, valuePerK)
+                            VALUES(:name, :accountId, :nif, :valueperk)");
+    $stmt->execute(array("name" => $name, "accountId" => $accountId, "nif" => $nif,
+        "valueperk" => $valuePerK));
 
     return $stmt->fetch() == true;
 }
@@ -328,6 +330,16 @@ function editPrivatePayerNIF($accountid, $identitypayer, $nif)
     $stmt = $conn->prepare("UPDATE privatepayer SET nif = :nif
                             WHERE idaccount = :accountid AND idprivatepayer = :identitypayer");
     $stmt->execute(array("nif" => $nif, "accountid" => $accountid, "identitypayer" => $identitypayer));
+
+    return $stmt->fetch() == true;
+}
+
+function editPrivatePayerValuePerK($accountid, $identitypayer, $valueperk)
+{
+    global $conn;
+    $stmt = $conn->prepare("UPDATE privatepayer SET valueperk = :valueperk
+                            WHERE idaccount = :accountid AND idprivatepayer = :identitypayer");
+    $stmt->execute(array("valueperk" => $valueperk, "accountid" => $accountid, "identitypayer" => $identitypayer));
 
     return $stmt->fetch() == true;
 }

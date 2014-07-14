@@ -18,7 +18,11 @@
                    {literal}pattern="\d{9}"{/literal} maxlength="9"/>
             <span>{$FIELD_ERRORS.nif}</span>
         </label>
-
+        <label>
+            Valor por K:
+            <input type="number" min="0" name="valueperk" placeholder="Valor por K" value="{$FORM_VALUES.valueperk}"/>
+            <span>{$FIELD_ERRORS.valueperk}</span>
+        </label>
         <button type="submit">Editar</button>
     </form>
 {else}

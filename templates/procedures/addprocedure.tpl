@@ -187,13 +187,9 @@
     <script type="text/javascript">
         var subProcedures = 1;
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
-
+        var baseUrl = {$BASE_URL};
     </script>
 
-    <div>
-        <label for="fantasma">Profissional: </label>
-        <input id="fantasma">
-    </div>
 
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
 {else}

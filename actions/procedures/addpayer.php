@@ -38,6 +38,7 @@
 
         $name = $_POST['name'];
         $nif = $_POST['nif'];
+        $valueperk = $_POST['valueperk'];
         $accountId = $_SESSION['idaccount'];
 
         if (checkDuplicateEntityName($accountId, $name)) {
@@ -50,7 +51,7 @@
         }
 
         try {
-            createPrivatePayer($name, $accountId, $nif);
+            createPrivatePayer($name, $accountId, $nif, $valueperk);
         } catch (PDOException $e) {
             if (strpos($e->getMessage(), 'validnif') !== false) {
                 $_SESSION['error_messages'][] = 'NIF inválido';

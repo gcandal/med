@@ -5,6 +5,7 @@
     {foreach $ENTITIES['Privado'] as $entity}
         <p>Nome: {$entity.name} </p>
         <p>NIF: {$entity.nif} </p>
+        <p>Valor por K: {$entity.valueperk}</p>
         <form action="{$BASE_URL}pages/procedures/editprivatepayer.php" method="post">
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}"/>
             <button type="submit">Editar</button>
