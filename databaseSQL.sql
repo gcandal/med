@@ -101,7 +101,7 @@ CREATE TABLE Professional (
   idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
   name           VARCHAR(40),
   nif            NIF,
-  licenseId      LicenseId UNIQUE,
+  licenseId LicenseId,
   createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
