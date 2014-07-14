@@ -18,5 +18,7 @@
 {else}
     <p>Tem que fazer login!</p>
 {/if}
-
+<script type="text/javascript">
+    var baseUrl = {$BASE_URL};
+</script>
 {include file='common/footer.tpl'}

@@ -199,4 +199,24 @@ function cleanInvites() {
 
     $stmt->execute();
 }
+
+function checkOrganizationName($name) {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT name
+                            FROM organization
+                            WHERE name = :name");
+    $stmt->execute(array("name" => $name));
+
+    return $stmt->fetch() == true;
+}
+
+function checkInviteForOrganization($idorganization, $licenseid) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT foradmin FROM OrgInvitation WHERE idorganization = :idorganization
+                            AND licenseIdInvited = :licenseIdInvited");
+    $stmt->execute(array("idorganization" => $idorganization, "licenseIdInvited" => $licenseid));
+
+    return $stmt->fetch() == true;
+}
 ?>

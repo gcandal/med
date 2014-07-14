@@ -22,14 +22,6 @@
     $name = $_POST['name'];
     $accountId = $_SESSION['idaccount'];
 
-    if ($contractstart > $contractend && $contractend) {
-        $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
-        $_SESSION['form_values'] = $_POST;
-
-        header("Location: $BASE_URL" . 'pages/organizations/addorganization.php');
-        exit;
-    }
-
     try {
         createOrganization($name, $accountId);
     } catch (PDOException $e) {

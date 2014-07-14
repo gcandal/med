@@ -6,7 +6,7 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <form method="post" action="{$BASE_URL}actions/users/register.php">
+    <form id="registerform" method="post" action="{$BASE_URL}actions/users/register.php">
         <label>
             Nome:
             <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
@@ -27,12 +27,12 @@
         </label>
         <label>
             Password:
-            <input type="password" name="password" placeholder="Password" required/>
+            <input type="password" id="password" name="password" placeholder="Password" required/>
             <span>{$FIELD_ERRORS.password}</span><br/>
         </label>
         <label>
             Confirmar Password:
-            <input type="password" name="passwordconfirm" placeholder="Confirmar Password" required/>
+            <input type="password" id="passwordconfirm" name="passwordconfirm" placeholder="Confirmar Password" required/>
             <span>{$FIELD_ERRORS.passwordconfirm}</span><br/>
         </label>
         <button type="submit">Registar</button>
@@ -40,4 +40,5 @@
     </form>
 {/if}
 
+<script src="{$BASE_URL}javascript/validateregisterform.js"></script>
 {include file='common/footer.tpl'}
