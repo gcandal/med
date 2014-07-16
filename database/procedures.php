@@ -95,13 +95,12 @@ function createProcedure($paymentStatus, $idPrivatePayer, $idEntityPayer)
     return $stmt->fetch() == true;
 }
 
-function deleteProcedure($idProcedure)
+function deleteProcedure($idProcedure, $idAccount)
 {
     global $conn;
-    $stmt = $conn->prepare("DELETE FROM Procedure WHERE idprocedure = ?;");
-    $stmt->execute(array($idProcedure));
-
-    return $stmt->fetch() == true;
+    $stmt = $conn->prepare("DELETE FROM ProcedureAccount WHERE idprocedure = :idprocedure
+                            AND idaccount = :idaccount");
+    $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount));
 }
 
 function editProcedurePaymentStatus($idProcedure, $paymentStatus)

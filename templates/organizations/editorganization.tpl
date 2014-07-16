@@ -9,7 +9,7 @@
 
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"
+            <input type="text" id="name" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"
                    maxlength="40" />
             <span>{$FIELD_ERRORS.name}</span>
         </label>
@@ -21,4 +21,5 @@
 <script type="text/javascript">
     var baseUrl = {$BASE_URL};
 </script>
+<script src="{$BASE_URL}javascript/validateeditorganizationform.js"></script>
 {include file='common/footer.tpl'}

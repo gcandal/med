@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    checkIfNameIsFree();
+    checkIfInviteUnsent();
 });
 
-var checkIfNameIsFree = function () {
+var checkIfInviteUnsent = function () {
     var licenseid = $('#licenseid');
     var licenseiderror = $('#licenseiderror');
 

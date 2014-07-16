@@ -113,12 +113,6 @@ $(document).ready(function () {
                 data: {speciality: 'any', name: request.term},
                 type: 'GET',
                 success: function(data) {
-                    console.log($.map(data, function(item) {
-                        return {
-                            label: item.name,
-                            value: item['idprofessional']
-                        };
-                    }));
                     response($.map(data, function(item) {
                         return {
                             label: item.name,
@@ -137,7 +131,6 @@ $(document).ready(function () {
         minLength: 3,
         select: function(event, ui) {
             if(ui.item) {
-                console.log(ui.item);
                 $(this).parent().siblings().first().next().children().first().val(ui.item.nif);
             }
         }
