@@ -20,3 +20,4 @@
     $smarty->assign('PROCEDURES', $procedures);
     $smarty->display('procedures/procedures.tpl');
 
+

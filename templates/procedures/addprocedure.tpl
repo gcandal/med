@@ -10,7 +10,7 @@
         <label>
             Estado de pagamento:
             <select name="status" required>
-                <option value="Nada">Nada</option>
+                <option value="Pendente">Pendente</option>
                 <option value="Recebi">Recebi</option>
                 <option value="Paguei">Paguei</option>
             </select>
@@ -86,8 +86,8 @@
 
         <label>
             Função a Desempenhar:
-            <select id="function">
-                <option value="Principal">Cirurgião Principal</option>
+            <select id="function" name="function">
+            <option value="Principal">Cirurgião Principal</option>
                 <option value="Ajudante">Ajudante</option>
                 <option value="Anestesista">Anestesista</option>
             </select>

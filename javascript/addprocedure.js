@@ -330,18 +330,21 @@ var removeSubProcedure = function () {
 
 var getTotalRemuneration = function () {
     if ($('[name=totalType]').val() == 'auto') {
-        var total = 0;
+        var total = 0.0;
 
         if (isNumeric($('input[name=valuePerK]').val())) {
             $('.subProcedure').each(function () {
                 for (var i = 0; i < subProcedureTypes.length; i++) {
                     if ($(this).val() == subProcedureTypes[i].idproceduretype) {
-                        total += subProcedureTypes[i].k;
+                        total = total + parseInt(subProcedureTypes[i].k);
+                        console.log("Tipo:" + subProcedureTypes[i].idproceduretype + "; K: " + subProcedureTypes[i].k);
                     }
                 }
             });
         }
+        console.log("Total de K: " + total);
         total *= $('[name=valuePerK]').val();
+        console.log("Total Remun: " + total);
         $('input[name=totalRemun]').val(total);
     }
 };

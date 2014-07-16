@@ -3,7 +3,7 @@
 {if $EMAIL}
     <h1>Dr. {$USERNAME.name},</h1>
     <h2>Tem {$OPENPROCEDURES.number} procedimentos por concluir.</h2>
-    <p><a href="{$BASE_URL}pages/procedures/addprocedure.php"+ Adicionar Pagamento</p>
+    <p><a href="{$BASE_URL}pages/procedures/addprocedure.php">Adicionar Pagamento</a></p>
     <table class="procedureTable" border="1">
         <tr>
             <th>Data</th>
@@ -35,7 +35,7 @@
                         <button type="submit">Ver</button>
                     </form>
                 </td>
-                <td>{$procedure.totalvalue}&euro;</td>
+                <td>{$procedure.totalremun}&euro;</td>
             </tr>
         {/foreach}
 
