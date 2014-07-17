@@ -26,18 +26,19 @@
         </label>
         <label>
             Início do Contrato:
-            <input type="date" name="contractstart" placeholder="Início do Contrato"
+            <input type="date" name="contractstart" id="contractstart" placeholder="Início do Contrato"
                    value="{$FORM_VALUES.contractstart}"/>
         </label>
         <label>
             Fim do Contrato:
-            <input type="date" name="contractend" placeholder="Fim do Contrato" value="{$FORM_VALUES.contractend}"/>
+            <input type="date" name="contractend" id="contractend" placeholder="Fim do Contrato" value="{$FORM_VALUES.contractend}"/>
         </label>
+        <span id="dateerror"></span>
         <label>
             NIF:
-            <input type="number" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
+            <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" required value="{$FORM_VALUES.nif}"
                    {literal}pattern="\d{9}"{/literal} maxlength="9"/>
-            <span>{$FIELD_ERRORS.nif}</span>
+            <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
             Valor por K:
@@ -59,9 +60,9 @@
 
         <label>
             NIF:
-            <input type="number" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
+            <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
                    {literal}pattern="\d{9}"{/literal} maxlength="9"/>
-            <span>{$FIELD_ERRORS.nif}</span>
+            <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
         </label>
 
         <label>
@@ -75,4 +76,5 @@
     <p>Tem que fazer login!</p>
 {/if}
 
+<script src="{$BASE_URL}javascript/validateaddpayerform.js"></script>
 {include file='common/footer.tpl'}

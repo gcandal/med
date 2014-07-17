@@ -14,9 +14,9 @@
         </label>
         <label>
             NIF:
-            <input type="number" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
+            <input type="number" min="0" id="nifPrivate" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
                    {literal}pattern="\d{9}"{/literal} maxlength="9"/>
-            <span>{$FIELD_ERRORS.nif}</span>
+            <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
             Valor por K:
@@ -29,4 +29,5 @@
     <p>Tem que fazer login!</p>
 {/if}
 
+<script src="{$BASE_URL}javascript/validateeditprivatepayerform.js"></script>
 {include file='common/footer.tpl'}

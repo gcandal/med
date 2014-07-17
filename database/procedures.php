@@ -143,6 +143,13 @@
 
             $stmt->execute(array(":paymentStatus" => $paymentStatus, ":idEntityPayer" => $idEntityPayer, ":code" => $code));
 
+function deleteProcedure($idProcedure, $idAccount)
+{
+    global $conn;
+    $stmt = $conn->prepare("DELETE FROM ProcedureAccount WHERE idprocedure = :idprocedure
+                            AND idaccount = :idaccount");
+    $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount));
+}
         }
         */
 

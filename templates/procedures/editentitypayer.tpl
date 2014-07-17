@@ -14,18 +14,19 @@
         </label>
         <label>
             Início do Contrato:
-            <input type="date" name="contractstart" placeholder="Início do Contrato"
+            <input type="date" id="contractstart" name="contractstart" placeholder="Início do Contrato"
                    value="{$FORM_VALUES.contractstart}"/>
         </label>
         <label>
             Fim do Contrato:
-            <input type="date" name="contractend" placeholder="Fim do Contrato" value="{$FORM_VALUES.contractend}"/>
+            <input type="date" id="contractend" name="contractend" placeholder="Fim do Contrato" value="{$FORM_VALUES.contractend}"/>
         </label>
+        <span id="dateerror"></span>
         <label>
             NIF:
-            <input type="number" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
+            <input type="number" min="0" id="nifEntity" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
                    {literal}pattern="\d{9}"{/literal}/>
-            <span>{$FIELD_ERRORS.nif}</span>
+            <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
             Valor por K:
@@ -39,4 +40,5 @@
     <p>Tem que fazer login!</p>
 {/if}
 
+<script src="{$BASE_URL}javascript/validateeditentitypayerform.js"></script>
 {include file='common/footer.tpl'}

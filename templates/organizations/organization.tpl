@@ -20,7 +20,7 @@
     {/foreach}
 
     {if $organization.orgauthorization == 'AdminVisible' || $organization.orgauthorization == 'AdminNotVisible'}
-        <form action="{$BASE_URL}pages/organizations/editorganization.php" method="get">
+        <form action="{$BASE_URL}pages/organizations/editorganization.php" method="post">
             <input type="hidden" name="idorganization" value="{$organization.idorganization}"/>
             <button type="submit">Editar</button>
         </form>
