@@ -1,6 +1,6 @@
 <?php
     include_once('../../config/init.php');
-    include_once($BASE_DIR . 'database/procedures.php');
+    include_once($BASE_DIR . 'database/payers.php');
 
     if (!$_SESSION['email']) {
         $_SESSION['error_messages'][] = 'Tem que fazer login';
@@ -13,7 +13,7 @@
         $_SESSION['error_messages'][] = 'Tipo indefinido';
         $_SESSION['form_values'] = $_POST;
 
-        header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+        header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
         exit;
     }
 
@@ -23,7 +23,7 @@
             $_SESSION['field_errors']['name'] = 'Nome é obrigatório';
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
             exit;
         }
 
@@ -32,13 +32,14 @@
             $_SESSION['field_errors']['nif'] = 'NIF é obrigatório';
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
             exit;
         }
 
         $name = $_POST['name'];
         $nif = $_POST['nif'];
         $valueperk = $_POST['valueperk'];
+        if (!$valueperk) $valueperk = null;
         $accountId = $_SESSION['idaccount'];
 
         if (checkDuplicateEntityName($accountId, $name)) {
@@ -46,7 +47,7 @@
             $_SESSION['field_errors']['name'] = 'Nome já existe';
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
             exit;
         }
 
@@ -60,13 +61,13 @@
 
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
             exit;
         }
 
         $_SESSION['success_messages'][] = 'Entidade adicionada com sucesso';
 
-        header("Location: $BASE_URL");
+        header("Location: $BASE_URL" . 'pages/payers/payers.php');
         exit;
     }
 
@@ -77,7 +78,7 @@
         $_SESSION['error_messages'][] = 'Alguns campos em falta';
         $_SESSION['form_values'] = $_POST;
 
-        header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+        header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
         exit;
     }
 
@@ -87,7 +88,7 @@
         $_SESSION['field_errors']['name'] = 'Nome já existe';
         $_SESSION['form_values'] = $_POST;
 
-        header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+        header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
         exit;
     }
 
@@ -105,7 +106,7 @@
         $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
         $_SESSION['form_values'] = $_POST;
 
-        header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+        header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
         exit;
     }
 
@@ -120,12 +121,12 @@
 
         $_SESSION['form_values'] = $_POST;
 
-        header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+        header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
         exit;
     }
 
     $_SESSION['success_messages'][] = 'Entidade adicionada com sucesso';
 
-    header("Location: $BASE_URL" . 'pages/procedures/payers.php');
+    header("Location: $BASE_URL" . 'pages/payers/payers.php');
 
 ?>

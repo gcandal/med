@@ -15,7 +15,7 @@
         </script>
     {/if}
     <script src="{$BASE_URL}javascript/addpayer.js"></script>
-    <form id="formentidade" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
+    <form id="formentidade" method="post" action="{$BASE_URL}actions/payers/addpayer.php">
         <input type="hidden" name="type" value="Insurance" required/>
 
         <label>
@@ -48,7 +48,7 @@
         <button type="submit">Adicionar</button>
         <br>
     </form>
-    <form id="formprivado" method="post" action="{$BASE_URL}actions/procedures/addpayer.php">
+    <form id="formprivado" method="post" action="{$BASE_URL}actions/payers/addpayer.php">
         <input type="hidden" name="type" value="Private" required/>
 
         <label>

@@ -8,5 +8,5 @@
         $idprivatepayer = $_POST['idprivatepayer'];
 
     $smarty->assign('idprivatepayer', $idprivatepayer);
-    $smarty->display('procedures/editprivatepayer.tpl');
+    $smarty->display('payers/editprivatepayer.tpl');
 ?>

@@ -6,11 +6,11 @@
         <p>Nome: {$entity.name} </p>
         <p>NIF: {$entity.nif} </p>
         <p>Valor por K: {$entity.valueperk}</p>
-        <form action="{$BASE_URL}pages/procedures/editprivatepayer.php" method="post">
+        <form action="{$BASE_URL}pages/payers/editprivatepayer.php" method="post">
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}"/>
             <button type="submit">Editar</button>
         </form>
-        <form action="{$BASE_URL}actions/procedures/deleteprivatepayer.php" method="post">
+        <form action="{$BASE_URL}actions/payers/deleteprivatepayer.php" method="post">
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}"/>
             <button type="submit">Apagar</button>
         </form>
@@ -22,11 +22,11 @@
         <p>Fim do Contrato: {$entity.contractend}</p>
         <p>NIF: {$entity.nif}</p>
         <p>Valor por K: {$entity.valueperk}</p>
-        <form action="{$BASE_URL}pages/procedures/editentitypayer.php" method="post">
+        <form action="{$BASE_URL}pages/payers/editentitypayer.php" method="post">
             <input type="hidden" name="identitypayer" value="{$entity.identitypayer}"/>
             <button type="submit">Editar</button>
         </form>
-        <form action="{$BASE_URL}actions/procedures/deleteentitypayer.php" method="post">
+        <form action="{$BASE_URL}actions/payers/deleteentitypayer.php" method="post">
             <input type="hidden" name="identitypayer" value="{$entity.identitypayer}"/>
             <button type="submit">Apagar</button>
         </form>

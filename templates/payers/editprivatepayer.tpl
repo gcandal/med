@@ -4,7 +4,7 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <form id="formprivado" method="post" action="{$BASE_URL}actions/procedures/editprivatepayer.php">
+    <form id="formprivado" method="post" action="{$BASE_URL}actions/payers/editprivatepayer.php">
         <input type="hidden" name="idprivatepayer" value="{$idprivatepayer}"/>
 
         <label>

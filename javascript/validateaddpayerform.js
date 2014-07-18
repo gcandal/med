@@ -20,7 +20,8 @@ var checkValidNIF = function () {
     var nifRegex = new RegExp('\\d{9}');
 
     nif.bind("paste drop input change cut", function () {
-        var text = nif.val();
+        var text = $(this).val();
+
         if (text.length != 9 || isNaN(text) || !nifRegex.test(text)) {
             $(this).css('border', '1px solid red');
             $.each(niferror, function (i, v) {
@@ -55,14 +56,14 @@ var checkValidDate = function () {
             })
 
             if (contractstart.length == 0 || contractend.length == 0) {
-                $("#daterror").text("");
+                $("#dateerror").text("");
                 $.each(contracts, function (e) {
                     $(this).removeAttr('style');
                 })
             }
         }
         else {
-            $("#daterror").text("");
+            $("#dateerror").text("");
 
             if (contractstart.length > 0 && contractend.length > 0) {
                 $.each(contracts, function (e) {
