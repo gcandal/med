@@ -33,7 +33,7 @@ if ($_POST['licenseid']) {
     }
 
     try {
-        inviteForOrganization($idorganization, $idinviting, $licenseid, $foradmin, $nameorganization);
+        inviteForOrganization($idorganization, $idinviting, $licenseid, $foradmin);
     } catch (PDOException $e) {
         if (strpos($e->getMessage(), 'orginvitation_pkey') !== false) {
             $_SESSION['error_messages'][] = 'Já enviou um convite para esse membro.';

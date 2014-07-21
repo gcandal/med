@@ -1,6 +1,7 @@
 <?php
     include_once('../../config/init.php');
     include_once($BASE_DIR . 'database/procedures.php');
+    include_once($BASE_DIR . 'database/payers.php');
     include_once($BASE_DIR . 'database/users.php');
 
     if (!$_SESSION['email']) {
