@@ -1,4 +1,5 @@
 <p>{$EMAIL}</p>
+<p>{$LICENSEID}</p>
 
 {foreach $SUCCESS_MESSAGES as $success}
     <p>{$success}</p>
@@ -25,7 +26,11 @@
 </form>
 
 <form action="{$BASE_URL}pages/organizations/invites.php">
-    <button type="submit">Ver Convites</button>
+    <button type="submit">Ver Convites Organizações</button>
+</form>
+
+<form action="{$BASE_URL}pages/procedures/invites.php">
+    <button type="submit">Ver Convites Procedimentos</button>
 </form>
 
 <form action="{$BASE_URL}pages/organizations/addorganization.php">

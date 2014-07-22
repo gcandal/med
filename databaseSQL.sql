@@ -153,7 +153,7 @@ CREATE TABLE OrgInvitation (
   idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   licenseIdInvited  LicenseId NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
   forAdmin          BOOL      NOT NULL,
-  wasRejected       BOOL DEFAULT FALSE,
+  wasRejected       BOOL      NOT NULL DEFAULT FALSE,
   date              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idOrganization, idInvitingAccount, licenseIdInvited)
 );
@@ -162,6 +162,8 @@ CREATE TABLE ProcedureInvitation (
   idProcedure       INTEGER   NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
   idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   licenseIdInvited  LicenseId NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
+  wasRejected       BOOL      NOT NULL DEFAULT FALSE,
+
   PRIMARY KEY (idProcedure, idInvitingAccount, licenseIdInvited)
 );
 
@@ -301,11 +303,7 @@ INSERT INTO ProcedureProfessional VALUES (1, 1, 0);
 INSERT INTO ProcedureProfessional VALUES (1, 4, 0);
 INSERT INTO ProcedureAccount VALUES (1, 1);
 INSERT INTO ProcedureAccount VALUES (1, 2);
-SELECT
-  share_procedure_with_all(1, 1);
-SELECT
-  share_procedure_with_all(1, 1);
-
+SELECT share_procedure_with_all(1, 1);
 INSERT INTO OrgAuthorization VALUES (1, 2, 'Visible');
 
 

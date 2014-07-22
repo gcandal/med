@@ -5,11 +5,11 @@
         <p>{$error}</p>
     {/foreach}
     <form id="formentidade" method="post" action="{$BASE_URL}actions/payers/editentitypayer.php">
-        <input type="hidden" name="identitypayer" value="{$identitypayer}"/>
+        <input type="hidden" name="identitypayer" value="{$entitypayer.identitypayer}"/>
 
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"/>
+            <input type="text" name="name" placeholder="{$entitypayer.name}" value="{$FORM_VALUES.name}"/>
             <span>{$FIELD_ERRORS.name}</span>
         </label>
         <label>
@@ -24,13 +24,13 @@
         <span id="dateerror"></span>
         <label>
             NIF:
-            <input type="number" min="0" id="nifEntity" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
+            <input type="number" min="0" id="nifEntity" name="nif" placeholder="{$entitypayer.nif}" value="{$FORM_VALUES.nif}"
                    {literal}pattern="\d{9}"{/literal}/>
             <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
             Valor por K:
-            <input type="number" min="0" name="valueperk" placeholder="Valor por K" value="{$FORM_VALUES.valueperk}"/>
+            <input type="number" min="0" name="valueperk" placeholder="{$entitypayer.valueperk}" value="{$FORM_VALUES.valueperk}"/>
             <span>{$FIELD_ERRORS.valueperk}</span>
         </label>
         <button type="submit">Editar</button>

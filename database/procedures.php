@@ -322,16 +322,79 @@ function getRecentProfessionals($idaccount, $speciality, $name)
 function shareProcedure($idprocedure, $idinviting, $licenseid)
 {
     global $conn;
-
-    if ($licenseid == 'all') {
+echo 3;
+    if ($licenseid === 'all') {
+        echo 1;
         $stmt = $conn->prepare("SELECT share_procedure_with_all(:idprocedure, :idaccount)");
         $stmt->execute(array("idprocedure" => $idprocedure, "idaccount" => $idinviting));
     } else {
+        echo 2;
         $stmt = $conn->prepare("INSERT INTO ProcedureInvitation(idProcedure, idInvitingAccount, licenseIdInvited)
                                 VALUES (:idprocedure, :idaccount, :licenseid)");
 
         $stmt->execute(array("idprocedure" => $idprocedure, "idaccount" => $idinviting, "licenseid" => $licenseid));
     }
+}
+
+function getInvites($licenseid)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT Account.name invitingName,
+                            ProcedureInvitation.idProcedure, ProcedureInvitation.idInvitingAccount, wasRejected
+                            FROM ProcedureInvitation, Account
+                            WHERE ProcedureInvitation.licenseIdInvited = :licenseId
+                            AND ProcedureInvitation.idInvitingAccount = Account.idAccount");
+    $stmt->execute(array("licenseId" => $licenseid));
+
+    return $stmt->fetchAll();
+}
+
+function rejectShared($idProcedure, $idInvitingAccount, $licenseIdInvited)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("UPDATE ProcedureInvitation SET wasRejected = TRUE
+                            WHERE idProcedure = :idProcedure
+                            AND idInvitingAccount = :idInvitingAccount
+                            AND licenseIdInvited = :licenseIdInvited");
+
+    $stmt->execute(array("idProcedure" => $idProcedure, "idInvitingAccount" => $idInvitingAccount,
+        "licenseIdInvited" => $licenseIdInvited));
+}
+
+function deleteShared($idProcedure, $idInvitingAccount, $licenseIdInvited)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("DELETE FROM ProcedureInvitation
+                            WHERE idProcedure = :idProcedure
+                            AND idInvitingAccount = :idInvitingAccount
+                            AND licenseIdInvited = :licenseIdInvited");
+
+    $stmt->execute(array("idProcedure" => $idProcedure, "idInvitingAccount" => $idInvitingAccount,
+        "licenseIdInvited" => $licenseIdInvited));
+}
+
+function acceptShared($idProcedure, $idInvitingAccount, $licenseIdInvited, $idAccount)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("INSERT INTO ProcedureAccount(idProcedure, idAccount)
+                            VALUES (:idProcedure, :idAccount)");
+
+    $stmt->execute(array("idProcedure" => $idProcedure, "idAccount" => $idAccount));
+
+    deleteShared($idProcedure, $idInvitingAccount, $licenseIdInvited);
+}
+
+function cleanShareds() {
+    global $conn;
+
+    $stmt = $conn->prepare("DELETE FROM ProcedureInvitation
+                            WHERE date < CURRENT_TIMESTAMP - interval '7 days'");
+
+    $stmt->execute();
 }
 
 ?>

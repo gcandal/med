@@ -5,7 +5,7 @@
         <p>{$error}</p>
     {/foreach}
     <form id="formprivado" method="post" action="{$BASE_URL}actions/payers/editprivatepayer.php">
-        <input type="hidden" name="idprivatepayer" value="{$idprivatepayer}"/>
+        <input type="hidden" name="idprivatepayer" value="{$privatepayer.idprivatepayer}"/>
 
         <label>
             Nome:

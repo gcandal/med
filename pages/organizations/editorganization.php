@@ -10,6 +10,6 @@
 
     $organization = getOrganization($_SESSION['idaccount'], $idorganization);
 
-    $smarty->assign('idorganization', $organization['idorganization']);
+    $smarty->assign('organization', $organization);
     $smarty->display('organizations/editorganization.tpl');
 ?>
