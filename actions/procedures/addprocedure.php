@@ -12,7 +12,7 @@
 
     $type = $_POST['payerType'];
 
-    if($type !== 'None') {
+    if ($type !== 'None') {
         $name = $_POST['name'];
         $nif = $_POST['nif'];
         $valueperk = $_POST['valuePerK'];
@@ -107,10 +107,14 @@
         $subProcedures[] = $_POST["subProcedure$i"];
     }
 
+    $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK']);
+
     if (count($subProcedures) > 0) {
-        addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK'], $subProcedures);
-    } else {
-        addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK']);
+        addSubProcedures($idProcedure, $subProcedures);
     }
 
-    exit;
+    addProcedureToAccount($idProcedure, $idAccount);
+
+    $_SESSION['success_messages'][] = 'Procedimento adicionado com sucesso';
+
+    header("Location: $BASE_URL" . 'pages/procedures/procedures.php');

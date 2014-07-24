@@ -7,23 +7,23 @@
     <p>Dados do Procedimento</p>
     <hr>
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/addprocedure.php">
-        <label>
-            Estado de pagamento:
-            <select name="status" required>
-                <option value="Pendente">Pendente</option>
-                <option value="Recebi">Recebi</option>
-                <option value="Paguei">Paguei</option>
-            </select>
-        </label>
-        <label>
-            Tipo de pagador:
-            <select id="entityType" required>
-                <option value="Privado">Privado</option>
-                <option value="Entidade">Entidade</option>
-                <option value="Novo Privado">Novo Privado</option>
-                <option value="Nova Entidade">Nova Entidade</option>
-            </select>
-        </label>
+    <label>
+        Estado de pagamento:
+        <select name="status" required>
+            <option value="Pendente">Pendente</option>
+            <option value="Recebi">Recebi</option>
+            <option value="Paguei">Paguei</option>
+        </select>
+    </label>
+    <label>
+        Tipo de pagador:
+        <select id="entityType" required>
+            <option value="Privado">Privado</option>
+            <option value="Entidade">Entidade</option>
+            <option value="Novo Privado">Novo Privado</option>
+            <option value="Nova Entidade">Nova Entidade</option>
+        </select>
+    </label>
 
         <span id="privatePayer">
             <select name="privateName" required>
@@ -35,19 +35,18 @@
 
         <span id="entityPayer">
             <select name="entityName" required>
-            {foreach $ENTITIES['Entidade'] as $entity}
+                {foreach $ENTITIES['Entidade'] as $entity}
                     <option value="{$entity.identitypayer}">{$entity.name}</option>
                 {/foreach}
             </select>
         </span>
 
-        <input type="hidden" id="payerType" name="payerType" value="None" required/>
+    <input type="hidden" id="payerType" name="payerType" value="None" required/>
 
         <span id="newEntityPayer">
             <label>
                 Nome:
-                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
-                       maxlength="40"/>
+                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
                 <span>{$FIELD_ERRORS.name}</span>
             </label>
             <label>
@@ -57,12 +56,13 @@
             </label>
             <label>
                 Fim do Contrato:
-                <input type="date" name="contractend" id="contractend" placeholder="Fim do Contrato" value="{$FORM_VALUES.contractend}"/>
+                <input type="date" name="contractend" id="contractend" placeholder="Fim do Contrato"
+                       value="{$FORM_VALUES.contractend}"/>
             </label>
             <span id="dateerror"></span>
             <label>
                 NIF:
-                <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" required value="{$FORM_VALUES.nif}"
+                <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" value="{$FORM_VALUES.nif}"
                        {literal}pattern="\d{9}"{/literal} maxlength="9"/>
                 <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
             </label>
@@ -71,14 +71,13 @@
         <span id="newPrivatePayer">
             <label>
                 Nome:
-                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
-                       maxlength="40"/>
+                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
                 <span>{$FIELD_ERRORS.name}</span>
             </label>
 
             <label>
                 NIF:
-                <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
+                <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
                        {literal}pattern="\d{9}"{/literal} maxlength="9"/>
                 <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
             </label>
@@ -91,26 +90,26 @@
             </label>
         </span>
 
-        <label>
+    <label>
         Data:
-            <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
-        </label>
+        <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
+    </label>
 
-        <button type="submit">Submeter</button>
+    <button type="submit">Submeter</button>
 
-        <br>
-        <hr>
+    <br>
+    <hr>
 
-        <p>Informações Pessoais</p>
+    <p>Informações Pessoais</p>
 
-        <label>
-            Função a Desempenhar:
-            <select id="function" name="function">
+    <label>
+        Função a Desempenhar:
+        <select id="function" name="function">
             <option value="Principal">Cirurgião Principal</option>
-                <option value="Ajudante">Ajudante</option>
-                <option value="Anestesista">Anestesista</option>
-            </select>
-        </label>
+            <option value="Ajudante">Ajudante</option>
+            <option value="Anestesista">Anestesista</option>
+        </select>
+    </label>
 
         <span id="principal">
             <p>Equipa</p>
@@ -196,10 +195,10 @@
                     </tr>
                 </table>
         </span>
-        <br>
-        <hr>
+    <br>
+    <hr>
 
-        <p>Sub-Procedimentos </p>
+    <p>Sub-Procedimentos </p>
         <span id="subProcedureMenu">
             <input type="hidden" name="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>
