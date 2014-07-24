@@ -1,4 +1,5 @@
 <p>{$EMAIL}</p>
+<p>{$LICENSEID}</p>
 
 {foreach $SUCCESS_MESSAGES as $success}
     <p>{$success}</p>
@@ -16,7 +17,7 @@
     <button type="submit">Editar perfil</button>
 </form>
 
-<form action="{$BASE_URL}pages/procedures/payers.php">
+<form action="{$BASE_URL}pages/payers/payers.php">
     <button type="submit">Ver Pagadores</button>
 </form>
 
@@ -25,7 +26,11 @@
 </form>
 
 <form action="{$BASE_URL}pages/organizations/invites.php">
-    <button type="submit">Ver Convites</button>
+    <button type="submit">Ver Convites Organizações</button>
+</form>
+
+<form action="{$BASE_URL}pages/procedures/invites.php">
+    <button type="submit">Ver Convites Procedimentos</button>
 </form>
 
 <form action="{$BASE_URL}pages/organizations/addorganization.php">
@@ -40,6 +45,6 @@
     <button type="submit">Ver Procedimentos</button>
 </form>
 
-<form action="{$BASE_URL}pages/procedures/addpayer.php">
+<form action="{$BASE_URL}pages/payers/addpayer.php">
     <button type="submit">Adicionar Pagador</button>
 </form>

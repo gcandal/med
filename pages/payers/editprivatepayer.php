@@ -1,5 +1,6 @@
 <?php
     include_once('../../config/init.php');
+    include_once($BASE_DIR . 'database/payers.php');
 
     if (isset($_SESSION['idprivatepayer'])) {
         $idprivatepayer = $_SESSION['idprivatepayer'];
@@ -7,6 +8,8 @@
     } else
         $idprivatepayer = $_POST['idprivatepayer'];
 
-    $smarty->assign('idprivatepayer', $idprivatepayer);
-    $smarty->display('procedures/editprivatepayer.tpl');
+
+    $privatepayer = getPrivatePayer($idprivatepayer);
+    $smarty->assign('privatepayer', $privatepayer);
+    $smarty->display('payers/editprivatepayer.tpl');
 ?>

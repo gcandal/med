@@ -5,11 +5,11 @@
         <p>{$error}</p>
     {/foreach}
     <form method="post" action="{$BASE_URL}actions/organizations/editorganization.php">
-        <input type="hidden" name="idorganization" value="{$idorganization}"/>
+        <input type="hidden" name="idorganization" value="{$organization.idorganization}"/>
 
         <label>
             Nome:
-            <input type="text" id="name" name="name" placeholder="Nome" value="{$FORM_VALUES.name}"
+            <input type="text" id="name" name="name" placeholder="{$organization.name}" value="{$FORM_VALUES.name}"
                    maxlength="40" />
             <span>{$FIELD_ERRORS.name}</span>
         </label>

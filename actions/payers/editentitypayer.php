@@ -1,6 +1,6 @@
 <?php
     include_once('../../config/init.php');
-    include_once($BASE_DIR . 'database/procedures.php');
+    include_once($BASE_DIR . 'database/payers.php');
 
     if (!$_SESSION['email']) {
         $_SESSION['error_messages'][] = 'Tem que fazer login';
@@ -21,7 +21,7 @@
 
             $_SESSION['identitypayer'] = $identitypayer;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/addpayer.php');
             exit;
         }
     }
@@ -38,7 +38,7 @@
 
         $_SESSION['identitypayer'] = $identitypayer;
 
-        header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
+        header("Location: $BASE_URL" . 'pages/payers/editentitypayer.php');
         exit;
     }
 
@@ -51,7 +51,7 @@
 
             $_SESSION['identitypayer'] = $identitypayer;
 
-            header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/editentitypayer.php');
             exit;
         }
     }
@@ -68,7 +68,7 @@
 
             $_SESSION['identitypayer'] = $identitypayer;
 
-            header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/editentitypayer.php');
             exit;
         }
     }
@@ -85,7 +85,7 @@
 
             $_SESSION['identitypayer'] = $identitypayer;
 
-            header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/editentitypayer.php');
             exit;
         }
     }
@@ -102,7 +102,7 @@
 
             $_SESSION['identitypayer'] = $identitypayer;
 
-            header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/editentitypayer.php');
             exit;
         }
     }
@@ -116,12 +116,12 @@
 
             $_SESSION['identitypayer'] = $identitypayer;
 
-            header("Location: $BASE_URL" . 'pages/procedures/editentitypayer.php');
+            header("Location: $BASE_URL" . 'pages/payers/editentitypayer.php');
             exit;
         }
     }
 
     $_SESSION['success_messages'][] = 'Entidade editada com sucesso';
 
-    header("Location: $BASE_URL" . "pages/procedures/payers.php");
+    header("Location: $BASE_URL" . "pages/payers/payers.php");
 ?>

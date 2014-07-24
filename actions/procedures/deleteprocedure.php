@@ -3,9 +3,9 @@ include_once('../../config/init.php');
 include_once($BASE_DIR . 'database/procedures.php');
 
 if (!$_SESSION['email'] || !$_POST['idprocedure']) {
-    $_SESSION['error_messages'][] = 'Tem que fazer login e fornecer os dados necessários';
-    header('Location: ' . $BASE_URL);
-
+    $_SESSION['error_messages'][] = 'Tem que fazer login';
+    //header('Location: ' . $BASE_URL);
+var_dump($_POST);
     exit;
 }
 
@@ -17,7 +17,7 @@ try {
 } catch (PDOException $e) {
     $_SESSION['error_messages'][] = 'Erro a apagar procedimento ' . $e->getMessage();
 
-    header("Location: $BASE_URL" . 'pages/procedures/addpayer.php');
+    header("Location: $BASE_URL" . 'pages/procedures/procedures.php');
     exit;
 }
 

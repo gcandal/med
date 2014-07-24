@@ -1,6 +1,6 @@
 <?php
     include_once('../../config/init.php');
-    include_once($BASE_DIR . 'database/procedures.php');
+    include_once($BASE_DIR . 'database/payers.php');
 
     if (!$_SESSION['email']) {
         $_SESSION['error_messages'][] = 'Tem que fazer login';
@@ -14,5 +14,5 @@
     $entities['Privado'] = getPrivatePayers($idaccount);
 
     $smarty->assign('ENTITIES', $entities);
-    $smarty->display('procedures/payers.tpl');
+    $smarty->display('payers/payers.tpl');
 ?>

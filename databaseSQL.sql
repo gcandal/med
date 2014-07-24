@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS OrgInvitation;
+DROP TABLE IF EXISTS ProcedureInvitation;
 DROP TABLE IF EXISTS OrgAuthorization;
 DROP TABLE IF EXISTS Organization;
 DROP TABLE IF EXISTS ProcedureProcedureType;
@@ -108,24 +109,24 @@ CREATE TABLE Professional (
 CREATE TABLE ProcedureType (
   idProcedureType SERIAL PRIMARY KEY,
   name            VARCHAR(256) NOT NULL,
-  K FLOAT NOT NULL
+  K               FLOAT        NOT NULL
 );
 
 CREATE TABLE Procedure (
   idProcedure       SERIAL PRIMARY KEY,
-  paymentStatus ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
+  paymentStatus     ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
   idPrivatePayer    INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
   idEntityPayer     INTEGER REFERENCES EntityPayer (idEntityPayer),
-  idGeneral     INTEGER REFERENCES Professional (idProfessional),
+  idGeneral         INTEGER REFERENCES Professional (idProfessional),
   idFirstAssistant  INTEGER REFERENCES Professional (idProfessional),
   idSecondAssistant INTEGER REFERENCES Professional (idProfessional),
   idAnesthetist     INTEGER REFERENCES Professional (idProfessional),
   idInstrumentist   INTEGER REFERENCES Professional (idProfessional),
-  date          DATE                   NOT NULL DEFAULT CURRENT_DATE,
+  date              DATE                   NOT NULL DEFAULT CURRENT_DATE,
   valuePerK         FLOAT,
-  wasAssistant  BOOLEAN                NOT NULL DEFAULT FALSE,
-  totalRemun    FLOAT DEFAULT 0,
-  personalRemun FLOAT DEFAULT 0
+  wasAssistant      BOOLEAN                NOT NULL DEFAULT FALSE,
+  totalRemun        FLOAT DEFAULT 0,
+  personalRemun     FLOAT DEFAULT 0
 );
 
 CREATE TABLE ProcedureAccount (
@@ -152,10 +153,48 @@ CREATE TABLE OrgInvitation (
   idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   licenseIdInvited  LicenseId NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
   forAdmin          BOOL      NOT NULL,
-  wasRejected       BOOL DEFAULT FALSE,
+  wasRejected       BOOL      NOT NULL DEFAULT FALSE,
   date              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idOrganization, idInvitingAccount, licenseIdInvited)
 );
+
+CREATE TABLE ProcedureInvitation (
+  idProcedure       INTEGER   NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  licenseIdInvited  LicenseId NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
+  wasRejected       BOOL      NOT NULL DEFAULT FALSE,
+
+  PRIMARY KEY (idProcedure, idInvitingAccount, licenseIdInvited)
+);
+
+CREATE OR REPLACE FUNCTION share_procedure_with_all(idp INTEGER, ida INTEGER)
+  RETURNS VOID AS $$
+DECLARE
+BEGIN
+  IF NOT EXISTS(SELECT
+                  *
+                FROM ProcedureAccount
+                WHERE idprocedure = idp AND idaccount = ida)
+  THEN
+    RETURN;
+  END IF;
+
+  INSERT INTO ProcedureInvitation (idprocedure, idinvitingaccount, licenseidinvited)
+    SELECT
+      idp,
+      ida,
+      licenseid
+    FROM ProcedureProfessional, Professional
+    WHERE
+      ProcedureProfessional.idprocedure = idp AND Professional.idprofessional = ProcedureProfessional.idprofessional AND
+      licenseid IS NOT NULL AND NOT EXISTS(SELECT
+                                             *
+                                           FROM procedureinvitation
+                                           WHERE procedureinvitation.idprocedure = idp AND
+                                                 procedureinvitation.idInvitingAccount = ida AND
+                                                 procedureinvitation.licenseidinvited = licenseid);
+END
+$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION delete_procedureaccount_trigger()
   RETURNS TRIGGER AS $$
@@ -260,14 +299,11 @@ INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-07-02 20:36:43.206615');
 INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, DEFAULT, 0, FALSE, 0);
+INSERT INTO ProcedureProfessional VALUES (1, 1, 0);
+INSERT INTO ProcedureProfessional VALUES (1, 4, 0);
 INSERT INTO ProcedureAccount VALUES (1, 1);
 INSERT INTO ProcedureAccount VALUES (1, 2);
-/*
-DELETE FROM ProcedureAccount
-WHERE idAccount = 1;
-DELETE FROM ProcedureAccount
-WHERE idAccount = 2;
-*/
+SELECT share_procedure_with_all(1, 1);
 INSERT INTO OrgAuthorization VALUES (1, 2, 'Visible');
 
 

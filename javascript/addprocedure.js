@@ -359,6 +359,8 @@ function getTotalK() {
 }
 
 var updatePayerVisibility = function () {
+    var payerType = $("#payerType");
+
     switch ($("select#entityType").val()) {
         case 'Privado':
             $("span#privatePayer").show();
@@ -367,6 +369,7 @@ var updatePayerVisibility = function () {
             $("span#newPrivatePayer").hide();
             $("[name=valuePerK]").prop('readonly', true);
             fillValuePerK('private');
+            payerType.val("None");
             break;
         case 'Entidade':
             $("span#privatePayer").hide();
@@ -375,22 +378,25 @@ var updatePayerVisibility = function () {
             $("span#newPrivatePayer").hide();
             $("[name=valuePerK]").prop('readonly', true);
             fillValuePerK('entity');
+            payerType.val("None");
             break;
         case 'Novo Privado':
-            $("span#privatePayer").hide();
-            $("span#entityPayer").hide();
-            $("span#newEntityPayer").show();
-            $("span#newPrivatePayer").hide();
-            $("[name=valuePerK]").prop('readonly', false);
-            fillValuePerK('none');
-            break;
-        case 'Nova Entidade':
             $("span#privatePayer").hide();
             $("span#entityPayer").hide();
             $("span#newEntityPayer").hide();
             $("span#newPrivatePayer").show();
             $("[name=valuePerK]").prop('readonly', false);
             fillValuePerK('none');
+            payerType.val("Private");
+            break;
+        case 'Nova Entidade':
+            $("span#privatePayer").hide();
+            $("span#entityPayer").hide();
+            $("span#newEntityPayer").show();
+            $("span#newPrivatePayer").hide();
+            $("[name=valuePerK]").prop('readonly', false);
+            fillValuePerK('none');
+            payerType.val("Insurance");
             break;
         default:
             break;

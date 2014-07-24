@@ -12,6 +12,8 @@
             <th>Sub-Procedumentos</th>
             <th>Equipa</th>
             <th>Valor Total</th>
+            <th>Partilhar</th>
+            <th>Apagar</th>
         </tr>
 
         {foreach $PROCEDURES as $procedure}
@@ -36,6 +38,18 @@
                     </form>
                 </td>
                 <td>{$procedure.totalremun}&euro;</td>
+                <td>
+                    <form action="{$BASE_URL}actions/procedures/shareprocedure.php" method="post">
+                        <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
+                        <button type="submit">Partilhar</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{$BASE_URL}actions/procedures/deleteprocedure.php" method="post">
+                        <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
+                        <button type="submit">X</button>
+                    </form>
+                </td>
             </tr>
         {/foreach}
 
