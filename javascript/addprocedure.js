@@ -1,17 +1,17 @@
+var subProcedures = 0;
+
 $(document).ready(function () {
     updatePayerVisibility();
     updateFunctionVisibility();
     addSubProcedure();
 
     $('#addSubProcedure').click(function () {
-        subProcedures++;
         addSubProcedure();
-        $('#nSubProcedures').value = subProcedures;
+
     });
 
     $('#removeSubProcedure').click(function () {
         removeSubProcedure();
-        $('#nSubProcedures').value = subProcedures;
     });
 
     $('[name=totalType]').change(function () {
@@ -146,6 +146,8 @@ var getSubProcedureTypes = function () {
 };
 
 var addSubProcedure = function () {
+    subProcedures++;
+    $('[name=nSubProcedures]').val(subProcedures);
     $('<select name="subProcedure' + subProcedures + '" class="subProcedure">' + getSubProcedureTypes() +
         '</select><br>').fadeIn('slow').appendTo('#subProcedures');
     getTotalRemuneration();
@@ -317,6 +319,7 @@ var removeSubProcedure = function () {
         $('#subProcedures select:last').remove();
         subProcedures--;
     }
+    $('[name=nSubProcedures]').val(subProcedures);
     getTotalRemuneration();
     adjustPersonalRemuneration();
 };
@@ -330,14 +333,11 @@ var getTotalRemuneration = function () {
                 for (var i = 0; i < subProcedureTypes.length; i++) {
                     if ($(this).val() == subProcedureTypes[i].idproceduretype) {
                         total = total + parseInt(subProcedureTypes[i].k);
-                        console.log("Tipo:" + subProcedureTypes[i].idproceduretype + "; K: " + subProcedureTypes[i].k);
                     }
                 }
             });
         }
-        console.log("Total de K: " + total);
         total *= $('[name=valuePerK]').val();
-        console.log("Total Remun: " + total);
         $('input[name=totalRemun]').val(total);
     }
 };

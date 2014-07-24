@@ -13,4 +13,15 @@
     $idAccount = $_SESSION['idaccount'];
     if ($wasAssistant) $wasAssistant = 'true'; else
         $wasAssistant = 'false';
-    addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK']);
+
+    for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
+        $subProcedures[] = $_POST["subProcedure$i"];
+    }
+
+    if (count($subProcedures) > 0) {
+        addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK'], $subProcedures);
+    } else {
+        addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK']);
+    }
+
+    exit;

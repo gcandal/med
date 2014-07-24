@@ -182,7 +182,7 @@
 
         <p>Sub-Procedimentos </p>
         <span id="subProcedureMenu">
-            <input type="hidden" id="nSubProcedures" value="0">
+            <input type="hidden" name="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>
             <button type="button" id="removeSubProcedure">Remover</button>
             <br>
@@ -192,7 +192,6 @@
         </span>
     </form>
     <script type="text/javascript">
-        var subProcedures = 1;
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
