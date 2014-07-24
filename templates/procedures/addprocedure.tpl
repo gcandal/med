@@ -41,27 +41,46 @@
             </select>
         </span>
 
+        <input type="hidden" id="payerType" name="payerType" value="None" required/>
+
         <span id="newEntityPayer">
             <label>
+                Nome:
+                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
+                       maxlength="40"/>
+                <span>{$FIELD_ERRORS.name}</span>
+            </label>
+            <label>
+                Início do Contrato:
+                <input type="date" name="contractstart" id="contractstart" placeholder="Início do Contrato"
+                       value="{$FORM_VALUES.contractstart}"/>
+            </label>
+            <label>
+                Fim do Contrato:
+                <input type="date" name="contractend" id="contractend" placeholder="Fim do Contrato" value="{$FORM_VALUES.contractend}"/>
+            </label>
+            <span id="dateerror"></span>
+            <label>
                 NIF:
-                <input type="text" name="privatePayerNIF" placeholder="123456789" value="{$FORM_VALUES.NIF}"/>
+                <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" required value="{$FORM_VALUES.nif}"
+                       {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+                <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
             </label>
         </span>
 
         <span id="newPrivatePayer">
             <label>
+                Nome:
+                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
+                       maxlength="40"/>
+                <span>{$FIELD_ERRORS.name}</span>
+            </label>
+
+            <label>
                 NIF:
-                <input type="text" name="privatePayerNIF" placeholder="123456789" value="{$FORM_VALUES.NIF}"/>
-            </label>
-            <label>
-                Início de Contrato:
-                <input type="date" name="contractStartDate" placeholder="Data do Procedimento"
-                       value="{$FORM_VALUES.CONTRACTSTARTDATE}"/>
-            </label>
-            <label>
-                Fim de Contrato:
-                <input type="date" name="contractEndDate" placeholder="Data do Procedimento"
-                       value="{$FORM_VALUES.CONTRACTENDDATE}"/>
+                <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" required value="{$FORM_VALUES.nif}"
+                       {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+                <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
             </label>
         </span>
 
@@ -199,6 +218,7 @@
         var baseUrl = {$BASE_URL};
     </script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
+    <script src="{$BASE_URL}javascript/validateaddprocedureform.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}
