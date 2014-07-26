@@ -17,6 +17,12 @@ $(document).ready(function () {
     $('[name=totalType]').change(function () {
         if ($('[name=totalType]').val() == 'auto') {
             $("[name=totalRemun]").prop('readonly', true);
+            getTotalRemuneration();
+            fillFirstAssistantRemuneration();
+            fillSecondAssistantRemuneration();
+            fillInstrumentistRemuneration();
+            fillAnesthetistRemuneration();
+            adjustPersonalRemuneration();
         } else {
             $("[name=totalRemun]").prop('readonly', false);
         }

@@ -103,6 +103,8 @@ CREATE TABLE Professional (
   name           VARCHAR(40),
   nif            NIF,
   licenseId      LicenseId,
+  email          VARCHAR(120),
+  cell           NIF,
   createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -122,6 +124,7 @@ CREATE TABLE Procedure (
   idSecondAssistant INTEGER REFERENCES Professional (idProfessional),
   idAnesthetist     INTEGER REFERENCES Professional (idProfessional),
   idInstrumentist   INTEGER REFERENCES Professional (idProfessional),
+  idMaster          INTEGER REFERENCES Professional (idProfessional),
   date              DATE                   NOT NULL DEFAULT CURRENT_DATE,
   valuePerK         FLOAT,
   wasAssistant      BOOLEAN                NOT NULL DEFAULT FALSE,
@@ -298,12 +301,13 @@ INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, NULL, '2014-
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-22 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-07-02 20:36:43.206615');
-INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, DEFAULT, 0, FALSE, 0);
+INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, NULL, DEFAULT, 0, FALSE, 0);
 INSERT INTO ProcedureProfessional VALUES (1, 1, 0);
 INSERT INTO ProcedureProfessional VALUES (1, 4, 0);
 INSERT INTO ProcedureAccount VALUES (1, 1);
 INSERT INTO ProcedureAccount VALUES (1, 2);
-SELECT share_procedure_with_all(1, 1);
+SELECT
+  share_procedure_with_all(1, 1);
 INSERT INTO OrgAuthorization VALUES (1, 2, 'Visible');
 
 

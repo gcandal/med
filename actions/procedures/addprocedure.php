@@ -113,6 +113,34 @@
         addSubProcedures($idProcedure, $subProcedures);
     }
 
+    if ($_POST['function'] == "Principal") {
+
+        if ($_POST['firstAssistantName'] != "") {
+            $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, "", "", "");
+            addFirstAssistant($idProf, $idProcedure);
+        }
+
+        if ($_POST['secondAssistantName'] != "") {
+            $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, "", "", "");
+            addSecondAssistant($idProf, $idProcedure);
+        }
+
+        if ($_POST['instrumentistName'] != "") {
+            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "");
+            addInstrumentist($idProf, $idProcedure);
+        }
+
+        if ($_POST['anesthetistName'] != "") {
+            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "");
+            addAnesthetist($idProf, $idProcedure);
+        }
+    } else {
+        if ($_POST['masterName'] != "") {
+            $idProf = addProfessional($_POST['masterName'], $_POST['masterNIF'], $idAccount, $_POST['masterLicense'], $_POST['masterEmail'], $_POST['masterPhone']);
+            addMaster($idProf, $idProcedure);
+        }
+    }
+
     addProcedureToAccount($idProcedure, $idAccount);
 
     $_SESSION['success_messages'][] = 'Procedimento adicionado com sucesso';

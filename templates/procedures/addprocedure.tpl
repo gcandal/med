@@ -187,11 +187,11 @@
                         <th>Telefone</th>
                     </tr>
                     <tr>
-                        <td><input type="text" name="accountableName" value="{$FORM_VALUES.ACCOUNTABLENAME}"/></td>
-                        <td><input type="text" name="accountableNIF" value="{$FORM_VALUES.ACCOUNTABLENIF}"</td>
-                        <td><input type="text" name="accountableLicense" value="{$FORM_VALUES.ACCOUNTABLELICENCE}"</td>
-                        <td><input type="text" name="accountableEmail" value="{$FORM_VALUES.ACCOUNTABLEEMAIL}"</td>
-                        <td><input type="text" name="accountbalePhone" value="{$FORM_VALUES.ACCOUNTABLEPHONE}"></td>
+                        <td><input type="text" name="masterName" value="{$FORM_VALUES.MASTERNAME}"/></td>
+                        <td><input type="text" name="masterNIF" value="{$FORM_VALUES.MASTERNIF}"</td>
+                        <td><input type="text" name="masterLicense" value="{$FORM_VALUES.MASTERLICENCE}"</td>
+                        <td><input type="text" name="masterEmail" value="{$FORM_VALUES.MASTEREMAIL}"</td>
+                        <td><input type="text" name="masterCell" value="{$FORM_VALUES.MASTERPHONE}"></td>
                     </tr>
                 </table>
         </span>

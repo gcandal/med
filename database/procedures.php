@@ -243,27 +243,92 @@
         return $stmt->fetchAll();
     }
 
-    function addProfessionals($professionals)
+    function addProfessional($name, $NIF, $idaccount, $licenceID, $email, $cell)
     {
         global $conn;
 
         $conn->beginTransaction();
 
-        foreach ($professionals as $professional) {
-            if (isset($professional['nonDefault'])) {
-                $stmt = $conn->prepare("INSERT INTO PROCEDUREPROFESSIONAL(idprocedure, idprofessional, nondefault)
-                                    VALUES(:idProcedure, :idProfessional, :nonDefault)");
-                $stmt->execute(array(":idProcedure" => $professional['idProcedure'], ":idProfessional" => $professional['idProfessional'], ":nonDefault" => $professional['nonDefault']));
-
-            } else {
-                $stmt = $conn->prepare("INSERT INTO PROCEDUREPROFESSIONAL(idprocedure, idprofessional)
-                                    VALUES(:idProcedure, :idProfessional)");
-                $stmt->execute(array(":idProcedure" => $professional['idProcedure'], ":idProfessional" => $professional['idProfessional']));
-            }
-
+        if ($NIF != "") {
+            $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name, nif, idaccount) VALUES(:name, :nif, :idaccount);");
+            $stmt->execute(array(":name" => $name, ":nif" => $NIF, ":idaccount" => $idaccount));
+        } else {
+            $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name) VALUES(?);");
+            $stmt->execute(array($NIF));
         }
 
-        return $conn->commit() == true;
+        $id = $conn->lastInsertId('professional_idprofessional_seq');
+
+        if ($licenceID != "") {
+            $stmt = $conn->prepare("UPDATE PROFESSIONAL SET licenceid = :licenceid WHERE idprofessional = :idprofessional;");
+            $stmt->execute(array(":licenceid" => $licenceID, ":idprofessional" => $id));
+        }
+
+        if ($email != "") {
+            $stmt = $conn->prepare("UPDATE PROFESSIONAL SET email = :email WHERE idprofessional = :idprofessional;");
+            $stmt->execute(array(":email" => $email, ":idprofessional" => $id));
+        }
+
+        if ($cell != "") {
+            $stmt = $conn->prepare("UPDATE PROFESSIONAL SET cell = :cell WHERE idprofessional = :idprofessional;");
+            $stmt->execute(array(":cell" => $cell, ":idprofessional" => $id));
+        }
+
+        if ($conn->commit()) {
+            return $id;
+        } else {
+            return 0;
+        }
+    }
+
+    function addFirstAssistant($idProfessional, $idProcedure)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET idfirstassistant = :idfirstassistant WHERE idprocedure = :idprocedure;");
+        $stmt->execute(array(":idfirstassistant" => $idProfessional, ":idprocedure" => $idProcedure));
+
+        return $stmt->fetch();
+    }
+
+    function addSecondAssistant($idProfessional, $idProcedure)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET idsecondssistant = :idsecondassistant WHERE idprocedure = :idprocedure;");
+        $stmt->execute(array(":idsecondassistant" => $idProfessional, ":idprocedure" => $idProcedure));
+
+        return $stmt->fetch();
+    }
+
+    function addInstrumentist($idProfessional, $idProcedure)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET idinstrumentist = :idinstrumentist WHERE idprocedure = :idprocedure;");
+        $stmt->execute(array(":idinstrumentist" => $idProfessional, ":idprocedure" => $idProcedure));
+
+        return $stmt->fetch();
+    }
+
+    function addAnesthetist($idProfessional, $idProcedure)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET idanesthetist = :idanesthetist WHERE idprocedure = :idprocedure;");
+        $stmt->execute(array(":idanesthetist" => $idProfessional, ":idprocedure" => $idProcedure));
+
+        return $stmt->fetch();
+    }
+
+    function addMaster($idProfessional, $idProcedure)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET idmaster = :idmaster WHERE idprocedure = :idprocedure;");
+        $stmt->execute(array(":idmaster" => $idProfessional, ":idprocedure" => $idProcedure));
+
+        return $stmt->fetch();
     }
 
     function getRecentProfessionals($idaccount, $speciality, $name)
