@@ -356,12 +356,15 @@ function getTotalK() {
         $('.subProcedure').each(function () {
             for (var i = 0; i < subProcedureTypes.length; i++) {
                 if ($(this).val() == subProcedureTypes[i].idproceduretype) {
-                    total += subProcedureTypes[i].k;
+                    total += parseInt(subProcedureTypes[i].k);
                 }
             }
         });
+
+        return total;
     }
-    return total;
+
+    return 0;
 }
 
 var updatePayerVisibility = function () {
@@ -414,11 +417,13 @@ var updateFunctionVisibility = function () {
         case 'Principal':
             $("span#principal").show();
             $("span#ajudante").hide();
+            $("[name=personalRemun]").prop('readonly', true);
             break;
         case 'Ajudante':
         case 'Anestesista':
             $("span#principal").hide();
             $("span#ajudante").show();
+            $("[name=personalRemun]").prop('readonly', false);
             break;
         default:
             break;

@@ -104,19 +104,19 @@
 
         echo "Id do procedimento acabado de inserir: " + $id;
 
-        if (isset($totalRemun)) {
+        if (is_numeric($totalRemun)) {
             $stmt = $conn->prepare("UPDATE PROCEDURE SET totalremun = :totalremun WHERE idprocedure = :idprocedure;");
 
             $stmt->execute(array("totalremun" => $totalRemun, "idprocedure" => $id));
         }
 
-        if (isset($personalRemun)) {
+        if (is_numeric($personalRemun)) {
             $stmt = $conn->prepare("UPDATE PROCEDURE SET personalremun = :personalremun WHERE idprocedure = :idprocedure;");
 
             $stmt->execute(array("personalremun" => $personalRemun, "idprocedure" => $id));
         }
 
-        if (isset($valuePerK)) {
+        if (is_numeric($valuePerK)) {
             $stmt = $conn->prepare("UPDATE PROCEDURE SET valueperk = :valueperk WHERE idprocedure = :idprocedure;");
 
             $stmt->execute(array("valueperk" => $valuePerK, "idprocedure" => $id));
@@ -243,7 +243,7 @@
         return $stmt->fetchAll();
     }
 
-    function addProfessional($name, $NIF, $idaccount, $licenceID, $email, $cell)
+    function addProfessional($name, $NIF, $idAccount, $licenseID, $email, $cell, $remuneration)
     {
         global $conn;
 
@@ -251,17 +251,17 @@
 
         if ($NIF != "") {
             $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name, nif, idaccount) VALUES(:name, :nif, :idaccount);");
-            $stmt->execute(array(":name" => $name, ":nif" => $NIF, ":idaccount" => $idaccount));
+            $stmt->execute(array(":name" => $name, ":nif" => $NIF, ":idaccount" => $idAccount));
         } else {
-            $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name) VALUES(?);");
-            $stmt->execute(array($NIF));
+            $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name, idaccount) VALUES(?, ?);");
+            $stmt->execute(array($name, $idAccount));
         }
 
         $id = $conn->lastInsertId('professional_idprofessional_seq');
 
-        if ($licenceID != "") {
-            $stmt = $conn->prepare("UPDATE PROFESSIONAL SET licenceid = :licenceid WHERE idprofessional = :idprofessional;");
-            $stmt->execute(array(":licenceid" => $licenceID, ":idprofessional" => $id));
+        if ($licenseID != "") {
+            $stmt = $conn->prepare("UPDATE PROFESSIONAL SET licenseid = :licenseid WHERE idprofessional = :idprofessional;");
+            $stmt->execute(array(":licenseid" => $licenseID, ":idprofessional" => $id));
         }
 
         if ($email != "") {
@@ -272,6 +272,11 @@
         if ($cell != "") {
             $stmt = $conn->prepare("UPDATE PROFESSIONAL SET cell = :cell WHERE idprofessional = :idprofessional;");
             $stmt->execute(array(":cell" => $cell, ":idprofessional" => $id));
+        }
+
+        if ($remuneration != "") {
+            $stmt = $conn->prepare("UPDATE PROFESSIONAL SET remuneration = :remuneration WHERE idprofessional = :idprofessional;");
+            $stmt->execute(array(":remuneration" => $remuneration, ":idprofessional" => $id));
         }
 
         if ($conn->commit()) {
@@ -295,7 +300,7 @@
     {
         global $conn;
 
-        $stmt = $conn->prepare("UPDATE PROCEDURE SET idsecondssistant = :idsecondassistant WHERE idprocedure = :idprocedure;");
+        $stmt = $conn->prepare("UPDATE PROCEDURE SET idsecondassistant = :idsecondassistant WHERE idprocedure = :idprocedure;");
         $stmt->execute(array(":idsecondassistant" => $idProfessional, ":idprocedure" => $idProcedure));
 
         return $stmt->fetch();

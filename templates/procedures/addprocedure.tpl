@@ -4,42 +4,57 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <p>Dados do Procedimento</p>
-    <hr>
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/addprocedure.php">
+
     <label>
-        Estado de pagamento:
-        <select name="status" required>
-            <option value="Pendente">Pendente</option>
-            <option value="Recebi">Recebi</option>
-            <option value="Paguei">Paguei</option>
+        Função a Desempenhar:
+        <select id="function" name="function">
+            <option value="Principal">Cirurgião Principal</option>
+            <option value="Ajudante">Ajudante</option>
+            <option value="Anestesista">Anestesista</option>
         </select>
     </label>
     <label>
-        Tipo de pagador:
-        <select id="entityType" required>
-            <option value="Privado">Privado</option>
-            <option value="Entidade">Entidade</option>
-            <option value="Novo Privado">Novo Privado</option>
-            <option value="Nova Entidade">Nova Entidade</option>
-        </select>
+        Data:
+        <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
     </label>
+    <button type="submit">Submeter</button>
 
-        <span id="privatePayer">
-            <select name="privateName" required>
-                {foreach $ENTITIES['Privado'] as $entity}
-                    <option value="{$entity.idprivatepayer}">{$entity.name}</option>
-                {/foreach}
-            </select>
-        </span>
+    <hr>
+        <span id="principal">
+            <label>
+                Estado de pagamento:
+                <select name="status" required>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Recebi">Recebi</option>
+                    <option value="Paguei">Paguei</option>
+                </select>
+            </label>
+            <label>
+                Tipo de pagador:
+                <select id="entityType" required>
+                    <option value="Privado">Privado</option>
+                    <option value="Entidade">Entidade</option>
+                    <option value="Novo Privado">Novo Privado</option>
+                    <option value="Nova Entidade">Nova Entidade</option>
+                </select>
+            </label>
 
-        <span id="entityPayer">
-            <select name="entityName" required>
-                {foreach $ENTITIES['Entidade'] as $entity}
-                    <option value="{$entity.identitypayer}">{$entity.name}</option>
-                {/foreach}
-            </select>
-        </span>
+            <span id="privatePayer">
+                <select name="privateName" required>
+                    {foreach $ENTITIES['Privado'] as $entity}
+                        <option value="{$entity.idprivatepayer}">{$entity.name}</option>
+                    {/foreach}
+                </select>
+            </span>
+
+            <span id="entityPayer">
+                <select name="entityName" required>
+                    {foreach $ENTITIES['Entidade'] as $entity}
+                        <option value="{$entity.identitypayer}">{$entity.name}</option>
+                    {/foreach}
+                </select>
+            </span>
 
     <input type="hidden" id="payerType" name="payerType" value="None" required/>
 
@@ -90,28 +105,7 @@
             </label>
         </span>
 
-    <label>
-        Data:
-        <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
-    </label>
 
-    <button type="submit">Submeter</button>
-
-    <br>
-    <hr>
-
-    <p>Informações Pessoais</p>
-
-    <label>
-        Função a Desempenhar:
-        <select id="function" name="function">
-            <option value="Principal">Cirurgião Principal</option>
-            <option value="Ajudante">Ajudante</option>
-            <option value="Anestesista">Anestesista</option>
-        </select>
-    </label>
-
-        <span id="principal">
             <p>Equipa</p>
             <table class="teamTable" border="1">
                 <tr>
@@ -166,15 +160,19 @@
                         </select></td>
                     <td><input type="text" name="totalRemun" readonly value="0"></td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Pessoal</td>
-                    <td><input type="text" name="personalRemun" readonly value="0"></td>
-                </tr>
             </table>
+            <p>Sub-Procedimentos </p>
+        <span id="subProcedureMenu">
+            <input type="hidden" name="nSubProcedures" value="0">
+            <button type="button" id="addSubProcedure">Adicionar</button>
+            <button type="button" id="removeSubProcedure">Remover</button>
+            <br>
         </span>
+
+        <span id="subProcedures">
+        </span>
+        </span>
+    </span>
 
         <span id="ajudante">
             <p>Responsável</p>
@@ -194,20 +192,21 @@
                         <td><input type="text" name="masterCell" value="{$FORM_VALUES.MASTERPHONE}"></td>
                     </tr>
                 </table>
-        </span>
+
+
+</span>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Remuneração Pessoal</td>
+            <td><input type="text" name="personalRemun" readonly value="0"></td>
+        </tr>
+    </table>
     <br>
     <hr>
 
-    <p>Sub-Procedimentos </p>
-        <span id="subProcedureMenu">
-            <input type="hidden" name="nSubProcedures" value="0">
-            <button type="button" id="addSubProcedure">Adicionar</button>
-            <button type="button" id="removeSubProcedure">Remover</button>
-            <br>
-        </span>
-
-        <span id="subProcedures">
-        </span>
     </form>
     <script type="text/javascript">
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};

@@ -105,7 +105,8 @@ CREATE TABLE Professional (
   licenseId      LicenseId,
   email          VARCHAR(120),
   cell           NIF,
-  createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  remuneration   FLOAT
 );
 
 CREATE TABLE ProcedureType (

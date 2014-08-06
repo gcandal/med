@@ -98,45 +98,58 @@
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     $wasAssistant = $_POST['function'] != 'Principal';
     $idAccount = $_SESSION['idaccount'];
-    if ($wasAssistant) $wasAssistant = 'true'; else
+
+    if (!$wasAssistant) {
         $wasAssistant = 'false';
 
-    for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
-        $subProcedures[] = $_POST["subProcedure$i"];
-    }
+        for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
+            $subProcedures[] = $_POST["subProcedure$i"];
+        }
 
-    $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK']);
+        $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK']);
 
-    if (count($subProcedures) > 0) {
-        addSubProcedures($idProcedure, $subProcedures);
-    }
-
-    if ($_POST['function'] == "Principal") {
+        if (count($subProcedures) > 0) {
+            addSubProcedures($idProcedure, $subProcedures);
+        }
 
         if ($_POST['firstAssistantName'] != "") {
-            $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, "", "", "");
+            $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, "", "", "", $_POST['firstAssistantRemun']);
             addFirstAssistant($idProf, $idProcedure);
         }
 
         if ($_POST['secondAssistantName'] != "") {
-            $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, "", "", "");
+            $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, "", "", "", $_POST['secondAssistantRemun']);
             addSecondAssistant($idProf, $idProcedure);
         }
 
         if ($_POST['instrumentistName'] != "") {
-            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "");
+            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "", $_POST['instrumentistRemun']);
             addInstrumentist($idProf, $idProcedure);
         }
 
         if ($_POST['anesthetistName'] != "") {
-            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "");
+            echo "cenas";
+            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "", $_POST['anesthetistRemun']);
             addAnesthetist($idProf, $idProcedure);
         }
+
     } else {
+        $wasAssistant = 'true';
+
+        $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, 0.0, $_POST['personalRemun'], "");
+
         if ($_POST['masterName'] != "") {
-            $idProf = addProfessional($_POST['masterName'], $_POST['masterNIF'], $idAccount, $_POST['masterLicense'], $_POST['masterEmail'], $_POST['masterPhone']);
+            $idProf = addProfessional($_POST['masterName'], $_POST['masterNIF'], $idAccount, $_POST['masterLicense'], $_POST['masterEmail'], $_POST['masterPhone'], 0);
             addMaster($idProf, $idProcedure);
         }
     }
