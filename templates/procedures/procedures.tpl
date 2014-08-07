@@ -20,7 +20,7 @@
             <tr>
                 <td>{$procedure.date}</td>
                 <td>{$procedure.paymentstatus}</td>
-                {if $procedure.payerId = 0}
+                {if $procedure.payerId == 0}
                     <td>{$procedure.payerName}</td>
                 {else}
                     <td>
@@ -28,14 +28,10 @@
                     </td>
                 {/if}
                 <td>
-                    <form action="{$BASE_URL}pages/procedures/viewSubProcedures.php?idProcedure={$procedure.idprocedure}">
-                        <button type="submit">Ver</button>
-                    </form>
+                    <a href="{$BASE_URL}pages/procedures/viewSubProcedures.php?idProcedure={$procedure.idprocedure}">Ver</a>
                 </td>
                 <td>
-                    <form action="{$BASE_URL}pages/procedures/viewTeam.php?idProcedure={$procedure.idprocedure}">
-                        <button type="submit">Ver</button>
-                    </form>
+                    <a href="{$BASE_URL}pages/procedures/viewTeam.php?idProcedure={$procedure.idprocedure}">Ver</a>
                 </td>
                 <td>{$procedure.totalremun}&euro;</td>
                 <td>

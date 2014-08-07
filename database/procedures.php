@@ -35,6 +35,35 @@
         return $procedures;
     }
 
+    function getSubProcedures($idAccount, $idProcedure)
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT * FROM PROCEDUREACCOUNT WHERE idProcedure = ?");
+        $stmt->execute(array($idProcedure));
+
+        $procedures = $stmt->fetchAll();
+
+        if (sizeof($procedures) == 0) {
+            return "Este procedimento não existe ou foi apagado";
+        } else {
+            $i = 0;
+            foreach ($procedures as $procedure) {
+                if ($procedure['idaccount'] == $idAccount) $i++;
+            }
+
+            if ($i == 0) {
+                return "Este procedimento não lhe pertence";
+            }
+        }
+
+        $stmt = $conn->prepare("SELECT * FROM PROCEDUREPROCEDURETYPE NATURAL JOIN PROCEDURETYPE WHERE idProcedure = ?");
+        $stmt->execute(array($idProcedure));
+
+        $subProcedures = $stmt->fetchAll();
+
+        return $subProcedures;
+    }
+
     function getNumberOfOpenProcedures($idAccount)
     {
         global $conn;
