@@ -1,5 +1,5 @@
 <?php
-require_once '../../swiftmailer/lib/swift_required.php';
+require_once '../../lib/swiftmailer/lib/swift_required.php';
 
 $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, "ssl")
     ->setUsername('gabrielcandal@gmail.com')

@@ -21,5 +21,8 @@
     $smarty->assign('ENTITIES', $entities);
     $smarty->assign('PROCEDURETYPES', $procedureTypes);
     //$smarty->assign('SPECIALITIES', $specialities);
+
+    $_SESSION['form_values']['entityType'] = $_SESSION['entityType'];
+
     $smarty->display('procedures/addprocedure.tpl');
 ?>

@@ -1,6 +1,3 @@
-var niferror = $("#niferrorEntity, #niferrorPrivate");
-var nif = $('#nifEntity, #nifPrivate');
-
 $(document).ready(function () {
     checkValidNIF();
     checkValidDate();
@@ -18,6 +15,8 @@ $(document).ready(function () {
 
 var checkValidNIF = function () {
     var nifRegex = new RegExp('\\d{9}');
+    var nif = $('#nifEntity, #nifPrivate');
+    var niferror = $("#niferrorEntity, #niferrorPrivate");
 
     nif.bind("paste drop input change cut", function () {
         var text = $(this).val();

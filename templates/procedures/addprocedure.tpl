@@ -6,21 +6,21 @@
     {/foreach}
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/addprocedure.php">
 
-    <label>
-        Função a Desempenhar:
-        <select id="function" name="function">
-            <option value="Principal">Cirurgião Principal</option>
-            <option value="Ajudante">Ajudante</option>
-            <option value="Anestesista">Anestesista</option>
-        </select>
-    </label>
-    <label>
-        Data:
-        <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
-    </label>
-    <button type="submit">Submeter</button>
+        <label>
+            Função a Desempenhar:
+            <select id="function" name="function">
+                <option value="Principal">Cirurgião Principal</option>
+                <option value="Ajudante">Ajudante</option>
+                <option value="Anestesista">Anestesista</option>
+            </select>
+        </label>
+        <label>
+            Data:
+            <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
+        </label>
+        <button type="submit">Submeter</button>
 
-    <hr>
+        <hr>
         <span id="principal">
             <label>
                 Estado de pagamento:
@@ -31,13 +31,21 @@
                 </select>
             </label>
             <label>
-                Tipo de pagador:
                 <select id="entityType" required>
                     <option value="Privado">Privado</option>
                     <option value="Entidade">Entidade</option>
                     <option value="Novo Privado">Novo Privado</option>
                     <option value="Nova Entidade">Nova Entidade</option>
                 </select>
+
+                <script>
+                    if ("{$ENTITYTYPE}" !== 'None') {
+                        if ("{$ENTITYTYPE}" === 'Private')
+                            $("select#entityType").val("Novo Privado");
+                        else
+                            $("select#entityType").val("Nova Entidade");
+                    }
+                </script>
             </label>
 
             <span id="privatePayer">
@@ -56,47 +64,7 @@
                 </select>
             </span>
 
-    <input type="hidden" id="payerType" name="payerType" value="None" required/>
-
-        <span id="newEntityPayer">
-            <label>
-                Nome:
-                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
-                <span>{$FIELD_ERRORS.name}</span>
-            </label>
-            <label>
-                Início do Contrato:
-                <input type="date" name="contractstart" id="contractstart" placeholder="Início do Contrato"
-                       value="{$FORM_VALUES.contractstart}"/>
-            </label>
-            <label>
-                Fim do Contrato:
-                <input type="date" name="contractend" id="contractend" placeholder="Fim do Contrato"
-                       value="{$FORM_VALUES.contractend}"/>
-            </label>
-            <span id="dateerror"></span>
-            <label>
-                NIF:
-                <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" value="{$FORM_VALUES.nif}"
-                       {literal}pattern="\d{9}"{/literal} maxlength="9"/>
-                <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
-            </label>
-        </span>
-
-        <span id="newPrivatePayer">
-            <label>
-                Nome:
-                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
-                <span>{$FIELD_ERRORS.name}</span>
-            </label>
-
-            <label>
-                NIF:
-                <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
-                       {literal}pattern="\d{9}"{/literal} maxlength="9"/>
-                <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
-            </label>
-        </span>
+        <input type="hidden" id="payerType" name="payerType" value="None" required/>
 
         <span id="valuePerK">
             <label>
@@ -172,7 +140,7 @@
         <span id="subProcedures">
         </span>
         </span>
-    </span>
+        </span>
 
         <span id="ajudante">
             <p>Responsável</p>
@@ -195,17 +163,17 @@
 
 
 </span>
-    <table>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Remuneração Pessoal</td>
-            <td><input type="text" name="personalRemun" readonly value="0"></td>
-        </tr>
-    </table>
-    <br>
-    <hr>
+        <table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Remuneração Pessoal</td>
+                <td><input type="text" name="personalRemun" readonly value="0"></td>
+            </tr>
+        </table>
+        <br>
+        <hr>
 
     </form>
     <script type="text/javascript">
@@ -213,6 +181,49 @@
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
         var baseUrl = {$BASE_URL};
+    </script>
+    <script src="{$BASE_URL}lib/handlebars-v1.3.0.js" type="text/javascript"></script>
+    <script id="newPrivatePayer-template" type="text/x-handlebars-template">
+        <span id="newPrivatePayer">
+            <label>
+                Nome:
+                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40" required/>
+                <span>{$FIELD_ERRORS.name}</span>
+            </label>
+
+            <label>
+                NIF:
+                <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
+                       {literal}pattern="\d{9}"{/literal} maxlength="9" required />
+                <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
+            </label>
+        </span>
+    </script>
+    <script id="newEntityPayer-template" type="text/x-handlebars-template">
+        <span id="newEntityPayer">
+            <label>
+                Nome:
+                <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40" required/>
+                <span>{$FIELD_ERRORS.name}</span>
+            </label>
+            <label>
+                Início do Contrato:
+                <input type="date" name="contractstart" id="contractstart" placeholder="Início do Contrato"
+                       value="{$FORM_VALUES.contractstart}"/>
+            </label>
+            <label>
+                Fim do Contrato:
+                <input type="date" name="contractend" id="contractend" placeholder="Fim do Contrato"
+                       value="{$FORM_VALUES.contractend}"/>
+            </label>
+            <span id="dateerror"></span>
+            <label>
+                NIF:
+                <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" value="{$FORM_VALUES.nif}"
+                       {literal}pattern="\d{9}"{/literal} maxlength="9" required/>
+                <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
+            </label>
+        </span>
     </script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
     <script src="{$BASE_URL}javascript/validateaddprocedureform.js"></script>

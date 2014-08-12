@@ -1,6 +1,9 @@
 var subProcedures = 0;
+var newPrivatePayerTemplate = Handlebars.compile($('#newPrivatePayer-template').html());
+var newEntityPayerTemplate = Handlebars.compile($('#newEntityPayer-template').html());
 
 $(document).ready(function () {
+
     updatePayerVisibility();
     updateFunctionVisibility();
     addSubProcedure();
@@ -374,8 +377,8 @@ var updatePayerVisibility = function () {
         case 'Privado':
             $("span#privatePayer").show();
             $("span#entityPayer").hide();
-            $("span#newEntityPayer").hide();
-            $("span#newPrivatePayer").hide();
+            $("#newEntityPayer").remove();
+            $("#newPrivatePayer").remove();
             $("[name=valuePerK]").prop('readonly', true);
             fillValuePerK('private');
             payerType.val("None");
@@ -384,28 +387,31 @@ var updatePayerVisibility = function () {
             $("span#privatePayer").hide();
             $("span#entityPayer").show();
             $("span#newEntityPayer").hide();
-            $("span#newPrivatePayer").hide();
+            $("#newPrivatePayer").remove();
             $("[name=valuePerK]").prop('readonly', true);
             fillValuePerK('entity');
             payerType.val("None");
             break;
         case 'Novo Privado':
             $("span#privatePayer").hide();
-            $("span#entityPayer").hide();
-            $("span#newEntityPayer").hide();
-            $("span#newPrivatePayer").show();
+            $("#newEntityPayer").remove();
             $("[name=valuePerK]").prop('readonly', false);
             fillValuePerK('none');
             payerType.val("Private");
+            $("#newEntityPayer").remove();
+            $("span#entityPayer").after(newPrivatePayerTemplate());
+            checkValidNIF();
             break;
         case 'Nova Entidade':
             $("span#privatePayer").hide();
             $("span#entityPayer").hide();
-            $("span#newEntityPayer").show();
-            $("span#newPrivatePayer").hide();
             $("[name=valuePerK]").prop('readonly', false);
             fillValuePerK('none');
             payerType.val("Insurance");
+            $("#newPrivatePayer").remove();
+            $("span#entityPayer").after(newEntityPayerTemplate());
+            checkValidNIF();
+            checkValidDate();
             break;
         default:
             break;

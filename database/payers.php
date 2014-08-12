@@ -165,11 +165,12 @@ function editEntityPayerValuePerK($accountid, $identitypayer, $valueperk)
 function deleteEntityPayer($accountid, $identitypayer)
 {
     global $conn;
-    $stmt = $conn->prepare("DELETE FROM entitypayer WHERE identitypayer NOT IN(SELECT
-                                identitypayer
-                              FROM procedure
-                              WHERE idaccount = :accountid
-                            ) AND identitypayer = :identitypayer");
+    $stmt = $conn->prepare("DELETE FROM entitypayer WHERE identitypayer = :identitypayer
+                            AND (SELECT
+                                procedure.identitypayer
+                              FROM procedure, procedureaccount
+                              WHERE procedureaccount.idaccount = :accountid AND procedureaccount.idprocedure = procedure.idprocedure AND procedure.identitypayer = :identitypayer
+                            ) IS NULL");
     $stmt->execute(array("accountid" => $accountid, "identitypayer" => $identitypayer));
 
     return $stmt->rowCount() > 0;
@@ -178,11 +179,12 @@ function deleteEntityPayer($accountid, $identitypayer)
 function deletePrivatePayer($accountid, $idprivatepayer)
 {
     global $conn;
-    $stmt = $conn->prepare("DELETE FROM privatepayer WHERE idprivatepayer NOT IN(SELECT
-                                idprivatepayer
-                              FROM procedure
-                              WHERE idaccount = :accountid
-                            ) AND idprivatepayer = :idprivatepayer");
+    $stmt = $conn->prepare("DELETE FROM privatepayer WHERE idprivatepayer = :idprivatepayer
+                            AND (SELECT
+                                procedure.idprivatepayer
+                              FROM procedure, procedureaccount
+                              WHERE procedureaccount.idaccount = :accountid AND procedureaccount.idprocedure = procedure.idprocedure AND procedure.idprivatepayer = :idprivatepayer
+                            ) IS NULL");
     $stmt->execute(array("accountid" => $accountid, "idprivatepayer" => $idprivatepayer));
 
     return $stmt->rowCount() > 0;
