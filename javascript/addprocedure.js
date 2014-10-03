@@ -381,7 +381,7 @@ var updatePayerVisibility = function () {
             $("#newPrivatePayer").remove();
             $("[name=valuePerK]").prop('readonly', true);
             fillValuePerK('private');
-            payerType.val("None");
+            payerType.val("Private");
             break;
         case 'Entidade':
             $("span#privatePayer").hide();
@@ -390,14 +390,14 @@ var updatePayerVisibility = function () {
             $("#newPrivatePayer").remove();
             $("[name=valuePerK]").prop('readonly', true);
             fillValuePerK('entity');
-            payerType.val("None");
+            payerType.val("Entity");
             break;
         case 'Novo Privado':
             $("span#privatePayer").hide();
             $("#newEntityPayer").remove();
             $("[name=valuePerK]").prop('readonly', false);
             fillValuePerK('none');
-            payerType.val("Private");
+            payerType.val("NewPrivate");
             $("#newEntityPayer").remove();
             $("span#entityPayer").after(newPrivatePayerTemplate());
             checkValidNIF();
@@ -407,7 +407,7 @@ var updatePayerVisibility = function () {
             $("span#entityPayer").hide();
             $("[name=valuePerK]").prop('readonly', false);
             fillValuePerK('none');
-            payerType.val("Insurance");
+            payerType.val("NewEntity");
             $("#newPrivatePayer").remove();
             $("span#entityPayer").after(newEntityPayerTemplate());
             checkValidNIF();

@@ -12,9 +12,14 @@
     }
 
     $idAccount = $_SESSION['idaccount'];
-    $username = getUserById($idAccount);
+    $username = $_SESSION['name'];
+
     $openProcedures = getNumberOfOpenProcedures($idAccount);
     $procedures = getProcedures($idAccount);
+
+    foreach($procedures as $key => $procedure) {
+        $procedures[$key]["subprocedures"] = getSubProcedures($procedure['idprocedure']);
+    }
 
     $smarty->assign('USERNAME', $username);
     $smarty->assign('OPENPROCEDURES', $openProcedures);

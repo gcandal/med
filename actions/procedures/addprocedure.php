@@ -13,7 +13,7 @@
     $type = $_POST['payerType'];
     $_SESSION['entityType'] = $type;
 
-    if ($type !== 'None') {
+    if ($type === 'NewPrivate' || $type === 'NewEntity') {
         $name = $_POST['name'];
         $nif = $_POST['nif'];
         $valueperk = $_POST['valuePerK'];
@@ -40,9 +40,9 @@
             exit;
         }
 
-        if ($type === 'Private') {
+        if ($type === 'NewPrivate') {
             try {
-                createPrivatePayer($name, $accountId, $nif, $valueperk);
+                $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
             } catch (PDOException $e) {
                 if (strpos($e->getMessage(), 'validnif') !== false) {
                     $_SESSION['error_messages'][] = 'NIF inválido';
@@ -69,7 +69,7 @@
             }
 
             try {
-                createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $accountId);
+                $identitypayer = createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $accountId);
             } catch (PDOException $e) {
 
                 if (strpos($e->getMessage(), 'validnif') !== false) {
@@ -96,6 +96,14 @@
     $wasAssistant = $_POST['function'] != 'Principal';
     $idAccount = $_SESSION['idaccount'];
 
+    $idprivatepayer = NULL;
+    if($type === 'Private')
+        $idprivatepayer = $_POST['privateName'];
+
+    $identitypayer = NULL;
+    if($type === 'Entity')
+        $identitypayer = $_POST['entityName'];
+
     if (!$wasAssistant) {
         $wasAssistant = 'false';
 
@@ -103,7 +111,7 @@
             $subProcedures[] = $_POST["subProcedure$i"];
         }
 
-        $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK']);
+        $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK'], $idprivatepayer, $identitypayer);
 
         if (count($subProcedures) > 0) {
             addSubProcedures($idProcedure, $subProcedures);
@@ -133,15 +141,13 @@
     } else {
         $wasAssistant = 'true';
 
-        $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, 0.0, $_POST['personalRemun'], "");
+        $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, 0.0, $_POST['personalRemun'], NULL, NULL, NULL);
 
         if ($_POST['masterName'] != "") {
             $idProf = addProfessional($_POST['masterName'], $_POST['masterNIF'], $idAccount, $_POST['masterLicense'], $_POST['masterEmail'], $_POST['masterPhone'], 0);
             addMaster($idProf, $idProcedure);
         }
     }
-
-    addProcedureToAccount($idProcedure, $idAccount);
 
     $_SESSION['success_messages'][] = 'Procedimento adicionado com sucesso';
 

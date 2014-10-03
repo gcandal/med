@@ -3,22 +3,37 @@
 function createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $idaccount)
 {
     global $conn;
+
+    $conn->beginTransaction();
+    $id = $conn->lastInsertId('entitypayer_identitypayer_seq');
+
     $stmt = $conn->prepare("INSERT INTO EntityPayer(name, contractstart, contractend, type, nif, valueperk, idaccount)
                             VALUES(:name, :contractstart, :contractend, :type, :nif, :valueperk, :idaccount)");
 
     $stmt->execute(array("name" => $name, "contractstart" => $contractstart, "contractend" => $contractend, "type" => $type, "nif" => $nif, "valueperk" => $valueperk, "idaccount" => $idaccount));
 
-    return $stmt->fetch() == true;
+    if ($conn->commit()) {
+        return $id;
+    } else {
+        return 0;
+    }
 }
 
 function createPrivatePayer($name, $accountId, $nif, $valuePerK)
 {
     global $conn;
+    $conn->beginTransaction();
+    $id = $conn->lastInsertId('privatepayer_idprivatepayer_seq');
+
     $stmt = $conn->prepare("INSERT INTO PrivatePayer(name, idaccount, nif, valuePerK)
                             VALUES(:name, :accountId, :nif, :valueperk)");
     $stmt->execute(array("name" => $name, "accountId" => $accountId, "nif" => $nif, "valueperk" => $valuePerK));
 
-    return $stmt->fetch() == true;
+    if ($conn->commit()) {
+        return $id;
+    } else {
+        return 0;
+    }
 }
 
 function getEntityPayers($idAccount)

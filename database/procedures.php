@@ -12,7 +12,11 @@
     function getProcedures($idAccount)
     {
         global $conn;
-        $stmt = $conn->prepare("SELECT * FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? ORDER BY date DESC");
+
+        $stmt = $conn->prepare("SELECT idProcedure, paymentstatus, idprivatepayer, identitypayer, date,
+        totalRemun, personalRemun, wasAssistant
+         FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? ORDER BY date DESC");
+
         $stmt->execute(array($idAccount));
 
         $procedures = $stmt->fetchAll();
@@ -35,33 +39,19 @@
         return $procedures;
     }
 
-    function getSubProcedures($idAccount, $idProcedure)
+    function getSubProcedures($idProcedure)
     {
         global $conn;
-        $stmt = $conn->prepare("SELECT * FROM PROCEDUREACCOUNT WHERE idProcedure = ?");
-        $stmt->execute(array($idProcedure));
 
-        $procedures = $stmt->fetchAll();
+        $stmt = $conn->prepare("SELECT array_to_string(array_agg(name), ', ') subProcedures FROM proceduretype, procedureproceduretype
+                                WHERE procedureproceduretype.idprocedure = :idProcedure
+                                AND procedureproceduretype.idproceduretype = proceduretype.idproceduretype");
 
-        if (sizeof($procedures) == 0) {
-            return "Este procedimento não existe ou foi apagado";
-        } else {
-            $i = 0;
-            foreach ($procedures as $procedure) {
-                if ($procedure['idaccount'] == $idAccount) $i++;
-            }
+        $stmt->execute(array("idProcedure" => $idProcedure));
 
-            if ($i == 0) {
-                return "Este procedimento não lhe pertence";
-            }
-        }
+        $result = $stmt->fetch();
 
-        $stmt = $conn->prepare("SELECT * FROM PROCEDUREPROCEDURETYPE NATURAL JOIN PROCEDURETYPE WHERE idProcedure = ?");
-        $stmt->execute(array($idProcedure));
-
-        $subProcedures = $stmt->fetchAll();
-
-        return $subProcedures;
+        return $result["subprocedures"];
     }
 
     function getNumberOfOpenProcedures($idAccount)
@@ -110,7 +100,7 @@
         return $stmt->fetchAll();
     }
 
-    function addProcedure($idAccount, $paymentStatus, $date, $wasAssistant, $totalRemun, $personalRemun, $valuePerK)
+    function addProcedure($idAccount, $paymentStatus, $date, $wasAssistant, $totalRemun, $personalRemun, $valuePerK, $idprivatepayer, $identitypayer)
     {
         global $conn;
 
@@ -119,19 +109,17 @@
         //$code = hash('sha256', $paymentStatus + date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
 
         if (strtotime($date)) {
-            $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, wasassistant)
-                            VALUES(:paymentStatus, :date, :wasassistant);");
-            $stmt->execute(array("paymentStatus" => $paymentStatus, "date" => $date, "wasassistant" => $wasAssistant));
+            $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, wasassistant, identitypayer, idprivatepayer)
+                            VALUES(:paymentStatus, :date, :wasassistant, :identitypayer, :idprivatepayer);");
+            $stmt->execute(array("paymentStatus" => $paymentStatus, "date" => $date, "wasassistant" => $wasAssistant, "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer));
         } else {
-            $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, wasassistant)
-                            VALUES(:paymentStatus, CURRENT_TIMESTAMP, :wasassistant);");
+            $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, wasassistant, identitypayer, idprivatepayer)
+                            VALUES(:paymentStatus, CURRENT_TIMESTAMP, :wasassistant, :identitypayer, :idprivatepayer);");
 
-            $stmt->execute(array("paymentStatus" => $paymentStatus, "wasassistant" => $wasAssistant));
+            $stmt->execute(array("paymentStatus" => $paymentStatus, "wasassistant" => $wasAssistant, "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer));
         }
 
         $id = $conn->lastInsertId('procedure_idprocedure_seq');
-
-        echo "Id do procedimento acabado de inserir: " + $id;
 
         if (is_numeric($totalRemun)) {
             $stmt = $conn->prepare("UPDATE PROCEDURE SET totalremun = :totalremun WHERE idprocedure = :idprocedure;");
@@ -150,6 +138,8 @@
 
             $stmt->execute(array("valueperk" => $valuePerK, "idprocedure" => $id));
         }
+
+        addProcedureToAccount($id, $idAccount);
 
         if ($conn->commit()) {
             return $id;
