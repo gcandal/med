@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS Organization;
 DROP TABLE IF EXISTS ProcedureProcedureType;
 DROP TABLE IF EXISTS ProcedureAccount;
 DROP TABLE IF EXISTS ProcedureType;
-DROP TABLE IF EXISTS ProcedureProfessional;
 DROP TABLE IF EXISTS Procedure;
 DROP TABLE IF EXISTS Professional;
 DROP TABLE IF EXISTS LoginAttempts;
@@ -145,13 +144,6 @@ CREATE TABLE ProcedureProcedureType (
   PRIMARY KEY (idProcedure, idProcedureType)
 );
 
-CREATE TABLE ProcedureProfessional (
-  idProcedure    INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
-  idProfessional INTEGER NOT NULL REFERENCES Professional (idProfessional) ON DELETE CASCADE,
-  remuneration   FLOAT,
-  PRIMARY KEY (idProcedure, idProfessional)
-);
-
 CREATE TABLE OrgInvitation (
   idOrganization    INTEGER   NOT NULL REFERENCES Organization (idOrganization) ON DELETE CASCADE,
   idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
@@ -188,15 +180,19 @@ BEGIN
       idp,
       ida,
       licenseid
-    FROM ProcedureProfessional, Professional
+    FROM Procedure, Professional
     WHERE
-      ProcedureProfessional.idprocedure = idp AND Professional.idprofessional = ProcedureProfessional.idprofessional AND
-      licenseid IS NOT NULL AND NOT EXISTS(SELECT
-                                             *
-                                           FROM procedureinvitation
-                                           WHERE procedureinvitation.idprocedure = idp AND
-                                                 procedureinvitation.idInvitingAccount = ida AND
-                                                 procedureinvitation.licenseidinvited = licenseid);
+      Procedure.idprocedure = idp
+      AND wasassistant != TRUE AND (Professional.idProfessional = idfirstassistant
+                                    OR Professional.idProfessional = idsecondassistant
+                                    OR Professional.idProfessional = idanesthetist
+                                    OR Professional.idProfessional = idinstrumentist)
+      AND licenseid IS NOT NULL AND NOT EXISTS(SELECT
+                                                 *
+                                               FROM procedureinvitation
+                                               WHERE procedureinvitation.idprocedure = idp AND
+                                                     procedureinvitation.idInvitingAccount = ida AND
+                                                     procedureinvitation.licenseidinvited = licenseid);
 END
 $$ LANGUAGE plpgsql;
 
@@ -303,8 +299,6 @@ INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-07-02 20:36:43.206615');
 INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, NULL, DEFAULT, 0, FALSE, 0);
-INSERT INTO ProcedureProfessional VALUES (1, 1, 0);
-INSERT INTO ProcedureProfessional VALUES (1, 4, 0);
 INSERT INTO ProcedureAccount VALUES (1, 1);
 INSERT INTO ProcedureAccount VALUES (1, 2);
 SELECT

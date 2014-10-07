@@ -118,23 +118,23 @@
         }
 
         if ($_POST['firstAssistantName'] != "") {
-            $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, "", "", "", $_POST['firstAssistantRemun']);
+            $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, "", "", "", $_POST['firstAssistantRemun'], $_POST['firstAssistantSpecialityId']);
             addFirstAssistant($idProf, $idProcedure);
         }
 
         if ($_POST['secondAssistantName'] != "") {
-            $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, "", "", "", $_POST['secondAssistantRemun']);
+            $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, "", "", "", $_POST['secondAssistantRemun'], $_POST['firstAssistantSpecialityId']);
             addSecondAssistant($idProf, $idProcedure);
         }
 
         if ($_POST['instrumentistName'] != "") {
-            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "", $_POST['instrumentistRemun']);
+            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "", $_POST['instrumentistRemun'], $_POST['firstAssistantSpecialityId']);
             addInstrumentist($idProf, $idProcedure);
         }
 
         if ($_POST['anesthetistName'] != "") {
             echo "cenas";
-            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "", $_POST['anesthetistRemun']);
+            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "", $_POST['anesthetistRemun'], $_POST['firstAssistantSpecialityId']);
             addAnesthetist($idProf, $idProcedure);
         }
 
@@ -144,7 +144,7 @@
         $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $wasAssistant, 0.0, $_POST['personalRemun'], NULL, NULL, NULL);
 
         if ($_POST['masterName'] != "") {
-            $idProf = addProfessional($_POST['masterName'], $_POST['masterNIF'], $idAccount, $_POST['masterLicense'], $_POST['masterEmail'], $_POST['masterPhone'], 0);
+            $idProf = addProfessional($_POST['masterName'], $_POST['masterNIF'], $idAccount, $_POST['masterLicense'], $_POST['masterEmail'], $_POST['masterPhone'], 0, "");
             addMaster($idProf, $idProcedure);
         }
     }

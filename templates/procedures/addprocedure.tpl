@@ -80,6 +80,7 @@
                     <th>Nome</th>
                     <th>Função</th>
                     <th>NIF</th>
+                    <th>Especialidade</th>
                     <th>Percentagem de K</th>
                     <th>Remuneração</th>
                 </tr>
@@ -87,6 +88,14 @@
                     <td><input type="text" name="firstAssistantName" value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
                     <td>1º Ajudante</td>
                     <td><input type="text" name="firstAssistantNIF" value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
+                    <td>
+                        <select id="anesthetistIdSpeciality">
+                            <option value=""></option>
+                            {foreach $SPECIALITIES as $speciality}
+                                <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                            {/foreach}
+                        </select>
+                    </td>
                     <td>20%</td>
                     <td><input type="text" name="firstAssistantRemun" readonly value="0"></td>
                 </tr>
@@ -94,6 +103,14 @@
                     <td><input type="text" name="secondAssistantName" value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                     <td>2º Ajudante</td>
                     <td><input type="text" name="secondAssistantNIF" value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
+                    <td>
+                        <select id="anesthetistIdSpeciality">
+                            <option value=""></option>
+                            {foreach $SPECIALITIES as $speciality}
+                                <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                            {/foreach}
+                        </select>
+                    </td>
                     <td>10%</td>
                     <td><input type="text" name="secondAssistantRemun" readonly value="0"></td>
                 </tr>
@@ -101,13 +118,30 @@
                     <td><input type="text" name="instrumentistName" value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                     <td>Instrumentista</td>
                     <td><input type="text" name="instrumentistNIF" value="{$FORM_VALUES.INSTRUMENTISTNIF}"/></td>
+                    <td>
+                        <select id="anesthetistIdSpeciality">
+                            <option value=""></option>
+                            {foreach $SPECIALITIES as $speciality}
+                                <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                            {/foreach}
+                        </select>
+                    </td>
                     <td>10%</td>
                     <td><input type="text" name="instrumentistRemun" readonly value="0"></td>
                 </tr>
+
                 <tr>
                     <td><input type="text" name="anesthetistName" value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                     <td>Anestesista</td>
                     <td><input type="text" name="anesthetistNIF" value="{$FORM_VALUES.ANESTHETISTNIF}"/></td>
+                    <td>
+                        <select id="anesthetistIdSpeciality">
+                            <option value=""></option>
+                            {foreach $SPECIALITIES as $speciality}
+                                <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                            {/foreach}
+                        </select>
+                    </td>
                     <td>
                         <select id="anesthetistK">
                             <option value="25">25%</option>
@@ -118,6 +152,7 @@
                     <td><input type="text" name="anesthetistRemun" readonly value="0"></td>
                 </tr>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -194,7 +229,7 @@
             <label>
                 NIF:
                 <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
-                       {literal}pattern="\d{9}"{/literal} maxlength="9" required />
+                       {literal}pattern="\d{9}"{/literal} maxlength="9" required/>
                 <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
             </label>
         </span>

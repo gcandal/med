@@ -29,7 +29,7 @@
                 {/if}
                 <td>{$procedure.subprocedures}</td>
                 <td>
-                    <a href="{$BASE_URL}pages/procedures/viewTeam.php?idProcedure={$procedure.idprocedure}">Ver</a>
+                    <a href="{$BASE_URL}pages/procedures/professionals.php?idProcedure={$procedure.idprocedure}">Ver</a>
                 </td>
                 <td>
                     {if $procedure.wasassistant}

@@ -126,6 +126,7 @@ $(document).ready(function () {
                         return {
                             label: item.name,
                             nif: item['nif'],
+                            idspeciality: item['idspeciality'],
                             id: item['idprofessional']
                         };
                     }));
@@ -140,6 +141,7 @@ $(document).ready(function () {
         minLength: 3,
         select: function(event, ui) {
             if(ui.item) {
+                $(this).parent().siblings().first().next().next().children().first().val(ui.item.idspeciality);
                 $(this).parent().siblings().first().next().children().first().val(ui.item.nif);
             }
         }
