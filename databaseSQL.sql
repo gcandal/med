@@ -183,16 +183,23 @@ BEGIN
     FROM Procedure, Professional
     WHERE
       Procedure.idprocedure = idp
-      AND wasassistant != TRUE AND (Professional.idProfessional = idfirstassistant
-                                    OR Professional.idProfessional = idsecondassistant
-                                    OR Professional.idProfessional = idanesthetist
-                                    OR Professional.idProfessional = idinstrumentist)
-      AND licenseid IS NOT NULL AND NOT EXISTS(SELECT
-                                                 *
-                                               FROM procedureinvitation
-                                               WHERE procedureinvitation.idprocedure = idp AND
-                                                     procedureinvitation.idInvitingAccount = ida AND
-                                                     procedureinvitation.licenseidinvited = licenseid);
+      AND wasassistant != TRUE AND licenseid IS NOT NULL
+      AND (Professional.idProfessional = idfirstassistant
+           OR Professional.idProfessional = idsecondassistant
+           OR Professional.idProfessional = idanesthetist
+           OR Professional.idProfessional = idinstrumentist)
+      AND NOT EXISTS(SELECT
+                       *
+                     FROM procedureinvitation
+                     WHERE procedureinvitation.idprocedure = idp AND
+                           procedureinvitation.idInvitingAccount = ida AND
+                           procedureinvitation.licenseidinvited = licenseid)
+      AND NOT EXISTS(SELECT
+                       *
+                     FROM account, procedureaccount
+                     WHERE procedureaccount.idprocedure = idp AND
+                           procedureaccount.idaccount = account.idaccount AND
+                           account.licenseid = Professional.licenseid);
 END
 $$ LANGUAGE plpgsql;
 
@@ -294,7 +301,7 @@ INSERT INTO Speciality VALUES (DEFAULT, 'Cena');
 INSERT INTO Speciality VALUES (DEFAULT, 'OutraCena');
 INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal', '123456789', '987654321', '2014-06-02 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal incompleto', NULL, '987654321', '2014-06-02 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, NULL, '2014-06-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, '111111111', '2014-06-02 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-22 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-07-02 20:36:43.206615');

@@ -18,7 +18,7 @@
             Data:
             <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
         </label>
-        <button type="submit">Submeter</button>
+        <button id="submitButton" type="submit">Submeter</button>
 
         <hr>
         <span id="principal">
@@ -30,7 +30,10 @@
                     <option value="Paguei">Paguei</option>
                 </select>
             </label>
+            <br/><br/>
+
             <label>
+                Pagador:
                 <select id="entityType" required>
                     <option value="Privado">Privado</option>
                     <option value="Entidade">Entidade</option>
