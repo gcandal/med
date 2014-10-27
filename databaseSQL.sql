@@ -39,7 +39,7 @@ CHECK (VALUE ~ '\d{9}');
 
 CREATE DOMAIN LicenseId CHAR(9)
 CONSTRAINT validLicenseId
-CHECK (VALUE ~ '\d{9}');
+CHECK (VALUE ~ '\d+');
 
 ------------------------------------------------------------------------
 
