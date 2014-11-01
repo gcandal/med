@@ -97,11 +97,11 @@
     $idAccount = $_SESSION['idaccount'];
 
     $idprivatepayer = NULL;
-    if($type === 'Private')
+    if($type === 'Private' || $type === 'NewPrivate')
         $idprivatepayer = $_POST['privateName'];
 
     $identitypayer = NULL;
-    if($type === 'Entity')
+    if($type === 'Entity' || $type === 'NewEntity')
         $identitypayer = $_POST['entityName'];
 
     if (!$wasAssistant) {
@@ -128,13 +128,13 @@
         }
 
         if ($_POST['instrumentistName'] != "") {
-            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "", $_POST['instrumentistRemun'], $_POST['firstAssistantSpecialityId']);
+            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "", $_POST['instrumentistRemun'], 0);
             addInstrumentist($idProf, $idProcedure);
         }
 
         if ($_POST['anesthetistName'] != "") {
             echo "cenas";
-            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "", $_POST['anesthetistRemun'], $_POST['firstAssistantSpecialityId']);
+            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "", $_POST['anesthetistRemun'], 0);
             addAnesthetist($idProf, $idProcedure);
         }
 

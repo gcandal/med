@@ -23,13 +23,13 @@ function createPrivatePayer($name, $accountId, $nif, $valuePerK)
 {
     global $conn;
     $conn->beginTransaction();
-    $id = $conn->lastInsertId('privatepayer_idprivatepayer_seq');
 
     $stmt = $conn->prepare("INSERT INTO PrivatePayer(name, idaccount, nif, valuePerK)
                             VALUES(:name, :accountId, :nif, :valueperk)");
     $stmt->execute(array("name" => $name, "accountId" => $accountId, "nif" => $nif, "valueperk" => $valuePerK));
 
     if ($conn->commit()) {
+        $id = $conn->lastInsertId('privatepayer_idprivatepayer_seq');
         return $id;
     } else {
         return 0;

@@ -10,7 +10,7 @@ var checkIfInviteUnsent = function () {
         var text = licenseid.val();
         var idorganization = $("#idorganization").val();
 
-        if (text.length != 9 || isNaN(text)) {
+        if (text.length < 1 || isNaN(text)) {
             licenseid.removeAttr('style');
             licenseiderror.text("Formato inválido");
 

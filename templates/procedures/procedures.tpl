@@ -1,5 +1,19 @@
 {include file='common/header.tpl'}
 
+<style>
+    .procedurePendente {
+        background-color: red;
+    }
+
+    .procedureRecebi {
+        background-color: yellow;
+    }
+
+    .procedurePaguei {
+        background-color: green;
+    }
+</style>
+
 {if $EMAIL}
     <h1>Dr. {$USERNAME},</h1>
     <h2>Tem {$OPENPROCEDURES.number} procedimentos por concluir.</h2>
@@ -17,7 +31,7 @@
         </tr>
 
         {foreach $PROCEDURES as $procedure}
-            <tr>
+            <tr class="procedure{$procedure.paymentstatus}">
                 <td>{$procedure.date}</td>
                 <td>{$procedure.paymentstatus}</td>
                 {if $procedure.idpayer == 0}

@@ -1,25 +1,52 @@
 var subProcedures = 0;
-var newPrivatePayerTemplate = Handlebars.compile($('#newPrivatePayer-template').html());
-var newEntityPayerTemplate = Handlebars.compile($('#newEntityPayer-template').html());
+
+const valuePerK = $('#valuePerK');
+const anesthetistRemun = $('#anesthetistRemun');
+const totalRemun = $('#totalRemun');
+const totalType = $('#totalType');
+const payerType = $("#payerType");
+const privatePayer = $("#privatePayer");
+const entityPayer = $("#entityPayer");
+const newEntityPayer = $("#newEntityPayer");
+const newPrivatePayer = $("#newPrivatePayer");
+const principal = $("#principal");
+const ajudante = $("#ajudante");
+const personalRemun = $("#personalRemun");
+const firstAssistantRemun = $('#firstAssistantRemun');
+const firstAssistantName = $('#firstAssistantName');
+const secondAssistantRemun = $('#secondAssistantRemun');
+const secondAssistantName = $('#secondAssistantName');
+const insturmentistRemun = $('#insturmentistAssistantRemun');
+const insturmentistName = $('#insturmentistAssistantName');
+const anesthetistName = $('#anesthetistName');
+const anesthetistK = $('#anesthetistK');
+const nSubProcedures = $('#nSubProcedures');
+const niferrorPrivate = $('#niferrorPrivate');
+const niferrorEntity = $('#niferrorEntity');
+const dateerror = $('#dateerror');
+const subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
+
+var enableField = function(field, disable) {
+    field.prop('readonly', disable);
+    field.prop('disabled', disable);
+};
 
 $(document).ready(function () {
-
     updatePayerVisibility();
     updateFunctionVisibility();
-    addSubProcedure();
 
     $('#addSubProcedure').click(function () {
         addSubProcedure();
-
     });
 
     $('#removeSubProcedure').click(function () {
         removeSubProcedure();
     });
 
-    $('[name=totalType]').change(function () {
-        if ($('[name=totalType]').val() == 'auto') {
-            $("[name=totalRemun]").prop('readonly', true);
+    totalType.change(function () {
+        if (totalType.val() == 'auto') {
+            enableField(totalRemun, true);
+
             getTotalRemuneration();
             fillFirstAssistantRemuneration();
             fillSecondAssistantRemuneration();
@@ -27,11 +54,11 @@ $(document).ready(function () {
             fillAnesthetistRemuneration();
             adjustPersonalRemuneration();
         } else {
-            $("[name=totalRemun]").prop('readonly', false);
+            enableField(totalRemun, false);
         }
     });
 
-    $('[name=totalRemun]').bind("paste drop input change cut", function () {
+    totalRemun.bind("paste drop input change cut", function () {
         getTotalRemuneration();
         fillFirstAssistantRemuneration();
         fillSecondAssistantRemuneration();
@@ -50,7 +77,7 @@ $(document).ready(function () {
         adjustPersonalRemuneration();
     });
 
-    $("select[name=entityName]").change(function () {
+    $("#entityName").change(function () {
         updatePayerVisibility();
         getTotalRemuneration();
         fillFirstAssistantRemuneration();
@@ -60,7 +87,7 @@ $(document).ready(function () {
         adjustPersonalRemuneration();
     });
 
-    $("select[name=privateName]").change(function () {
+    $("#privateName").change(function () {
         updatePayerVisibility();
         getTotalRemuneration();
         fillFirstAssistantRemuneration();
@@ -70,16 +97,23 @@ $(document).ready(function () {
         adjustPersonalRemuneration();
     });
 
-    $("#subProcedures").on('change', '.subProcedure', function () {
+    const subProcedures = $("#subProcedures");
+    subProcedures.on('change', '.subProcedure', function () {
         getTotalRemuneration();
         adjustPersonalRemuneration();
+    });
+
+    subProcedures.on('click', '.removeSubProcedureButton', function (e) {
+        e.preventDefault();
+        removeSubProcedure($(this).attr('subprocedurenr'));
+        $(this).remove();
     });
 
     $("select#function").change(function () {
         updateFunctionVisibility();
     });
 
-    $('[name=valuePerK]').bind("paste drop input change cut", function () {
+    valuePerK.bind("paste drop input change cut", function () {
         getTotalRemuneration();
         fillFirstAssistantRemuneration();
         fillSecondAssistantRemuneration();
@@ -88,33 +122,33 @@ $(document).ready(function () {
         adjustPersonalRemuneration();
     });
 
-    $('[name=firstAssistantName]').bind("paste drop input change cut", function () {
+    firstAssistantName.bind("paste drop input change cut", function () {
         fillFirstAssistantRemuneration();
         adjustPersonalRemuneration();
     });
 
-    $('[name=secondAssistantName]').bind("paste drop input change cut", function () {
+    secondAssistantName.bind("paste drop input change cut", function () {
         fillSecondAssistantRemuneration();
         adjustPersonalRemuneration();
     });
 
-    $('[name=instrumentistName]').bind("paste drop input change cut", function () {
+    insturmentistName.bind("paste drop input change cut", function () {
         fillInstrumentistRemuneration();
         adjustPersonalRemuneration();
     });
 
-    $('[name=anesthetistName]').bind("paste drop input change cut", function () {
+    anesthetistName.bind("paste drop input change cut", function () {
         fillAnesthetistRemuneration();
         adjustPersonalRemuneration();
     });
 
-    $('#anesthetistK').change(function () {
+    anesthetistK.change(function () {
         fillAnesthetistRemuneration();
         adjustPersonalRemuneration();
     });
 
 
-    $('#principal table tr:not(:first-child) td:first-child input').autocomplete({
+    $('.professionalName').autocomplete({
         source: function( request, response ) {
             $.ajax({
                 url: baseUrl + "actions/procedures/getrecentprofessionals.php",
@@ -157,10 +191,10 @@ var getSubProcedureTypes = function () {
 };
 
 var addSubProcedure = function () {
-    subProcedures++;
-    $('[name=nSubProcedures]').val(subProcedures);
-    $('<select name="subProcedure' + subProcedures + '" class="subProcedure">' + getSubProcedureTypes() +
-        '</select><br>').fadeIn('slow').appendTo('#subProcedures');
+    nSubProcedures.val(++subProcedures);
+    $(subProcedureTemplate({subProcedureNr: subProcedures, type: getSubProcedureTypes()}))
+        .fadeIn('slow').appendTo('#subProcedures');
+
     getTotalRemuneration();
     fillFirstAssistantRemuneration();
     fillSecondAssistantRemuneration();
@@ -173,13 +207,13 @@ var addSubProcedure = function () {
 var fillValuePerK = function (type) {
     switch (type) {
         case 'private':
-            $('[name=valuePerK]').val(getPrivateValuePerK());
+            valuePerK.val(getPrivateValuePerK());
             break;
         case 'entity':
-            $('[name=valuePerK]').val(getEntityValuePerK());
+            valuePerK.val(getEntityValuePerK());
             break;
         case 'none':
-            $('[name=valuePerK]').val(0);
+            valuePerK.val(0);
             break;
         default:
             break;
@@ -187,7 +221,6 @@ var fillValuePerK = function (type) {
 };
 
 var getPrivateValuePerK = function () {
-    var oneChosen = false;
     for (var i = 0; i < privatePayers.length; i++) {
         if (privatePayers[i].idprivatepayer == $('[name=privateName]').val()) {
             if (isNumeric(privatePayers[i].valueperk))
@@ -198,7 +231,6 @@ var getPrivateValuePerK = function () {
 };
 
 var getEntityValuePerK = function () {
-    var oneChosen = false;
     for (var i = 0; i < entityPayers.length; i++) {
         if (entityPayers[i].identitypayer == $('[name=entityName]').val()) {
             if (isNumeric(entityPayers[i].valueperk))
@@ -209,64 +241,63 @@ var getEntityValuePerK = function () {
 };
 
 var adjustPersonalRemuneration = function () {
-    var total = $('[name=totalRemun]').val();
+    var total = totalRemun.val();
 
     if (thereIsAFirstAssistant()) {
-        total -= $('[name=firstAssistantRemun]').val();
+        total -= firstAssistantRemun.val();
 
     }
     if (thereIsASecondAssistant()) {
-        total -= $('[name=secondAssistantRemun]').val();
+        total -= secondAssistantRemun.val();
 
     }
     if (thereIsAnInstrumentist()) {
-        total -= $('[name=instrumentistRemun]').val();
+        total -= insturmentistRemun.val();
 
     }
     if (thereIsAnAnesthetist()) {
-        total -= $('[name=anesthetistRemun]').val();
+        total -= anesthetistRemun.val();
     }
 
-    $('[name=personalRemun]').val(total);
+    personalRemun.val(total);
 };
 
 var fillFirstAssistantRemuneration = function () {
     if (thereIsAFirstAssistant()) {
-        var remun = $('[name=totalRemun]').val() * 0.2;
-        $('[name=firstAssistantRemun]').val(remun);
+        var remun = totalRemun.val() * 0.2;
+        firstAssistantRemun.val(remun);
     } else {
-        $('[name=firstAssistantRemun]').val(0);
+        firstAssistantRemun.val(0);
     }
 };
 
 var fillSecondAssistantRemuneration = function () {
     if (thereIsASecondAssistant()) {
-        var remun = $('[name=totalRemun]').val() * 0.1;
-        $('[name=secondAssistantRemun]').val(remun);
+        var remun = totalRemun.val() * 0.1;
+        secondAssistantRemun.val(remun);
     } else {
-        $('[name=secondAssistantRemun]').val(0);
-        $('[name=secondAssistantRemun]').val(0);
+        secondAssistantRemun.val(0);
     }
 };
 
 var fillInstrumentistRemuneration = function () {
     if (thereIsAnInstrumentist()) {
-        var remun = $('[name=totalRemun]').val() * 0.1;
-        $('[name=instrumentistRemun]').val(remun);
+        var remun = totalRemun.val() * 0.1;
+        insturmentistRemun.val(remun);
     } else {
-        $('[name=instrumentistRemun]').val(0);
+        insturmentistRemun.val(0);
     }
 };
 
 var fillAnesthetistRemuneration = function () {
+    var remun;
     if (thereIsAnAnesthetist()) {
-        var percentage;
-        switch ($('#anesthetistK').val()) {
+        switch (anesthetistK.val()) {
             case "25":
-                var remun = $('[name=totalRemun]').val() * 0.25;
+                remun = totalRemun.val() * 0.25;
                 break;
             case "30":
-                var remun = $('[name=totalRemun]').val() * 0.30;
+                remun = totalRemun.val() * 0.30;
                 break;
             case "table":
                 var totalK = getTotalK();
@@ -315,31 +346,28 @@ var fillAnesthetistRemuneration = function () {
                     k = 300;
                 }
 
-                var remun = k * $('input[name=valuePerK]').val();
+                remun = k * valuePerK.val();
                 break;
         }
-        $('[name=anesthetistRemun]').val(remun);
+        anesthetistRemun.val(remun);
     } else {
-        $('[name=anesthetistRemun]').val(0);
+        anesthetistRemun.val(0);
     }
 };
 
-var removeSubProcedure = function () {
-    if (subProcedures > 1) {
-        $('#subProcedures br:last').remove();
-        $('#subProcedures select:last').remove();
-        subProcedures--;
-    }
-    $('[name=nSubProcedures]').val(subProcedures);
+var removeSubProcedure = function (subProcedureNr) {
+    $("#subProcedure"+subProcedureNr).remove();
+    subProcedures--;
+    nSubProcedures.val(subProcedures);
     getTotalRemuneration();
     adjustPersonalRemuneration();
 };
 
 var getTotalRemuneration = function () {
-    if ($('[name=totalType]').val() == 'auto') {
+    if (totalType.val() == 'auto') {
         var total = 0.0;
 
-        if (isNumeric($('input[name=valuePerK]').val())) {
+        if (isNumeric(valuePerK.val())) {
             $('.subProcedure').each(function () {
                 for (var i = 0; i < subProcedureTypes.length; i++) {
                     if ($(this).val() == subProcedureTypes[i].idproceduretype) {
@@ -348,8 +376,8 @@ var getTotalRemuneration = function () {
                 }
             });
         }
-        total *= $('[name=valuePerK]').val();
-        $('input[name=totalRemun]').val(total);
+        total *= valuePerK.val();
+        totalRemun.val(total);
     }
 };
 
@@ -373,45 +401,56 @@ function getTotalK() {
 }
 
 var updatePayerVisibility = function () {
-    var payerType = $("#payerType");
+    switch ($("#entityType").val()) {
+        case 'Private':
+            privatePayer.show();
+            entityPayer.hide();
+            newEntityPayer.hide();
+            newPrivatePayer.hide();
 
-    switch ($("select#entityType").val()) {
-        case 'Privado':
-            $("span#privatePayer").show();
-            $("span#entityPayer").hide();
-            $("#newEntityPayer").remove();
-            $("#newPrivatePayer").remove();
-            $("[name=valuePerK]").prop('readonly', true);
+            enableField(valuePerK, true);
+
             fillValuePerK('private');
             payerType.val("Private");
             break;
-        case 'Entidade':
-            $("span#privatePayer").hide();
-            $("span#entityPayer").show();
-            $("span#newEntityPayer").hide();
-            $("#newPrivatePayer").remove();
-            $("[name=valuePerK]").prop('readonly', true);
+        case 'Entity':
+            privatePayer.hide();
+            entityPayer.show();
+            newEntityPayer.hide();
+            newPrivatePayer.hide();
+
+            enableField(valuePerK, true);
+
             fillValuePerK('entity');
             payerType.val("Entity");
             break;
-        case 'Novo Privado':
-            $("span#privatePayer").hide();
-            $("#newEntityPayer").remove();
-            $("[name=valuePerK]").prop('readonly', false);
+        case 'NewPrivate':
+            privatePayer.hide();
+            entityPayer.hide();
+            newEntityPayer.hide();
+            newPrivatePayer.show();
+
+            enableField(valuePerK, false);
+
             fillValuePerK('none');
             payerType.val("NewPrivate");
-            $("#newEntityPayer").remove();
-            $("span#entityPayer").after(newPrivatePayerTemplate());
+            niferrorEntity.val("");
+            dateerror.val("");
+
             checkValidNIF();
             break;
-        case 'Nova Entidade':
-            $("span#privatePayer").hide();
-            $("span#entityPayer").hide();
-            $("[name=valuePerK]").prop('readonly', false);
+        case 'NewEntity':
+            privatePayer.hide();
+            entityPayer.hide();
+            newEntityPayer.show();
+            newPrivatePayer.hide();
+
+            enableField(valuePerK, false);
+
             fillValuePerK('none');
             payerType.val("NewEntity");
-            $("#newPrivatePayer").remove();
-            $("span#entityPayer").after(newEntityPayerTemplate());
+            niferrorPrivate.val("");
+
             checkValidNIF();
             checkValidDate();
             break;
@@ -423,15 +462,15 @@ var updatePayerVisibility = function () {
 var updateFunctionVisibility = function () {
     switch ($("select#function").val()) {
         case 'Principal':
-            $("span#principal").show();
-            $("span#ajudante").hide();
-            $("[name=personalRemun]").prop('readonly', true);
+            principal.show();
+            ajudante.hide();
+            enableField(personalRemun, true);
             break;
         case 'Ajudante':
         case 'Anestesista':
-            $("span#principal").hide();
-            $("span#ajudante").show();
-            $("[name=personalRemun]").prop('readonly', false);
+            principal.hide();
+            ajudante.show();
+            enableField(personalRemun, false);
             break;
         default:
             break;
@@ -439,19 +478,19 @@ var updateFunctionVisibility = function () {
 };
 
 var thereIsAFirstAssistant = function () {
-    return $('[name=firstAssistantName]').val() != "";
+    return firstAssistantName.val() != "";
 };
 
 var thereIsASecondAssistant = function () {
-    return $('[name=secondAssistantName]').val() != "";
+    return secondAssistantName.val() != "";
 };
 
 var thereIsAnInstrumentist = function () {
-    return $('[name=instrumentistName]').val() != "";
+    return insturmentistName.val() != "";
 };
 
 var thereIsAnAnesthetist = function () {
-    return $('[name=anesthetistName]').val() != "";
+    return anesthetistName.val() != "";
 };
 
 var isNumeric = function (n) {

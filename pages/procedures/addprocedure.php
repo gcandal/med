@@ -13,7 +13,6 @@
 
     $idaccount = $_SESSION['idaccount'];
     $username = getUserById($idaccount);
-    //$specialities = getSpecialities();
     $entities['Entidade'] = getEntityPayers($idaccount);
     $entities['Privado'] = getPrivatePayers($idaccount);
     $procedureTypes = getProcedureTypes();
@@ -23,7 +22,10 @@
     $smarty->assign('PROCEDURETYPES', $procedureTypes);
     $smarty->assign('SPECIALITIES', $specialities);
 
-    $_SESSION['form_values']['entityType'] = $_SESSION['entityType'];
+    //if(!$_SESSION['entityType'])
+        $_SESSION['entityType'] = "NewPrivate";
+
+    $smarty->assign('ENTITYTYPE', $_SESSION['entityType']);
 
     $smarty->display('procedures/addprocedure.tpl');
 ?>
