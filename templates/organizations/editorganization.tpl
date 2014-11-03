@@ -4,6 +4,7 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
+    <span id="errorMessage"></span>
     <form method="post" action="{$BASE_URL}actions/organizations/editorganization.php">
         <input type="hidden" name="idorganization" value="{$organization.idorganization}"/>
 
@@ -20,6 +21,7 @@
 {/if}
 <script type="text/javascript">
     var baseUrl = {$BASE_URL};
+    var isEdit = true;
 </script>
-<script src="{$BASE_URL}javascript/validateeditorganizationform.js"></script>
+<script src="{$BASE_URL}javascript/validateorganizationform.js"></script>
 {include file='common/footer.tpl'}

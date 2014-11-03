@@ -103,7 +103,6 @@ function editOrganizationName($name, $idorganization)
 }
 
 
-
 function inviteForOrganization($idorganization, $idinviting, $licenseid, $foradmin)
 {
     global $conn;
@@ -138,7 +137,8 @@ function getInvites($licenseid)
     return $stmt->fetchAll();
 }
 
-function getSentInvites($accountId) {
+function getSentInvites($accountId)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT Organization.Name organizationName, forAdmin, OrgInvitation.idOrganization,
@@ -191,16 +191,18 @@ function acceptInvite($idOrganization, $idInvitingAccount, $licenseIdInvited, $i
     deleteInvite($idOrganization, $idInvitingAccount, $licenseIdInvited);
 }
 
-function cleanInvites() {
+function cleanInvites()
+{
     global $conn;
 
     $stmt = $conn->prepare("DELETE FROM OrgInvitation
-                            WHERE date < CURRENT_TIMESTAMP - interval '7 days'");
+                            WHERE date < CURRENT_TIMESTAMP - INTERVAL '7 days'");
 
     $stmt->execute();
 }
 
-function checkOrganizationName($name) {
+function checkOrganizationName($name)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT name
@@ -210,4 +212,13 @@ function checkOrganizationName($name) {
 
     return $stmt->fetch() == true;
 }
-?>
+
+function checkInviteForOrganization($idorganization, $licenseid)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT foradmin FROM OrgInvitation WHERE idorganization = :idorganization
+                            AND licenseIdInvited = :licenseIdInvited");
+    $stmt->execute(array("idorganization" => $idorganization, "licenseIdInvited" => $licenseid));
+
+    return $stmt->fetch() == true;
+}

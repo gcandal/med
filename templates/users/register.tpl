@@ -6,23 +6,27 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
+    <span id="userNameError"></span>
+    <span id="emailError"></span>
+    <span id="licenseIdError"></span>
+    <span id="passwordError"></span>
     <form id="registerform" method="post" action="{$BASE_URL}actions/users/register.php">
         <label>
             Nome:
-            <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
+            <input type="text" name="name" id="userName" placeholder="Nome" value="{$FORM_VALUES.name}" required
                    maxlength="40"/>
             <span>{$FIELD_ERRORS.name}</span>
         </label>
         <label>
             Email:
-            <input type="email" name="email" placeholder="Email" value="{$FORM_VALUES.email}" required
+            <input type="email" name="email" id="email" placeholder="Email" value="{$FORM_VALUES.email}" required
                    maxlength="254"/>
             <span>{$FIELD_ERRORS.email}</span><br/>
         </label>
         <label>
             Cédula Médica:
-            <input type="text" name="licenseid" placeholder="Cédula Médica" value="{$FORM_VALUES.licenseid}"
-                   {literal}pattern="\d{9}"{/literal} maxlength="9" required/>
+            <input type="text" name="licenseid" id="licenseId" placeholder="Cédula Médica" value="{$FORM_VALUES.licenseid}"
+                   {literal}pattern="\d+"{/literal} maxlength="9" required/>
             <span>{$FIELD_ERRORS.licenseid}</span><br/>
         </label>
         <label>
@@ -35,10 +39,12 @@
             <input type="password" id="passwordconfirm" name="passwordconfirm" placeholder="Confirmar Password" required/>
             <span>{$FIELD_ERRORS.passwordconfirm}</span><br/>
         </label>
-        <button type="submit">Registar</button>
+        <button type="submit" id="submitButton">Registar</button>
         <br>
     </form>
 {/if}
-
-<script src="{$BASE_URL}javascript/validateregisterform.js"></script>
+<script>
+    var isEdit = false;
+</script>
+<script src="{$BASE_URL}javascript/validateuserform.js"></script>
 {include file='common/footer.tpl'}

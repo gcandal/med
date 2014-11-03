@@ -28,6 +28,7 @@
             <input type="hidden" name="idorganization" value="{$organization.idorganization}"/>
             <button type="submit">Apagar</button>
         </form>
+        <span id="licenseIdError"></span>
         <form action="{$BASE_URL}actions/organizations/invitemember.php" method="post">
             <input type="hidden" id="idorganization" name="idorganization" value="{$organization.idorganization}"/>
             <input type="hidden" name="nameorganization" value="{$organization.name}"/>
@@ -35,9 +36,9 @@
                 Cédula:
                 <input type="text" id="licenseid" name="licenseid" placeholder="Cédula" value="{$FORM_VALUES.licenseid}"
                        {literal}pattern="\d{9}"{/literal} required/>
-                <span id="licenseiderror">{$FIELD_ERRORS.licenseid}</span>
+                <span>{$FIELD_ERRORS.licenseid}</span>
             </label>
-            <button type="submit">Convidar</button>
+            <button type="submit" id="submitButton">Convidar</button>
         </form>
     {/if}
 {else}

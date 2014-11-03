@@ -1,5 +1,4 @@
 var subProcedures = 0;
-
 const valuePerK = $('#valuePerK');
 const anesthetistRemun = $('#anesthetistRemun');
 const totalRemun = $('#totalRemun');
@@ -11,6 +10,10 @@ const newEntityPayer = $("#newEntityPayer");
 const newPrivatePayer = $("#newPrivatePayer");
 const principal = $("#principal");
 const ajudante = $("#ajudante");
+const namePrivate = $("#namePrivate");
+const nifPrivate = $("#nifPrivate");
+const nameEntity = $("#nameEntity");
+const nifEntity = $("#nifEntity");
 const personalRemun = $("#personalRemun");
 const firstAssistantRemun = $('#firstAssistantRemun');
 const firstAssistantName = $('#firstAssistantName');
@@ -21,9 +24,7 @@ const insturmentistName = $('#insturmentistAssistantName');
 const anesthetistName = $('#anesthetistName');
 const anesthetistK = $('#anesthetistK');
 const nSubProcedures = $('#nSubProcedures');
-const niferrorPrivate = $('#niferrorPrivate');
-const niferrorEntity = $('#niferrorEntity');
-const dateerror = $('#dateerror');
+const submitButton = $("#submitButton");
 const subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
 
 var enableField = function(field, disable) {
@@ -67,7 +68,7 @@ $(document).ready(function () {
         adjustPersonalRemuneration();
     });
 
-    $("select#entityType").change(function () {
+    entityType.change(function () {
         updatePayerVisibility();
         getTotalRemuneration();
         fillFirstAssistantRemuneration();
@@ -151,7 +152,7 @@ $(document).ready(function () {
     $('.professionalName').autocomplete({
         source: function( request, response ) {
             $.ajax({
-                url: baseUrl + "actions/procedures/getrecentprofessionals.php",
+                url: baseUrl + "actions/professionals/getrecentprofessionals.php",
                 dataType: "json",
                 data: {speciality: 'any', name: request.term},
                 type: 'GET',
@@ -160,6 +161,7 @@ $(document).ready(function () {
                         return {
                             label: item.name,
                             nif: item['nif'],
+                            licenseid: item['licenseid'],
                             idspeciality: item['idspeciality'],
                             id: item['idprofessional']
                         };
@@ -175,8 +177,9 @@ $(document).ready(function () {
         minLength: 3,
         select: function(event, ui) {
             if(ui.item) {
-                $(this).parent().siblings().first().next().next().children().first().val(ui.item.idspeciality);
-                $(this).parent().siblings().first().next().children().first().val(ui.item.nif);
+                $(this).parent().siblings().first().next().next().next().children().first().val(ui.item.idspeciality);
+                $(this).parent().siblings().first().next().children().first().val(ui.item.licenseid);
+                $(this).parent().siblings().first().next().next().children().first().val(ui.item.nif);
             }
         }
     });
@@ -223,20 +226,31 @@ var fillValuePerK = function (type) {
 var getPrivateValuePerK = function () {
     for (var i = 0; i < privatePayers.length; i++) {
         if (privatePayers[i].idprivatepayer == $('[name=privateName]').val()) {
-            if (isNumeric(privatePayers[i].valueperk))
+            if (isNumeric(privatePayers[i].valueperk)) {
+                submitButton.attr('disabled', false);
                 return privatePayers[i].valueperk;
+            }
+
         }
     }
+
+    submitButton.attr('disabled', true);
+
     return 'Valor Indefinido. Edite Privado.';
 };
 
 var getEntityValuePerK = function () {
     for (var i = 0; i < entityPayers.length; i++) {
         if (entityPayers[i].identitypayer == $('[name=entityName]').val()) {
-            if (isNumeric(entityPayers[i].valueperk))
+            if (isNumeric(entityPayers[i].valueperk)) {
+                submitButton.attr('disabled', false);
                 return entityPayers[i].valueperk;
+            }
         }
     }
+
+    submitButton.attr('disabled', true);
+
     return 'Valor Indefinido. Edite Entidade.';
 };
 
@@ -401,7 +415,7 @@ function getTotalK() {
 }
 
 var updatePayerVisibility = function () {
-    switch ($("#entityType").val()) {
+    switch (entityType.val()) {
         case 'Private':
             privatePayer.show();
             entityPayer.hide();
@@ -409,6 +423,8 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, true);
+
+            submitButton.attr('disabled', false);
 
             fillValuePerK('private');
             payerType.val("Private");
@@ -420,6 +436,7 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, true);
+            submitButton.attr('disabled', false);
 
             fillValuePerK('entity');
             payerType.val("Entity");
@@ -431,13 +448,10 @@ var updatePayerVisibility = function () {
             newPrivatePayer.show();
 
             enableField(valuePerK, false);
+            submitButton.attr('disabled', !isValid(null, null));
 
             fillValuePerK('none');
             payerType.val("NewPrivate");
-            niferrorEntity.val("");
-            dateerror.val("");
-
-            checkValidNIF();
             break;
         case 'NewEntity':
             privatePayer.hide();
@@ -446,13 +460,10 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, false);
+            submitButton.attr('disabled', !isValid(null, null));
 
             fillValuePerK('none');
             payerType.val("NewEntity");
-            niferrorPrivate.val("");
-
-            checkValidNIF();
-            checkValidDate();
             break;
         default:
             break;

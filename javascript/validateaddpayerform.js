@@ -1,19 +1,15 @@
-var niferror = $("#niferrorEntity, #niferrorPrivate");
-var nif = $('#nifEntity, #nifPrivate');
+const nif = $('#nifEntity, #nifPrivate');
+const contracts = $("#contractstart, #contractend");
+const submitButton = $("#submitButtonPrivate, #submitButtonEntity");
+const errorMessageNif = $("#errorMessageNif");
+const errorMessageDate = $("#errorMessageDate");
 
 $(document).ready(function () {
     checkValidNIF();
     checkValidDate();
 
-    $("#entitytype").change(function () {
-        $.each(nif, function (i, v) {
-            $(this).val("");
-            $(this).removeAttr('style');
-        });
-        $.each(niferror, function (i, v) {
-            $(this).text("")
-        });
-    });
+    isInvalid(nif, "NIF inválido", errorMessageNif);
+    isValid(contracts, errorMessageDate);
 });
 
 var checkValidNIF = function () {
@@ -23,53 +19,37 @@ var checkValidNIF = function () {
         var text = $(this).val();
 
         if (text.length != 9 || isNaN(text) || !nifRegex.test(text)) {
-            $(this).css('border', '1px solid red');
-            $.each(niferror, function (i, v) {
-                $(this).text("Formato inválido")
-            });
-
-            if (text.length == 0) {
-                $(this).removeAttr('style');
-                $.each(niferror, function (i, v) {
-                    $(this).text("")
-                });
-            }
+            return isInvalid($(this), "NIF inválido", errorMessageNif);
         } else {
-            $.each(niferror, function (i, v) {
-                $(this).text("")
-            });
-            $(this).css('border', '1px solid green');
+            return isValid($(this), errorMessageNif);
         }
     });
 };
 
 var checkValidDate = function () {
-    $("#contractstart, #contractend").change(function () {
+    contracts.change(function () {
         var contractstart = $("#contractstart").val();
         var contractend = $("#contractend").val();
-        var contracts = $("#contractstart, #contractend");
 
-        if (contractend <= contractstart) {
-            $("#dateerror").text("Data incoerentes");
-            $.each(contracts, function (e) {
-                $(this).css('border', '1px solid red');
-            })
-
-            if (contractstart.length == 0 || contractend.length == 0) {
-                $("#dateerror").text("");
-                $.each(contracts, function (e) {
-                    $(this).removeAttr('style');
-                })
-            }
-        }
-        else {
-            $("#dateerror").text("");
-
-            if (contractstart.length > 0 && contractend.length > 0) {
-                $.each(contracts, function (e) {
-                    $(this).css('border', '1px solid green');
-                })
-            }
-        }
+        if (contractstart.length == 0 || contractend.length == 0 || contractend >= contractstart)
+            isValid(contracts, errorMessageDate);
+        else
+            isInvalid(contracts, "Datas incoerentes", errorMessageDate);
     });
+};
+
+var isInvalid = function (field, errorText, errorFieldText) {
+    submitButton.attr("disabled", true);
+    field.css('border', '1px solid red');
+    errorFieldText.text(errorText);
+
+    return false;
+};
+
+var isValid = function (field, errorFieldText) {
+    submitButton.attr("disabled", false);
+    field.css('border', '1px solid green');
+    errorFieldText.text("");
+
+    return true;
 };

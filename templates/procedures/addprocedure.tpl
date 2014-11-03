@@ -14,13 +14,14 @@
             <option value="Anestesista">Anestesista</option>
         </select>
     </label>
+
     <label>
         Data:
         <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
     </label>
     <button id="submitButton" type="submit">Submeter</button>
 
-    <hr>
+    <hr/>
         <span id="principal">
             <label>
                 Estado de pagamento:
@@ -30,17 +31,23 @@
                     <option value="Paguei">Paguei</option>
                 </select>
             </label>
-            <br/><br/>
+     <br/><br/>
 
-            <label>
-                Pagador:
-                <select id="entityType" required>
-                    <option value="Private">Privado</option>
-                    <option value="Entity">Entidade</option>
-                    <option value="NewPrivate">Novo Privado</option>
-                    <option value="NewEntity">Nova Entidade</option>
-                </select>
-            </label>
+    <span id="errorMessageNamePrivate"></span>
+    <span id="errorMessageNifPrivate"></span>
+    <span id="errorMessageNameEntity"></span>
+    <span id="errorMessageNifEntity"></span>
+    <span id="errorMessageDate"></span>
+
+    <label>
+        Pagador:
+        <select id="entityType" required>
+            <option value="Private">Privado</option>
+            <option value="Entity">Entidade</option>
+            <option value="NewPrivate">Novo Privado</option>
+            <option value="NewEntity">Nova Entidade</option>
+        </select>
+    </label>
 
             <span id="privatePayer">
                 <select name="privateName" id="privateName">
@@ -61,13 +68,15 @@
             <span id="newPrivatePayer">
                 <label>
                     Nome:
-                    <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
+                    <input type="text" name="namePrivate" id="namePrivate" placeholder="Nome" value="{$FORM_VALUES.namePrivate}"
+                           maxlength="40"/>
                     <span>{$FIELD_ERRORS.name}</span>
                 </label>
 
                 <label>
                     NIF:
-                    <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
+                    <input type="number" id="nifPrivate" min="0" name="nifPrivate" placeholder="NIF"
+                           value="{$FORM_VALUES.nifPrivate}"
                            {literal}pattern="\d{9}"{/literal} maxlength="9"/>
                     <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
                 </label>
@@ -76,8 +85,8 @@
             <span id="newEntityPayer">
                 <label>
                     Nome:
-                    <input type="text" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
-                    <span>{$FIELD_ERRORS.name}</span>
+                    <input type="text" name="nameEntity" id="nameEntity" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
+                    <span>{$FIELD_ERRORS.nameEntity}</span>
                 </label>
                 <label>
                     Início do Contrato:
@@ -92,7 +101,8 @@
                 <span id="dateerror"></span>
                 <label>
                     NIF:
-                    <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" value="{$FORM_VALUES.nif}"
+                    <input type="number" min="0" name="nifEntity" id="nifEntity" placeholder="NIF"
+                           value="{$FORM_VALUES.nifEntity}"
                            {literal}pattern="\d{9}"{/literal} maxlength="9"/>
                     <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
                 </label>
@@ -113,17 +123,21 @@
                 <tr>
                     <th>Nome</th>
                     <th>Função</th>
+                    <th>Cédula</th>
                     <th>NIF</th>
                     <th>Especialidade</th>
                     <th>Percentagem de K</th>
                     <th>Remuneração</th>
                 </tr>
                 <tr>
-                    <td><input type="text" name="firstAssistantName" class="professionalName" id="firstAssistantName" value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
+                    <td><input type="text" name="firstAssistantName" class="professionalName" id="firstAssistantName"
+                               value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
                     <td>1º Ajudante</td>
+                    <td><input type="text" name="firstAssistantLicenseId"
+                               value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/></td>
                     <td><input type="text" name="firstAssistantNIF" value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
                     <td>
-                        <select id="anesthetistIdSpeciality">
+                        <select id="firstAssistantIdSpeciality">
                             <option value=""></option>
                             {foreach $SPECIALITIES as $speciality}
                                 <option value="{$speciality.idspeciality}">{$speciality.name}</option>
@@ -131,14 +145,18 @@
                         </select>
                     </td>
                     <td>20%</td>
-                    <td><input type="text" name="firstAssistantRemun" id="firstAssistantRemun"  disabled readonly value="0"></td>
+                    <td><input type="text" name="firstAssistantRemun" id="firstAssistantRemun" disabled readonly
+                               value="0"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="secondAssistantName" class="professionalName" id="secondAssistantName" value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
+                    <td><input type="text" name="secondAssistantName" class="professionalName" id="secondAssistantName"
+                               value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                     <td>2º Ajudante</td>
+                    <td><input type="text" name="secondAssistantLicenseId"
+                               value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/></td>
                     <td><input type="text" name="secondAssistantNIF" value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
                     <td>
-                        <select id="anesthetistIdSpeciality">
+                        <select id="secondAssistantIdSpeciality">
                             <option value=""></option>
                             {foreach $SPECIALITIES as $speciality}
                                 <option value="{$speciality.idspeciality}">{$speciality.name}</option>
@@ -146,21 +164,29 @@
                         </select>
                     </td>
                     <td>10%</td>
-                    <td><input type="text" name="secondAssistantRemun" id="secondAssistantRemun" disabled readonly value="0"></td>
+                    <td><input type="text" name="secondAssistantRemun" id="secondAssistantRemun" disabled readonly
+                               value="0"></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="instrumentistName" class="professionalName" id="instrumentistName" value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
+                    <td><input type="text" name="instrumentistName" class="professionalName" id="instrumentistName"
+                               value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                     <td>Instrumentista</td>
+                    <td><input type="text" name="instrumentistAssistantLicenseId"
+                               value="{$FORM_VALUES.INSTRUMENTISTLICENSEID}"/></td>
                     <td><input type="text" name="instrumentistNIF" value="{$FORM_VALUES.INSTRUMENTISTNIF}"/></td>
                     <td>
                     </td>
                     <td>10%</td>
-                    <td><input type="text" name="instrumentistRemun" id="instrumentistRemun" disabled readonly value="0"></td>
+                    <td><input type="text" name="instrumentistRemun" id="instrumentistRemun" disabled readonly
+                               value="0"></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="anesthetistName" class="professionalName" id="anesthetistName" value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
+                    <td><input type="text" name="anesthetistName" class="professionalName" id="anesthetistName"
+                               value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                     <td>Anestesista</td>
+                    <td><input type="text" name="anesthetistAssistantLicenseId"
+                               value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/></td>
                     <td><input type="text" name="anesthetistNIF" value="{$FORM_VALUES.ANESTHETISTNIF}"/></td>
                     <td>
                     </td>
@@ -171,7 +197,8 @@
                             <option value="table">Tabela OM</option>
                         </select>
                     </td>
-                    <td><input type="text" name="anesthetistRemun" id="anesthetistRemun" disabled readonly value="0"></td>
+                    <td><input type="text" name="anesthetistRemun" id="anesthetistRemun" disabled readonly value="0">
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
@@ -199,7 +226,7 @@
         </span>
     </span>
 
-        <span id="ajudante">
+    <span id="ajudante">
             <p>Responsável</p>
                 <table class="teamTable" border="1">
                     <tr>
@@ -230,9 +257,7 @@
         </tr>
     </table>
     <br>
-    <hr>
     </form>
-
     <script src="{$BASE_URL}lib/handlebars-v1.3.0.js" type="text/javascript"></script>
     <script id="subProcedure-template" type="text/x-handlebars-template">
         {literal}
@@ -242,19 +267,16 @@
             <button class="removeSubProcedureButton" subProcedureNr="{{number}}">X</button>
         {/literal}
     </script>
-
     <script type="text/javascript">
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
         var baseUrl = {$BASE_URL};
+        $("#entityType").val("{$ENTITYTYPE}");
     </script>
+    <script src="{$BASE_URL}javascript/addpayer.js"></script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
-    <script src="{$BASE_URL}javascript/validateaddprocedureform.js"></script>
-    <script>
-        $("select#entityType").val("{$ENTITYTYPE}");
-        updatePayerVisibility();
-    </script>
+    <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}

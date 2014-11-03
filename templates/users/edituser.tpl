@@ -6,10 +6,13 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
+    <span id="emailError"></span>
+    <span id="licenseIdError"></span>
+    <span id="passwordError"></span>
     <form id="edituserform" method="post" action="{$BASE_URL}actions/users/edituser.php">
         <label>
             Novo Email:
-            <input type="email" name="email" placeholder="{$EMAIL}" value="{$FORM_VALUES.email}"
+            <input type="email" name="email" id="userName" placeholder="{$EMAIL}" value="{$FORM_VALUES.email}"
                    maxlength="254"/>
             <span>{$FIELD_ERRORS.email}</span><br/>
         </label>
@@ -30,10 +33,13 @@
             <span>{$FIELD_ERRORS.oldpassword}</span><br/>
         </label>
 
-        <button type="submit">Editar</button>
+        <button type="submit" id="submitButton">Editar</button>
         <br>
     </form>
-{/if}
 
-<script src="{$BASE_URL}javascript/validateedituserform.js"></script>
+    <script>
+        var isEdit = true;
+    </script>
+    <script src="{$BASE_URL}javascript/validateuserform.js"></script>
+{/if}
 {include file='common/footer.tpl'}

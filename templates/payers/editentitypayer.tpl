@@ -4,12 +4,16 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
+    <span id="errorMessageNameEntity"></span>
+    <span id="errorMessageNifEntity"></span>
+    <span id="errorMessageDate"></span>
     <form id="formentidade" method="post" action="{$BASE_URL}actions/payers/editentitypayer.php">
+        <input type="hidden" name="type" id="entityType" value="NewEntity" required/>
         <input type="hidden" name="identitypayer" value="{$entitypayer.identitypayer}"/>
 
         <label>
             Nome:
-            <input type="text" name="name" placeholder="{$entitypayer.name}" value="{$FORM_VALUES.name}"/>
+            <input type="text" name="name" id="nameEntity" placeholder="{$entitypayer.name}" value="{$FORM_VALUES.name}"/>
             <span>{$FIELD_ERRORS.name}</span>
         </label>
         <label>
@@ -33,12 +37,16 @@
             <input type="number" min="0" name="valueperk" placeholder="{$entitypayer.valueperk}" value="{$FORM_VALUES.valueperk}"/>
             <span>{$FIELD_ERRORS.valueperk}</span>
         </label>
-        <button type="submit">Editar</button>
+        <button type="submit" id="submitButtonEntity">Editar</button>
         <br>
     </form>
+
+    <script>
+        var isEdit = true;
+    </script>
+    <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}
 
-<script src="{$BASE_URL}javascript/validateeditentitypayerform.js"></script>
 {include file='common/footer.tpl'}

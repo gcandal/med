@@ -1,28 +1,55 @@
+const formEntidade = $("#formentidade");
+const formPrivado = $("#formprivado");
+const entityTypeInput = $("#entityTypeInput"); // TODO resolver isto
+const entityType = $('#entityType');
+const isEdit = false;
+const errorMessageNifPrivate = $('#errorMessageNifPrivate');
+const errorMessageNamePrivate = $('#errorMessageNamePrivate');
+const errorMessageNifEntity = $('#errorMessageNifEntity');
+const errorMessageNameEntity = $('#errorMessageNameEntity');
+const errorMessageDate = $('#errorMessageDate');
+var errorMessageName;
+var errorMessageNif;
+
 $(document).ready(function () {
     updateFormVisibility();
 
-    $("select#entitytype").change(function () {
+    entityType.change(function () {
         updateFormVisibility();
-    })
+    });
 });
 
 var updateFormVisibility = function () {
-    switch ($("select#entitytype").val()) {
-        case 'Private':
-            $("form#formentidade").hide();
-            $("form#formprivado").show();
+    switch (entityType.val()) {
+        case 'NewPrivate':
+            errorMessageName = errorMessageNamePrivate;
+            errorMessageNif = errorMessageNifPrivate;
+            formEntidade.hide();
+            errorMessageNifEntity.hide();
+            errorMessageNameEntity.hide();
+            errorMessageDate.hide();
+            errorMessageNifPrivate.show();
+            errorMessageNamePrivate.show();
+            formPrivado.show();
             break;
-        case 'Insurance':
-            $("form#formprivado").hide();
-            $("form#formentidade").show();
-            $("form#formentidade input[name=type]").val("Insurance");
-            break;
-        case 'Hospital':
-            $("form#formprivado").hide();
-            $("form#formentidade").show();
-            $("form#formentidade input[name=type]").val("Hospital");
+        case 'NewEntity':
+            errorMessageName = errorMessageNameEntity;
+            errorMessageNif = errorMessageNifEntity;
+            formPrivado.hide();
+            formEntidade.show();
+            errorMessageNifEntity.show();
+            errorMessageNameEntity.show();
+            errorMessageDate.show();
+            errorMessageNifPrivate.hide();
+            errorMessageNamePrivate.hide();
+            //entityTypeInput.val("Hospital");
             break;
         default:
+            errorMessageNifEntity.hide();
+            errorMessageNameEntity.hide();
+            errorMessageDate.hide();
+            errorMessageNifPrivate.hide();
+            errorMessageNamePrivate.hide();
             break;
     }
-}
+};

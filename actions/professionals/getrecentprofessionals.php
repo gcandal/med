@@ -1,6 +1,6 @@
 <?php
 include_once('../../config/init.php');
-include_once($BASE_DIR . 'database/procedures.php');
+include_once($BASE_DIR . 'database/professionals.php');
 header('Content-type: application/json');
 
 if (!$_SESSION['email'] || !isset($_GET['speciality']) || !isset($_GET['name'])) {

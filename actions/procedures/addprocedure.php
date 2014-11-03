@@ -1,6 +1,7 @@
 <?php
     include_once('../../config/init.php');
     include_once($BASE_DIR . 'database/procedures.php');
+    include_once($BASE_DIR . 'database/professionals.php');
     include_once($BASE_DIR . 'database/payers.php');
 
     if (!$_SESSION['email']) {
@@ -14,14 +15,19 @@
     $_SESSION['entityType'] = $type;
 
     if ($type === 'NewPrivate' || $type === 'NewEntity') {
-        $name = $_POST['name'];
-        $nif = $_POST['nif'];
+        if($type === 'NewPrivate')
+            $suffix = 'Private';
+        else
+            $suffix = 'Entity';
+
+        $name = $_POST['name'.$suffix];
+        $nif = $_POST['nif'.$suffix];
         $valueperk = $_POST['valuePerK'];
         if (!$valueperk) $valueperk = null;
         $accountId = $_SESSION['idaccount'];
 
-        if (!$_POST['name']) $_SESSION['field_errors']['name'] = 'Nome é obrigatório';
-        if (!$_POST['nif']) $_SESSION['field_errors']['nif'] = 'NIF é obrigatório';
+        if (!$_POST['name'.$suffix]) $_SESSION['field_errors']['name'.$suffix] = 'Nome é obrigatório';
+        if (!$_POST['nif'.$suffix]) $_SESSION['field_errors']['nif'.$suffix] = 'NIF é obrigatório';
 
         if ($_SESSION['field_erors'][0]) {
             $_SESSION['error_messages'][] = 'Alguns campos em falta';
@@ -33,7 +39,7 @@
 
         if (checkDuplicateEntityName($accountId, $name)) {
             $_SESSION['error_messages'][] = 'Entidade com este nome duplicada';
-            $_SESSION['field_errors']['name'] = 'Nome já existe';
+            $_SESSION['field_errors']['name'.$suffix] = 'Nome já existe';
             $_SESSION['form_values'] = $_POST;
 
             header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
@@ -45,8 +51,8 @@
                 $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
             } catch (PDOException $e) {
                 if (strpos($e->getMessage(), 'validnif') !== false) {
-                    $_SESSION['error_messages'][] = 'NIF inválido';
-                    $_SESSION['field_errors']['nif'] = 'NIF inválido';
+                    $_SESSION['error_messages'][] = 'NIF inválido 1';
+                    $_SESSION['field_errors']['nif'.$suffix] = 'NIF inválido';
                 } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
 
                 $_SESSION['form_values'] = $_POST;
@@ -73,8 +79,8 @@
             } catch (PDOException $e) {
 
                 if (strpos($e->getMessage(), 'validnif') !== false) {
-                    $_SESSION['error_messages'][] = 'NIF inválido';
-                    $_SESSION['field_errors']['nif'] = 'NIF inválido';
+                    $_SESSION['error_messages'][] = 'NIF inválido 2';
+                    $_SESSION['field_errors']['nif'.$suffix] = 'NIF inválido';
                 } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
 
                 $_SESSION['form_values'] = $_POST;
@@ -118,23 +124,23 @@
         }
 
         if ($_POST['firstAssistantName'] != "") {
-            $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, "", "", "", $_POST['firstAssistantRemun'], $_POST['firstAssistantSpecialityId']);
+            $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, $_POST['firstAssistantLicenseId'], "", "", $_POST['firstAssistantRemun'], $_POST['firstAssistantSpecialityId']);
             addFirstAssistant($idProf, $idProcedure);
         }
 
         if ($_POST['secondAssistantName'] != "") {
-            $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, "", "", "", $_POST['secondAssistantRemun'], $_POST['firstAssistantSpecialityId']);
+            $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, $_POST['secondAssistantLicenseId'], "", "", $_POST['secondAssistantRemun'], $_POST['firstAssistantSpecialityId']);
             addSecondAssistant($idProf, $idProcedure);
         }
 
         if ($_POST['instrumentistName'] != "") {
-            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, "", "", "", $_POST['instrumentistRemun'], 0);
+            $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, $_POST['instrumentistLicenseId'], "", "", $_POST['instrumentistRemun'], 0);
             addInstrumentist($idProf, $idProcedure);
         }
 
         if ($_POST['anesthetistName'] != "") {
             echo "cenas";
-            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, "", "", "", $_POST['anesthetistRemun'], 0);
+            $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, $_POST['anesthetistLicenseId'], "", "", $_POST['anesthetistRemun'], 0);
             addAnesthetist($idProf, $idProcedure);
         }
 
