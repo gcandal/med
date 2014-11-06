@@ -6,11 +6,11 @@
         <p>Nome: {$entity.name} </p>
         <p>NIF: {$entity.nif} </p>
         <p>Valor por K: {$entity.valueperk}</p>
-        <form action="{$BASE_URL}pages/payers/editprivatepayer.php" method="post">
+        <form action="{$BASE_URL}pages/payers/editprivatepayer.php" >
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}"/>
             <button type="submit">Editar</button>
         </form>
-        <form action="{$BASE_URL}actions/payers/deleteprivatepayer.php" method="post">
+        <form action="{$BASE_URL}actions/payers/deleteprivatepayer.php" >
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}"/>
             <button type="submit">Apagar</button>
         </form>

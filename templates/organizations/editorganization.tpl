@@ -14,7 +14,7 @@
                    maxlength="40" />
             <span>{$FIELD_ERRORS.name}</span>
         </label>
-        <button type="submit">Editar</button>
+        <button type="submit" id="submitButton">Editar</button>
     </form>
 {else}
     <p>Tem que fazer login!</p>

@@ -137,15 +137,15 @@
                                value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/></td>
                     <td><input type="text" name="firstAssistantNIF" value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
                     <td>
-                        <select id="firstAssistantIdSpeciality">
-                            <option value=""></option>
+                        <select name="firstAssistantIdSpeciality" id="firstAssistantIdSpeciality">
+                            <option value="3">Nenhuma</option>
                             {foreach $SPECIALITIES as $speciality}
                                 <option value="{$speciality.idspeciality}">{$speciality.name}</option>
                             {/foreach}
                         </select>
                     </td>
                     <td>20%</td>
-                    <td><input type="text" name="firstAssistantRemun" id="firstAssistantRemun" disabled readonly
+                    <td><input type="text" name="firstAssistantRemun" id="firstAssistantRemun" style="background-color: lightgrey" readonly
                                value="0"></td>
                 </tr>
                 <tr>
@@ -156,15 +156,15 @@
                                value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/></td>
                     <td><input type="text" name="secondAssistantNIF" value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
                     <td>
-                        <select id="secondAssistantIdSpeciality">
-                            <option value=""></option>
+                        <select name="secondAssistantIdSpeciality" id="secondAssistantIdSpeciality">
+                            <option value="3">Nenhuma</option>
                             {foreach $SPECIALITIES as $speciality}
                                 <option value="{$speciality.idspeciality}">{$speciality.name}</option>
                             {/foreach}
                         </select>
                     </td>
                     <td>10%</td>
-                    <td><input type="text" name="secondAssistantRemun" id="secondAssistantRemun" disabled readonly
+                    <td><input type="text" name="secondAssistantRemun" id="secondAssistantRemun" style="background-color: lightgrey" readonly
                                value="0"></td>
                 </tr>
                 <tr>
@@ -177,7 +177,7 @@
                     <td>
                     </td>
                     <td>10%</td>
-                    <td><input type="text" name="instrumentistRemun" id="instrumentistRemun" disabled readonly
+                    <td><input type="text" name="instrumentistRemun" id="instrumentistRemun" style="background-color: lightgrey" readonly
                                value="0"></td>
                 </tr>
 
@@ -197,7 +197,7 @@
                             <option value="table">Tabela OM</option>
                         </select>
                     </td>
-                    <td><input type="text" name="anesthetistRemun" id="anesthetistRemun" disabled readonly value="0">
+                    <td><input type="text" name="anesthetistRemun" id="anesthetistRemun" style="background-color: lightgrey" readonly value="0">
                     </td>
                 </tr>
                 <tr>
@@ -210,14 +210,13 @@
                             <option value="auto">Por K</option>
                             <option value="manual">Manual</option>
                         </select></td>
-                    <td><input type="text" name="totalRemun" id="totalRemun" disabled readonly value="0"></td>
+                    <td><input type="text" name="totalRemun" id="totalRemun" style="background-color: lightgrey" readonly value="0"></td>
                 </tr>
             </table>
             <p>Sub-Procedimentos </p>
         <span id="subProcedureMenu">
             <input type="hidden" name="nSubProcedures" id="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>
-            <button type="button" id="removeSubProcedure">Remover</button>
             <br>
         </span>
 
@@ -253,7 +252,7 @@
             <td></td>
             <td></td>
             <td>Remuneração Pessoal</td>
-            <td><input type="text" name="personalRemun" id="personalRemun" disabled readonly value="0"></td>
+            <td><input type="text" name="personalRemun" id="personalRemun" style="background-color: lightgrey" readonly value="0"></td>
         </tr>
     </table>
     <br>
@@ -261,10 +260,12 @@
     <script src="{$BASE_URL}lib/handlebars-v1.3.0.js" type="text/javascript"></script>
     <script id="subProcedure-template" type="text/x-handlebars-template">
         {literal}
-            <select class="subProcedure" id="subProcedure{{number}}">
-                {{{type}}}<br>
-            </select>
-            <button class="removeSubProcedureButton" subProcedureNr="{{number}}">X</button>
+            <span id="subProcedure{{number}}">
+                <select name="subProcedure{{number}}" class="subProcedure">
+                    {{{type}}}<br>
+                </select>
+                <button class="removeSubProcedureButton" subProcedureNr="{{number}}">X</button>
+            </span>
         {/literal}
     </script>
     <script type="text/javascript">
@@ -277,6 +278,7 @@
     <script src="{$BASE_URL}javascript/addpayer.js"></script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
     <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
+    <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}

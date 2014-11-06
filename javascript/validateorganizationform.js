@@ -1,6 +1,5 @@
 const submitButton = $("#submitButton");
 const errorMessage = $("#errorMessage");
-const submitButton = $('#submitButton');
 const organizationName = $('#name');
 
 $(document).ready(function () {

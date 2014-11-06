@@ -4,10 +4,13 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <form>
+    <span id="errorMessageName"></span>
+    <span id="errorMessageNif"></span>
+    <span id="errorMessageLicenseId"></span>
+    <form action="{$BASE_URL}actions/professionals/addprofessional.php" method="POST">
         <label>
             Nome:
-            <input type="text" name="name" value="{$FORM_VALUES.name}"/>
+            <input type="text" name="name" class="professionalName" value="{$FORM_VALUES.name}"/>
         </label>
 
         <label>
@@ -21,33 +24,37 @@
 
         <label>
             Cédula:
-            <input type="text" name="licenseId" value="{$FORM_VALUES.licenseId}"/>
+            <input type="text" name="licenseId" class="professionalLicenseId" value="{$FORM_VALUES.licenseId}"/>
         </label>
 
         <label>
             NIF:
-            <input type="text" name="nif" value="{$FORM_VALUES.nif}"/>
+            <input type="text" name="nif" class="professionalNif" value="{$FORM_VALUES.nif}"/>
         </label>
 
         <label id="specialityLabel">
             Especialidade:
-            <select>
-                <option value=""></option>
+            <select name="speciality" id="specialityId">
+                <option value="3">Nenhuma</option>
                 {foreach $SPECIALITIES as $speciality}
                     <option value="{$speciality.idspeciality}">{$speciality.name}</option>
                 {/foreach}
             </select>
         </label>
 
-        <button type="submit">Adicionar</button>
+        <button type="submit" id="submitButton">Adicionar</button>
     </form>
 
-    <script src="{$BASE_URL}javascript/addprofessional.js"></script>
     {if $FORM_VALUES.type}
         <script>
             $("select#professionalType").val("{$FORM_VALUES.type}");
         </script>
     {/if}
+    <script>
+        var isAddProfessional = true;
+    </script>
+    <script src="{$BASE_URL}javascript/addprofessional.js"></script>
+    <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}

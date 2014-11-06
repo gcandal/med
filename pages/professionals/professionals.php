@@ -1,7 +1,16 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: Gabriel
- * Date: 01/11/2014
- * Time: 13:32
- */ 
+include_once('../../config/init.php');
+include_once($BASE_DIR . 'database/professionals.php');
+
+if (!$_SESSION['email']) {
+    $_SESSION['error_messages'][] = 'Tem que fazer login';
+    header('Location: ' . $BASE_URL);
+
+    exit;
+}
+
+$idaccount = $_SESSION['idaccount'];
+$professionals = getProfessionals($idaccount);
+
+$smarty->assign('PROFESSIONALS', $professionals);
+$smarty->display('professionals/professionals.tpl');

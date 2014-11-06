@@ -22,4 +22,3 @@
 
     $smarty->assign('ORGANIZATIONS', $merged);
     $smarty->display('organizations/organizations.tpl');
-?>

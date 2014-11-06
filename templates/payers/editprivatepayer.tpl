@@ -13,18 +13,18 @@
 
         <label>
             Nome:
-            <input type="text" name="name" id="namePrivate" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
+            <input type="text" name="name" id="namePrivate" placeholder="{$privatepayer.name}" value="{$FORM_VALUES.name}" maxlength="40"/>
             <span>{$FIELD_ERRORS.name}</span>
         </label>
         <label>
             NIF:
-            <input type="number" min="0" id="nifPrivate" name="nif" placeholder="NIF" value="{$FORM_VALUES.nif}"
+            <input type="number" min="0" id="nifPrivate" name="nif" placeholder="{$privatepayer.nif}" value="{$FORM_VALUES.nif}"
                    {literal}pattern="\d{9}"{/literal} maxlength="9"/>
             <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
             Valor por K:
-            <input type="number" min="0" name="valueperk" placeholder="Valor por K" value="{$FORM_VALUES.valueperk}"/>
+            <input type="number" min="0" name="valueperk" placeholder="{$privatepayer.valueperk}" value="{$FORM_VALUES.valueperk}"/>
             <span>{$FIELD_ERRORS.valueperk}</span>
         </label>
         <button type="submit" id="submitButtonPrivate">Editar</button>

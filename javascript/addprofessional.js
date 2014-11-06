@@ -1,4 +1,5 @@
 const specialityLabel = $("#specialityLabel");
+const specialityId = $('#specialityId');
 
 $(document).ready(function() {
    $("#professionalType").change(function() {
@@ -14,10 +15,12 @@ var updateSpecialityVisibility = function(professionalType) {
 
         case 'Instrumentist':
             specialityLabel.hide();
+            specialityId.val(2);
             break;
 
         case 'Anesthetist':
             specialityLabel.hide();
+            specialityId.val(1);
             break;
     }
 }

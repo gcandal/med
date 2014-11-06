@@ -19,17 +19,21 @@ const firstAssistantRemun = $('#firstAssistantRemun');
 const firstAssistantName = $('#firstAssistantName');
 const secondAssistantRemun = $('#secondAssistantRemun');
 const secondAssistantName = $('#secondAssistantName');
-const insturmentistRemun = $('#insturmentistAssistantRemun');
-const insturmentistName = $('#insturmentistAssistantName');
+const instrumentistRemun = $('#instrumentistRemun');
+const instrumentistName = $('#instrumentistName');
 const anesthetistName = $('#anesthetistName');
 const anesthetistK = $('#anesthetistK');
 const nSubProcedures = $('#nSubProcedures');
 const submitButton = $("#submitButton");
 const subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
 
-var enableField = function(field, disable) {
+var enableField = function (field, disable) {
     field.prop('readonly', disable);
-    field.prop('disabled', disable);
+    if (disable)
+        field.css('background-color', "lightgrey");
+    else
+        field.css('background-color', "");
+    //field.prop('disabled', disable);
 };
 
 $(document).ready(function () {
@@ -38,10 +42,6 @@ $(document).ready(function () {
 
     $('#addSubProcedure').click(function () {
         addSubProcedure();
-    });
-
-    $('#removeSubProcedure').click(function () {
-        removeSubProcedure();
     });
 
     totalType.change(function () {
@@ -106,8 +106,7 @@ $(document).ready(function () {
 
     subProcedures.on('click', '.removeSubProcedureButton', function (e) {
         e.preventDefault();
-        removeSubProcedure($(this).attr('subprocedurenr'));
-        $(this).remove();
+        removeSubProcedure($(this).parent().attr("id").split("subProcedure")[1]);
     });
 
     $("select#function").change(function () {
@@ -133,7 +132,7 @@ $(document).ready(function () {
         adjustPersonalRemuneration();
     });
 
-    insturmentistName.bind("paste drop input change cut", function () {
+    instrumentistName.bind("paste drop input change cut", function () {
         fillInstrumentistRemuneration();
         adjustPersonalRemuneration();
     });
@@ -150,14 +149,14 @@ $(document).ready(function () {
 
 
     $('.professionalName').autocomplete({
-        source: function( request, response ) {
+        source: function (request, response) {
             $.ajax({
                 url: baseUrl + "actions/professionals/getrecentprofessionals.php",
                 dataType: "json",
                 data: {speciality: 'any', name: request.term},
                 type: 'GET',
-                success: function(data) {
-                    response($.map(data, function(item) {
+                success: function (data) {
+                    response($.map(data, function (item) {
                         return {
                             label: item.name,
                             nif: item['nif'],
@@ -167,7 +166,7 @@ $(document).ready(function () {
                         };
                     }));
                 },
-                error: function(a, b, c) {
+                error: function (a, b, c) {
                     console.log(a);
                     console.log(b);
                     console.log(c);
@@ -175,8 +174,8 @@ $(document).ready(function () {
             });
         },
         minLength: 3,
-        select: function(event, ui) {
-            if(ui.item) {
+        select: function (event, ui) {
+            if (ui.item) {
                 $(this).parent().siblings().first().next().next().next().children().first().val(ui.item.idspeciality);
                 $(this).parent().siblings().first().next().children().first().val(ui.item.licenseid);
                 $(this).parent().siblings().first().next().next().children().first().val(ui.item.nif);
@@ -195,7 +194,7 @@ var getSubProcedureTypes = function () {
 
 var addSubProcedure = function () {
     nSubProcedures.val(++subProcedures);
-    $(subProcedureTemplate({subProcedureNr: subProcedures, type: getSubProcedureTypes()}))
+    $(subProcedureTemplate({number: subProcedures, type: getSubProcedureTypes()}))
         .fadeIn('slow').appendTo('#subProcedures');
 
     getTotalRemuneration();
@@ -204,10 +203,10 @@ var addSubProcedure = function () {
     fillInstrumentistRemuneration();
     fillAnesthetistRemuneration();
     adjustPersonalRemuneration();
-
 };
 
 var fillValuePerK = function (type) {
+    var valueperk;
     switch (type) {
         case 'private':
             valuePerK.val(getPrivateValuePerK());
@@ -216,11 +215,17 @@ var fillValuePerK = function (type) {
             valuePerK.val(getEntityValuePerK());
             break;
         case 'none':
+            valueperk = 0;
             valuePerK.val(0);
             break;
         default:
             break;
     }
+
+    if(isNaN(valueperk))
+        return 0;
+    else
+        return valueperk;
 };
 
 var getPrivateValuePerK = function () {
@@ -261,14 +266,17 @@ var adjustPersonalRemuneration = function () {
         total -= firstAssistantRemun.val();
 
     }
+
     if (thereIsASecondAssistant()) {
         total -= secondAssistantRemun.val();
 
     }
+
     if (thereIsAnInstrumentist()) {
-        total -= insturmentistRemun.val();
+        total -= instrumentistRemun.val();
 
     }
+
     if (thereIsAnAnesthetist()) {
         total -= anesthetistRemun.val();
     }
@@ -297,9 +305,9 @@ var fillSecondAssistantRemuneration = function () {
 var fillInstrumentistRemuneration = function () {
     if (thereIsAnInstrumentist()) {
         var remun = totalRemun.val() * 0.1;
-        insturmentistRemun.val(remun);
+        instrumentistRemun.val(remun);
     } else {
-        insturmentistRemun.val(0);
+        instrumentistRemun.val(0);
     }
 };
 
@@ -370,7 +378,7 @@ var fillAnesthetistRemuneration = function () {
 };
 
 var removeSubProcedure = function (subProcedureNr) {
-    $("#subProcedure"+subProcedureNr).remove();
+    $("#subProcedure" + subProcedureNr).remove();
     subProcedures--;
     nSubProcedures.val(subProcedures);
     getTotalRemuneration();
@@ -497,7 +505,7 @@ var thereIsASecondAssistant = function () {
 };
 
 var thereIsAnInstrumentist = function () {
-    return insturmentistName.val() != "";
+    return instrumentistName.val() != "";
 };
 
 var thereIsAnAnesthetist = function () {
