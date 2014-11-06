@@ -4,9 +4,9 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <span id="errorMessageName"></span>
-    <span id="errorMessageNif"></span>
-    <span id="errorMessageLicenseId"></span>
+    <span class="errorMessage" id="errorMessageNameProfessional"></span>
+    <span class="errorMessage" id="errorMessageNifProfessional"></span>
+    <span class="errorMessage" id="errorMessageLicenseIdProfessional"></span>
 
     <form action="{$BASE_URL}actions/professionals/editprofessional.php" method="POST">
         <input type="hidden" name="idprofessional" value="{$professional.idprofessional}">
@@ -65,7 +65,7 @@
         </script>
     {/if}
     <script>
-        var isAddProfessional = false;
+        const method = "editProfessional";
     </script>
     <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
 {else}

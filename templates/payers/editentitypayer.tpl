@@ -4,9 +4,9 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <span id="errorMessageNameEntity"></span>
-    <span id="errorMessageNifEntity"></span>
-    <span id="errorMessageDate"></span>
+    <span class="errorMessageEntity" id="errorMessageNameEntity"></span>
+    <span class="errorMessageEntity" id="errorMessageNifEntity"></span>
+    <span class="errorMessageEntity" id="errorMessageDate"></span>
     <form id="formentidade" method="post" action="{$BASE_URL}actions/payers/editentitypayer.php">
         <input type="hidden" name="type" id="entityType" value="NewEntity" required/>
         <input type="hidden" name="identitypayer" value="{$entitypayer.identitypayer}"/>

@@ -4,11 +4,11 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <span id="errorMessageNamePrivate"></span>
-    <span id="errorMessageNifPrivate"></span>
-    <span id="errorMessageNameEntity"></span>
-    <span id="errorMessageNifEntity"></span>
-    <span id="errorMessageDate"></span>
+    <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>
+    <span class="errorMessagePrivate" id="errorMessageNifPrivate"></span>
+    <span class="errorMessageEntity" id="errorMessageNameEntity"></span>
+    <span class="errorMessageEntity" id="errorMessageNifEntity"></span>
+    <span class="errorMessageEntity" id="errorMessageDate"></span>
     <select id="entityType">
         <option value="NewEntity">Hospital</option>
         <option value="NewEntity">Seguro</option>

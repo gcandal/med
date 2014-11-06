@@ -4,9 +4,20 @@ const licenseIdProfessional = $('.professionalLicenseId');
 if (typeof submitButton === 'undefined')
     var submitButton = $("#submitButton");
 var professionalNifRegex = new RegExp('\\d{9}');
-const errorMessageNameProfessional = $('#errorMessageName');
-const errorMessageNifProfessional = $('#errorMessageNif');
-const errorMessageLicenseIdProfessional = $('#errorMessageLicenseId');
+const errorMessageNameProfessional = $('#errorMessageNameProfessional');
+const errorMessageNifProfessional = $('#errorMessageNifProfessional');
+const errorMessageLicenseIdProfessional = $('#errorMessageLicenseIdProfessional');
+
+
+if (typeof checkSubmitButton === 'undefined') {
+    var noErrorMessages = function() {
+        return $(".errorMessage").text().length == 0;
+    };
+
+    var checkSubmitButton = function() {
+        submitButton.attr('disabled', !noErrorMessages());
+    };
+}
 
 $(document).ready(function () {
     checkValidNameProfessional();
@@ -15,7 +26,7 @@ $(document).ready(function () {
     isValid(nifProfessional, errorMessageNifProfessional);
     isValid(licenseIdProfessional, errorMessageLicenseIdProfessional);
 
-    if (!isAddProfessional) {
+    if (method !== "addProfessional") {
         isValid(nameProfessional, errorMessageNameProfessional);
     }
     else {
@@ -27,7 +38,7 @@ var checkValidNameProfessional = function () {
     nameProfessional.bind("paste drop input change cut", function () {
         var textName = $(this).val();
 
-        if (isAddProfessional && textName.length == 0)
+        if (method === "addProfessional" && textName.length == 0)
             return isInvalid($(this), "Nome é obrigatório", errorMessageNameProfessional);
 
         return isValid($(this), errorMessageNameProfessional);
@@ -62,7 +73,7 @@ var isInvalid = function (field, errorText, errorField) {
     field.css('border', '1px solid red');
     errorField.text(errorText);
 
-    submitButton.attr("disabled", true);
+    checkSubmitButton();
 
     return false;
 };
@@ -71,7 +82,7 @@ var isValid = function (field, errorField) {
     field.css('border', '1px solid green');
     errorField.text("");
 
-    submitButton.attr("disabled", false);
+    checkSubmitButton();
 
     return true;
 };

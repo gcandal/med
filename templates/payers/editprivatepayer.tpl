@@ -5,8 +5,8 @@
         <p>{$error}</p>
     {/foreach}
 
-    <span id="errorMessageNifPrivate"></span>
-    <span id="errorMessageNamePrivate"></span>
+    <span class="errorMessagePrivate" id="errorMessageNifPrivate"></span>
+    <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>
     <form id="formprivado" method="post" action="{$BASE_URL}actions/payers/editprivatepayer.php">
         <input type="hidden" name="type" id="entityType" value="NewPrivate" required/>
         <input type="hidden" name="idprivatepayer" value="{$privatepayer.idprivatepayer}"/>

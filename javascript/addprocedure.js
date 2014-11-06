@@ -456,7 +456,7 @@ var updatePayerVisibility = function () {
             newPrivatePayer.show();
 
             enableField(valuePerK, false);
-           // submitButton.attr('disabled', !isValid(null, null));
+            checkSubmitButton();
 
             fillValuePerK('none');
             payerType.val("NewPrivate");
@@ -468,7 +468,7 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, false);
-          //  submitButton.attr('disabled', !isValid(null, null));
+            checkSubmitButton();
 
             fillValuePerK('none');
             payerType.val("NewEntity");
@@ -516,3 +516,10 @@ var isNumeric = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
+var noErrorMessages = function() {
+    return $('.errorMessage, .errorMessage'+payerType.val().slice(3)).text() === '';
+};
+
+var checkSubmitButton = function() {
+    submitButton.attr('disabled', !noErrorMessages());
+};

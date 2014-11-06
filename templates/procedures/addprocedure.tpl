@@ -19,7 +19,7 @@
         Data:
         <input type="date" name="date" placeholder="Data do Procedimento" value="{$FORM_VALUES.DATE}"/>
     </label>
-    <button id="submitButton" type="submit">Submeter</button>
+    <button id="submitButton" type="submit" disabled>Submeter</button>
 
     <hr/>
         <span id="principal">
@@ -33,11 +33,15 @@
             </label>
      <br/><br/>
 
-    <span id="errorMessageNamePrivate"></span>
-    <span id="errorMessageNifPrivate"></span>
-    <span id="errorMessageNameEntity"></span>
-    <span id="errorMessageNifEntity"></span>
-    <span id="errorMessageDate"></span>
+    <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>
+    <span class="errorMessagePrivate" id="errorMessageNifPrivate"></span>
+    <span class="errorMessageEntity" id="errorMessageNameEntity"></span>
+    <span class="errorMessageEntity" id="errorMessageNifEntity"></span>
+    <span class="errorMessageEntity" id="errorMessageDate"></span>
+    <span class="errorMessage" id="errorMessageNameProfessional"></span>
+    <span class="errorMessage" id="errorMessageNifProfessional"></span>
+    <span class="errorMessage" id="errorMessageLicenseIdProfessional"></span>
+
 
     <label>
         Pagador:
@@ -68,7 +72,8 @@
             <span id="newPrivatePayer">
                 <label>
                     Nome:
-                    <input type="text" name="namePrivate" id="namePrivate" placeholder="Nome" value="{$FORM_VALUES.namePrivate}"
+                    <input type="text" name="namePrivate" id="namePrivate" placeholder="Nome"
+                           value="{$FORM_VALUES.namePrivate}"
                            maxlength="40"/>
                     <span>{$FIELD_ERRORS.name}</span>
                 </label>
@@ -85,7 +90,8 @@
             <span id="newEntityPayer">
                 <label>
                     Nome:
-                    <input type="text" name="nameEntity" id="nameEntity" placeholder="Nome" value="{$FORM_VALUES.name}" maxlength="40"/>
+                    <input type="text" name="nameEntity" id="nameEntity" placeholder="Nome" value="{$FORM_VALUES.name}"
+                           maxlength="40"/>
                     <span>{$FIELD_ERRORS.nameEntity}</span>
                 </label>
                 <label>
@@ -133,9 +139,10 @@
                     <td><input type="text" name="firstAssistantName" class="professionalName" id="firstAssistantName"
                                value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
                     <td>1º Ajudante</td>
-                    <td><input type="text" name="firstAssistantLicenseId"
+                    <td><input type="text" name="firstAssistantLicenseId" class="professionalLicenseId"
                                value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/></td>
-                    <td><input type="text" name="firstAssistantNIF" value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
+                    <td><input type="text" name="firstAssistantNIF" class="professionalNif"
+                               value="{$FORM_VALUES.FIRSTASSISTANTNIF}"/></td>
                     <td>
                         <select name="firstAssistantIdSpeciality" id="firstAssistantIdSpeciality">
                             <option value="3">Nenhuma</option>
@@ -145,16 +152,18 @@
                         </select>
                     </td>
                     <td>20%</td>
-                    <td><input type="text" name="firstAssistantRemun" id="firstAssistantRemun" style="background-color: lightgrey" readonly
+                    <td><input type="text" name="firstAssistantRemun" id="firstAssistantRemun"
+                               style="background-color: lightgrey" readonly
                                value="0"></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="secondAssistantName" class="professionalName" id="secondAssistantName"
                                value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                     <td>2º Ajudante</td>
-                    <td><input type="text" name="secondAssistantLicenseId"
+                    <td><input type="text" name="secondAssistantLicenseId" class="professionalLicenseId"
                                value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/></td>
-                    <td><input type="text" name="secondAssistantNIF" value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
+                    <td><input type="text" name="secondAssistantNIF" class="professionalNif"
+                               value="{$FORM_VALUES.SECONDASSISTANTNIF}"/></td>
                     <td>
                         <select name="secondAssistantIdSpeciality" id="secondAssistantIdSpeciality">
                             <option value="3">Nenhuma</option>
@@ -164,20 +173,23 @@
                         </select>
                     </td>
                     <td>10%</td>
-                    <td><input type="text" name="secondAssistantRemun" id="secondAssistantRemun" style="background-color: lightgrey" readonly
+                    <td><input type="text" name="secondAssistantRemun" id="secondAssistantRemun"
+                               style="background-color: lightgrey" readonly
                                value="0"></td>
                 </tr>
                 <tr>
                     <td><input type="text" name="instrumentistName" class="professionalName" id="instrumentistName"
                                value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                     <td>Instrumentista</td>
-                    <td><input type="text" name="instrumentistAssistantLicenseId"
+                    <td><input type="text" name="instrumentistAssistantLicenseId" class="professionalLicenseId"
                                value="{$FORM_VALUES.INSTRUMENTISTLICENSEID}"/></td>
-                    <td><input type="text" name="instrumentistNIF" value="{$FORM_VALUES.INSTRUMENTISTNIF}"/></td>
+                    <td><input type="text" name="instrumentistNIF" class="professionalNif"
+                               value="{$FORM_VALUES.INSTRUMENTISTNIF}"/></td>
                     <td>
                     </td>
                     <td>10%</td>
-                    <td><input type="text" name="instrumentistRemun" id="instrumentistRemun" style="background-color: lightgrey" readonly
+                    <td><input type="text" name="instrumentistRemun" id="instrumentistRemun"
+                               style="background-color: lightgrey" readonly
                                value="0"></td>
                 </tr>
 
@@ -185,9 +197,10 @@
                     <td><input type="text" name="anesthetistName" class="professionalName" id="anesthetistName"
                                value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                     <td>Anestesista</td>
-                    <td><input type="text" name="anesthetistAssistantLicenseId"
+                    <td><input type="text" name="anesthetistAssistantLicenseId" class="professionalLicenseId"
                                value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/></td>
-                    <td><input type="text" name="anesthetistNIF" value="{$FORM_VALUES.ANESTHETISTNIF}"/></td>
+                    <td><input type="text" name="anesthetistNIF" class="professionalNif"
+                               value="{$FORM_VALUES.ANESTHETISTNIF}"/></td>
                     <td>
                     </td>
                     <td>
@@ -197,7 +210,8 @@
                             <option value="table">Tabela OM</option>
                         </select>
                     </td>
-                    <td><input type="text" name="anesthetistRemun" id="anesthetistRemun" style="background-color: lightgrey" readonly value="0">
+                    <td><input type="text" name="anesthetistRemun" id="anesthetistRemun"
+                               style="background-color: lightgrey" readonly value="0">
                     </td>
                 </tr>
                 <tr>
@@ -210,7 +224,8 @@
                             <option value="auto">Por K</option>
                             <option value="manual">Manual</option>
                         </select></td>
-                    <td><input type="text" name="totalRemun" id="totalRemun" style="background-color: lightgrey" readonly value="0"></td>
+                    <td><input type="text" name="totalRemun" id="totalRemun" style="background-color: lightgrey"
+                               readonly value="0"></td>
                 </tr>
             </table>
             <p>Sub-Procedimentos </p>
@@ -252,7 +267,8 @@
             <td></td>
             <td></td>
             <td>Remuneração Pessoal</td>
-            <td><input type="text" name="personalRemun" id="personalRemun" style="background-color: lightgrey" readonly value="0"></td>
+            <td><input type="text" name="personalRemun" id="personalRemun" style="background-color: lightgrey" readonly
+                       value="0"></td>
         </tr>
     </table>
     <br>
@@ -273,7 +289,7 @@
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
         var baseUrl = {$BASE_URL};
-        var isAddProfessional = false;
+        var method = "addProcedure";
         $("#entityType").val("{$ENTITYTYPE}");
     </script>
     <script src="{$BASE_URL}javascript/addpayer.js"></script>
