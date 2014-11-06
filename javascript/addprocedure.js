@@ -456,7 +456,7 @@ var updatePayerVisibility = function () {
             newPrivatePayer.show();
 
             enableField(valuePerK, false);
-            submitButton.attr('disabled', !isValid(null, null));
+           // submitButton.attr('disabled', !isValid(null, null));
 
             fillValuePerK('none');
             payerType.val("NewPrivate");
@@ -468,7 +468,7 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, false);
-            submitButton.attr('disabled', !isValid(null, null));
+          //  submitButton.attr('disabled', !isValid(null, null));
 
             fillValuePerK('none');
             payerType.val("NewEntity");

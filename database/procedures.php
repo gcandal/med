@@ -34,15 +34,13 @@ function getSubProcedures($idProcedure)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT array_to_string(array_agg(name), ', ') subProcedures FROM proceduretype, procedureproceduretype
+    $stmt = $conn->prepare("SELECT name, quantity FROM proceduretype, procedureproceduretype
                                 WHERE procedureproceduretype.idprocedure = :idProcedure
                                 AND procedureproceduretype.idproceduretype = proceduretype.idproceduretype");
 
     $stmt->execute(array("idProcedure" => $idProcedure));
 
-    $result = $stmt->fetch();
-
-    return $result["subprocedures"];
+    return $stmt->fetchAll();
 }
 
 function getNumberOfOpenProcedures($idAccount)
@@ -127,12 +125,22 @@ function addSubProcedures($idProcedure, $subProcedures)
 {
     global $conn;
 
-    if (isset($subProcedures)) {
-        foreach ($subProcedures as $subProcedure) {
-            $stmt = $conn->prepare("INSERT INTO PROCEDUREPROCEDURETYPE(idprocedure, idproceduretype)
-                          VALUES(:idProcedure, :idProcedureType)");
+    $groupedSubProcedures = array();
 
-            $stmt->execute(array(":idProcedure" => $idProcedure, ":idProcedureType" => $subProcedure));
+    foreach($subProcedures as &$subProcedure) {
+        if($groupedSubProcedures[$subProcedure])
+            $groupedSubProcedures[$subProcedure] += 1;
+        else
+            $groupedSubProcedures[$subProcedure] = 1;
+    }
+
+    if (isset($groupedSubProcedures)) {
+        foreach ($groupedSubProcedures as $subProcedure => $count) {
+            $stmt = $conn->prepare("INSERT INTO PROCEDUREPROCEDURETYPE(idprocedure, idproceduretype, quantity)
+                          VALUES(:idProcedure, :idProcedureType, :quantity)");
+
+            $stmt->execute(array(":idProcedure" => $idProcedure, ":idProcedureType" => $subProcedure,
+                                 ":quantity" => $count));
         }
     }
 }

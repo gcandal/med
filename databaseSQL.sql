@@ -139,6 +139,7 @@ CREATE TABLE ProcedureAccount (
 CREATE TABLE ProcedureProcedureType (
   idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
   idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType) ON DELETE CASCADE,
+  quantity INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (idProcedure, idProcedureType)
 );
 

@@ -35,6 +35,7 @@ if (typeof entityType === 'undefined') {
 }
 
 $(document).ready(function () {
+    console.log(1);
     namePayer.bind("paste drop input change cut", function () {
         checkValidName($(this));
     });

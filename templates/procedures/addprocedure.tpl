@@ -273,6 +273,7 @@
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
         var baseUrl = {$BASE_URL};
+        var isAddProfessional = false;
         $("#entityType").val("{$ENTITYTYPE}");
     </script>
     <script src="{$BASE_URL}javascript/addpayer.js"></script>

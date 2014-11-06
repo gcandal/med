@@ -41,7 +41,11 @@
                         <a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a>
                     </td>
                 {/if}
-                <td>{$procedure.subprocedures}</td>
+                <td>
+                    {foreach $procedure.subprocedures as $subprocedure}
+                        {$subprocedure.quantity}x {$subprocedure.name}<br>
+                    {/foreach}
+                </td>
                 <td>
                     <a href="{$BASE_URL}pages/procedures/professionals.php?idProcedure={$procedure.idprocedure}">Ver</a>
                 </td>
