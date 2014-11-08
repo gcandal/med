@@ -5,7 +5,6 @@ function createEntityPayer($name, $contractstart, $contractend, $type, $nif, $va
     global $conn;
 
     $conn->beginTransaction();
-    $id = $conn->lastInsertId('entitypayer_identitypayer_seq');
 
     $stmt = $conn->prepare("INSERT INTO EntityPayer(name, contractstart, contractend, type, nif, valueperk, idaccount)
                             VALUES(:name, :contractstart, :contractend, :type, :nif, :valueperk, :idaccount)");
@@ -13,6 +12,7 @@ function createEntityPayer($name, $contractstart, $contractend, $type, $nif, $va
     $stmt->execute(array("name" => $name, "contractstart" => $contractstart, "contractend" => $contractend, "type" => $type, "nif" => $nif, "valueperk" => $valueperk, "idaccount" => $idaccount));
 
     if ($conn->commit()) {
+        $id = $conn->lastInsertId('entitypayer_identitypayer_seq');
         return $id;
     } else {
         return 0;

@@ -13,23 +13,23 @@ function addProfessional($name, $NIF, $idAccount, $licenseID, $email, $remunerat
 {
     global $conn;
 
-    if($NIF === "")
+    if ($NIF === "")
         $NIF = NULL;
-    if($licenseID === "")
+    if ($licenseID === "")
         $licenseID = NULL;
-    if($email === "")
+    if ($email === "")
         $email = NULL;
-    if($remuneration === "")
+    if ($remuneration === "")
         $remuneration = NULL;
-    if($specialityId === NULL || $specialityId === 0)
+    if ($specialityId === NULL || $specialityId === 0)
         $specialityId = 3;
 
     $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name, nif, idaccount, licenseid, email, remuneration, idspeciality)
                             VALUES(:name, :nif, :idaccount, :licenseid, :email, :remuneration, :idspeciality);");
 
     $stmt->execute(array(":name" => $name, ":nif" => $NIF, ":idaccount" => $idAccount,
-                          ":licenseid" => $licenseID, ":email" => $email, ":remuneration" => $remuneration,
-                          ":idspeciality" => $specialityId));
+        ":licenseid" => $licenseID, ":email" => $email, ":remuneration" => $remuneration,
+        ":idspeciality" => $specialityId));
 
     return $conn->lastInsertId('professional_idprofessional_seq');
 }
@@ -37,7 +37,9 @@ function addProfessional($name, $NIF, $idAccount, $licenseID, $email, $remunerat
 function getRecentProfessionals($idaccount, $speciality, $name)
 {
     global $conn;
-    if ($speciality == 'any') {
+
+    /*
+    if ($speciality == -1) {
         $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, idspeciality, Professional.idProfessional
                             FROM Professional
                             WHERE Professional . idAccount = :idAccount AND Professional . name LIKE :name
@@ -48,14 +50,22 @@ function getRecentProfessionals($idaccount, $speciality, $name)
 
     } else {
         $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, Professional.idProfessional
-                            FROM Speciality, Professional
-                            WHERE Speciality . name = :speciality AND Professional . idSpeciality = Speciality . idSpeciality AND Professional . idAccount = :idAccount AND Professional . name LIKE :name
+                            FROM Professional
+                            WHERE Professional . idSpeciality = :speciality AND Professional . idAccount = :idAccount AND Professional . name LIKE :name
                             ORDER BY Professional . createdOn DESC
                             LIMIT 3");
 
         $stmt->execute(array("idAccount" => $idaccount, "speciality" => $speciality, "name" => $name . '%'));
-
     }
+    */
+    $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, idspeciality, Professional.idProfessional
+                            FROM Professional
+                            WHERE Professional . idAccount = :idAccount
+                            ORDER BY Professional . createdOn DESC
+                            LIMIT 3");
+
+    $stmt->execute(array("idAccount" => $idaccount));
+
 
     return $stmt->fetchAll();
 }
@@ -95,7 +105,8 @@ function deleteProfessional($accountid, $idprofessional)
     return $stmt->rowCount() > 0;
 }
 
-function editProfessionalName($accountId, $idprofessional, $name) {
+function editProfessionalName($accountId, $idprofessional, $name)
+{
     global $conn;
 
     $stmt = $conn->prepare("UPDATE professional SET name = :name
@@ -104,7 +115,8 @@ function editProfessionalName($accountId, $idprofessional, $name) {
     $stmt->execute(array("idaccount" => $accountId, "idprofessional" => $idprofessional, "name" => $name));
 }
 
-function editProfessionalNif($accountId, $idprofessional, $nif) {
+function editProfessionalNif($accountId, $idprofessional, $nif)
+{
     global $conn;
 
     $stmt = $conn->prepare("UPDATE professional SET nif = :nif
@@ -113,7 +125,8 @@ function editProfessionalNif($accountId, $idprofessional, $nif) {
     $stmt->execute(array("idaccount" => $accountId, "idprofessional" => $idprofessional, "nif" => $nif));
 }
 
-function editProfessionalLicenseId($accountId, $idprofessional, $licenseid) {
+function editProfessionalLicenseId($accountId, $idprofessional, $licenseid)
+{
     global $conn;
 
     $stmt = $conn->prepare("UPDATE professional SET licenseid = :licenseid
@@ -122,7 +135,8 @@ function editProfessionalLicenseId($accountId, $idprofessional, $licenseid) {
     $stmt->execute(array("idaccount" => $accountId, "idprofessional" => $idprofessional, "licenseid" => $licenseid));
 }
 
-function editProfessionalSpeciality($accountId, $idprofessional, $speciality) {
+function editProfessionalSpeciality($accountId, $idprofessional, $speciality)
+{
     global $conn;
 
     $stmt = $conn->prepare("UPDATE professional SET idspeciality = :idspeciality

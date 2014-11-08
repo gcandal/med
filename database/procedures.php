@@ -302,18 +302,25 @@ function getProcedureProfessionals($idAccount, $idProcedure)
     $ids = $stmt->fetch();
     $professionals = array();
 
-    $stmt = $conn->prepare("SELECT Speciality.name, Professional.name, nif, licenseid, email, remuneration FROM SPECIALITY, PROFESSIONAL
+    $stmt = $conn->prepare("SELECT Speciality.name as speciality, Professional.name, idProfessional, nif, licenseid, email, remuneration FROM SPECIALITY, PROFESSIONAL
                 WHERE Professional.idProfessional = :idProfessional
                 AND (Professional.idSpeciality IS NULL OR Speciality.idSpeciality = Professional.idSpeciality)");
 
-    $stmt->execute(array("idProfessional" => $ids['idfirstassistant']));
-    $professionals['firstassistant'] = $stmt->fetch();
-    $stmt->execute(array("idProfessional" => $ids['idsecondassistant']));
-    $professionals['idsecondassistant'] = $stmt->fetch();
-    $stmt->execute(array("idProfessional" => $ids['idanesthetist']));
-    $professionals['idanesthetist'] = $stmt->fetch();
-    $stmt->execute(array("idProfessional" => $ids['idinstrumentist']));
-    $professionals['idinstrumentist'] = $stmt->fetch();
+    $functions = array('idfirstassistant', 'idsecondassistant', 'idanesthetist', 'idinstrumentist');
+    $functionNames = array('Primeiro Assistente', 'Segundo Assistente', 'Anestesista', 'Instrumentista');
+    $i = 0;
+
+    foreach($functions as $function) {
+        $stmt->execute(array("idProfessional" => $ids[$function]));
+        $result = $stmt->fetch();
+
+        if($result) {
+            $result['function'] = $functionNames[$i];
+            $professionals[$function] = $result;
+        }
+
+        $i++;
+    }
 
     return $professionals;
 }
@@ -393,4 +400,13 @@ function cleanShareds()
                             WHERE date < CURRENT_TIMESTAMP - INTERVAL '7 days'");
 
     $stmt->execute();
+}
+
+function getProcedureTypesForAutocomplete() {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT idproceduretype id, name as label FROM proceduretype");
+    $stmt->execute();
+
+    return $stmt->fetchAll();
 }

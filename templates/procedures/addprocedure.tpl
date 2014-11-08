@@ -147,7 +147,9 @@
                         <select name="firstAssistantIdSpeciality" id="firstAssistantIdSpeciality">
                             <option value="3">Nenhuma</option>
                             {foreach $SPECIALITIES as $speciality}
-                                <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                                {if $speciality.idspeciality > 3}
+                                    <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                                {/if}
                             {/foreach}
                         </select>
                     </td>
@@ -168,7 +170,9 @@
                         <select name="secondAssistantIdSpeciality" id="secondAssistantIdSpeciality">
                             <option value="3">Nenhuma</option>
                             {foreach $SPECIALITIES as $speciality}
-                                <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                                {if $speciality.idspeciality > 3}
+                                    <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                                {/if}
                             {/foreach}
                         </select>
                     </td>
@@ -280,6 +284,7 @@
                 <select name="subProcedure{{number}}" class="subProcedure">
                     {{{type}}}<br>
                 </select>
+                <input class="subProcedureName" value="Queratoscopia fotográfica" type="text">
                 <button class="removeSubProcedureButton" subProcedureNr="{{number}}">X</button>
             </span>
         {/literal}

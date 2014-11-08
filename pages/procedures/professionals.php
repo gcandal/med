@@ -14,9 +14,7 @@ $idProcedure = $_GET['idProcedure'];
 
 $professionals = getProcedureProfessionals($idAccount, $idProcedure);
 
-$smarty->assign('professionals', $professionals);
-//$smarty->display('procedures/showTeam.tpl');
-
-var_dump($professionals);
+$smarty->assign('PROFESSIONALS', $professionals);
+$smarty->display('procedures/procedureTeam.tpl');
 
 

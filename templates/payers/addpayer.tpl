@@ -48,7 +48,7 @@
         </label>
         <label>
             Valor por K:
-            <input type="number" min="0" name="valueperk" placeholder="Valor por K" value="{$FORM_VALUES.valueperk}"/>
+            <input type="number" min="0" step="0.01" name="valueperk" placeholder="Valor por K" value="{$FORM_VALUES.valueperk}"/>
             <span>{$FIELD_ERRORS.valueperk}</span>
         </label>
         <button type="submit" id="submitButtonEntity">Adicionar</button>

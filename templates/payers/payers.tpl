@@ -22,7 +22,7 @@
         <p>Fim do Contrato: {$entity.contractend}</p>
         <p>NIF: {$entity.nif}</p>
         <p>Valor por K: {$entity.valueperk}</p>
-        <form action="{$BASE_URL}pages/payers/editentitypayer.php" method="post">
+        <form action="{$BASE_URL}pages/payers/editentitypayer.php">
             <input type="hidden" name="identitypayer" value="{$entity.identitypayer}"/>
             <button type="submit">Editar</button>
         </form>
