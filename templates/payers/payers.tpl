@@ -10,7 +10,7 @@
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}"/>
             <button type="submit">Editar</button>
         </form>
-        <form action="{$BASE_URL}actions/payers/deleteprivatepayer.php" >
+        <form action="{$BASE_URL}actions/payers/deleteprivatepayer.php" method="post">
             <input type="hidden" name="idprivatepayer" value="{$entity.idprivatepayer}"/>
             <button type="submit">Apagar</button>
         </form>

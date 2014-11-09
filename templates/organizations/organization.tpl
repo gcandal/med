@@ -34,8 +34,7 @@
             <input type="hidden" name="nameorganization" value="{$organization.name}"/>
             <label>
                 Cédula:
-                <input type="text" id="licenseid" name="licenseid" placeholder="Cédula" value="{$FORM_VALUES.licenseid}"
-                       {literal}pattern="\d{9}"{/literal} required/>
+                <input type="text" id="licenseid" name="licenseid" placeholder="Cédula" value="{$FORM_VALUES.licenseid}" min="0" required/>
                 <span>{$FIELD_ERRORS.licenseid}</span>
             </label>
             <button type="submit" id="submitButton">Convidar</button>

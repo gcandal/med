@@ -227,13 +227,13 @@ BEGIN
     SELECT
       idSpeciality,
       NEW.idAccount,
-      name,
-      nif,
-      licenseid
-    FROM Professional, Procedure
-    WHERE idProcedure = NEW.idProcedure AND (
+      Professional.name,
+      Professional.nif,
+      Professional.licenseid
+    FROM Professional, Procedure, Account
+    WHERE idProcedure = NEW.idProcedure AND Account.idAccount = NEW.idAccount AND (
       idProfessional = idgeneral OR idProfessional = idfirstassistant OR idProfessional = idsecondassistant OR
-      idProfessional = idinstrumentist OR idProfessional = idanesthetist) AND Professional.idAccount != NEW.idAccount;
+      idProfessional = idinstrumentist OR idProfessional = idanesthetist) AND Professional.idAccount != NEW.idAccount AND Professional.licenseid != Account.licenseid ;
 
   INSERT INTO PrivatePayer (idaccount, name, nif, valuePerK)
     SELECT

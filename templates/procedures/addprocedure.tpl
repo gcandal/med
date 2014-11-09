@@ -80,7 +80,7 @@
 
                 <label>
                     NIF:
-                    <input type="number" id="nifPrivate" min="0" name="nifPrivate" placeholder="NIF"
+                    <input type="number" id="nifPrivate" name="nifPrivate" placeholder="NIF"
                            value="{$FORM_VALUES.nifPrivate}"
                            {literal}pattern="\d{9}"{/literal} maxlength="9"/>
                     <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
@@ -119,7 +119,7 @@
         <span>
             <label>
                 Valor por K:
-                <input type="text" name="valuePerK" id="valuePerK" value="{$FORM_VALUES.VALUEPERK}"/>
+                <input type="number" name="valuePerK" id="valuePerK" min="0" step="0.01" value="{$FORM_VALUES.VALUEPERK}"/>
             </label>
         </span>
 
