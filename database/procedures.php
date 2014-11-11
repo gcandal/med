@@ -5,7 +5,7 @@ function getProcedures($idAccount)
     global $conn;
 
     $stmt = $conn->prepare("SELECT idProcedure, paymentstatus, idprivatepayer, identitypayer, date,
-        totalRemun, personalRemun, wasAssistant
+        totalRemun, personalRemun
          FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? ORDER BY date DESC");
 
     $stmt->execute(array($idAccount));
@@ -80,7 +80,7 @@ function isPrivatePayer($idPrivatePayer)
     return $stmt->fetch() == true;
 }
 
-function addProcedure($idAccount, $paymentStatus, $date, $wasAssistant, $totalRemun, $personalRemun, $valuePerK, $idprivatepayer, $identitypayer)
+function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $personalRemun, $valuePerK, $idprivatepayer, $identitypayer)
 {
     global $conn;
 
@@ -95,21 +95,21 @@ function addProcedure($idAccount, $paymentStatus, $date, $wasAssistant, $totalRe
         $valuePerK = 0;
 
     if (strtotime($date)) {
-        $stmt = $conn->prepare("INSERT INTO PROCEDURE(idgeneral, paymentstatus, date, wasassistant, identitypayer,
+        $stmt = $conn->prepare("INSERT INTO PROCEDURE(idgeneral, paymentstatus, date, identitypayer,
                                 idprivatepayer, totalremun, personalremun, valueperk)
-                                VALUES(:idaccount, :paymentStatus, :date, :wasassistant, :identitypayer,
+                                VALUES(:idaccount, :paymentStatus, :date, :identitypayer,
                                 :idprivatepayer, :totalremun, :personalremun, :valueperk);");
 
         $stmt->execute(array("idaccount" => $idAccount, "paymentStatus" => $paymentStatus, "date" => $date,
-            "wasassistant" => $wasAssistant, "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer,
+            "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer,
             "totalremun" => $totalRemun, "personalremun" => $personalRemun, "valueperk" => $valuePerK));
     } else {
-        $stmt = $conn->prepare("INSERT INTO PROCEDURE(idgeneral, paymentstatus, date, wasassistant, identitypayer,
+        $stmt = $conn->prepare("INSERT INTO PROCEDURE(idgeneral, paymentstatus, date, identitypayer,
                                 idprivatepayer, totalremun, personalremun, valueperk)
-                                VALUES(:idaccount, :paymentStatus, CURRENT_TIMESTAMP, :wasassistant,
+                                VALUES(:idaccount, :paymentStatus, CURRENT_TIMESTAMP,
                                 :identitypayer, :idprivatepayer, :totalremun, :personalremun, :valueperk);");
 
-        $stmt->execute(array("idaccount" => $idAccount, "paymentStatus" => $paymentStatus, "wasassistant" => $wasAssistant,
+        $stmt->execute(array("idaccount" => $idAccount, "paymentStatus" => $paymentStatus,
             "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer,
                 "totalremun" => $totalRemun, "personalremun" => $personalRemun, "valueperk" => $valuePerK));
     }
@@ -405,7 +405,7 @@ function cleanShareds()
 function getProcedureTypesForAutocomplete() {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT idproceduretype id, name as label FROM proceduretype");
+    $stmt = $conn->prepare("SELECT idproceduretype id, name as label, k FROM proceduretype");
     $stmt->execute();
 
     return $stmt->fetchAll();

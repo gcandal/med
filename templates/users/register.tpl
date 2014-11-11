@@ -29,6 +29,17 @@
                    {literal}pattern="\d+"{/literal} maxlength="9" required/>
             <span>{$FIELD_ERRORS.licenseid}</span><br/>
         </label>
+        <label id="specialityLabel">
+            Especialidade:
+            <select name="speciality" id="specialityId">
+                <option value="3">Nenhuma</option>
+                {foreach $SPECIALITIES as $speciality}
+                    {if $speciality.idspeciality != 3}
+                        <option value="{$speciality.idspeciality}">{$speciality.name}</option>
+                    {/if}
+                {/foreach}
+            </select>
+        </label>
         <label>
             Password:
             <input type="password" id="password" name="password" placeholder="Password" required/>

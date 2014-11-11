@@ -15,6 +15,7 @@
     $password = $_POST['password'];
     $licenseid = $_POST['licenseid'];
     $passwordconfirm = $_POST['passwordconfirm'];
+    $idspeciality = $_POST['speciality'];
 
     if (strlen($name) > 40) {
         $_SESSION['error_messages'][] = 'Nome demasiado grande';
@@ -45,7 +46,7 @@ if (strlen($email) > 254) {
     $random_salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), true));
 
     try {
-        createAccount($email, $password, $name, $random_salt, $licenseid);
+        createAccount($email, $password, $name, $random_salt, $licenseid, $idspeciality);
     } catch (PDOException $e) {
 
         if (strpos($e->getMessage(), 'account_email_key') !== false) {

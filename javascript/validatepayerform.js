@@ -34,12 +34,12 @@ if (typeof entityType === 'undefined') {
 }
 
 if (typeof checkSubmitButton === 'undefined') {
-    var noErrorMessages = function() {
+    var noErrorMessages = function () {
         return $(".errorMessage" + entityType.val().slice(3)).text().length == 0;
     };
 
-    var checkSubmitButton = function() {
-        if(entityType.val() === 'NewPrivate')
+    var checkSubmitButton = function () {
+        if (entityType.val() === 'NewPrivate')
             submitButtonPrivate.attr('disabled', !noErrorMessages());
         else
             submitButtonEntity.attr('disabled', !noErrorMessages());
@@ -60,19 +60,16 @@ $(document).ready(function () {
     });
 
     if (!isEdit) {
-        isInvalidPayer(nif, "NIF inválido", errorMessageNifEntity);
-        isInvalidPayer(nif, "NIF inválido", errorMessageNifPrivate);
+        isValidPayer(nif, errorMessageNifPrivate);
+        isValidPayer(nif, errorMessageNifEntity);
         isInvalidPayer(namePayer, "Nome obrigatório", errorMessageNamePrivate);
         isInvalidPayer(namePayer, "Nome obrigatório", errorMessageNameEntity);
     } else {
-        if (entityType.val() === 'Private') {
-            isValidPayer(nif, errorMessageNifPrivate);
-            isValidPayer(namePayer, errorMessageNamePrivate);
-        } else {
-            isValidPayer(contracts, errorMessageDate);
-            isValidPayer(nif, errorMessageNifEntity);
-            isValidPayer(namePayer, errorMessageNameEntity);
-        }
+        isValidPayer(nif, errorMessageNifPrivate);
+        isValidPayer(namePayer, errorMessageNamePrivate);
+        isValidPayer(contracts, errorMessageDate);
+        isValidPayer(nif, errorMessageNifEntity);
+        isValidPayer(namePayer, errorMessageNameEntity);
     }
 });
 

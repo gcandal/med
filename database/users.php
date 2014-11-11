@@ -41,13 +41,14 @@ function getNameAndEmailFromLicenseId($licenseId) {
         return $stmt->fetch();
     }
 
-    function createAccount($email, $password, $name, $salt, $licenseid)
+    function createAccount($email, $password, $name, $salt, $licenseid, $idspeciality)
     {
         global $conn;
-        $stmt = $conn->prepare("INSERT INTO Account(password, name, email, salt, licenseid)
-                            VALUES (:password, :name, :email, :salt, :licenseid)");
+        $stmt = $conn->prepare("INSERT INTO Account(password, name, email, salt, licenseid, speciality)
+                            VALUES (:password, :name, :email, :salt, :licenseid, :idspeciality)");
 
-        $stmt->execute(array("password" => hash('sha512', $password . $salt), "name" => $name, "email" => $email, "salt" => $salt, "licenseid" => $licenseid));
+        $stmt->execute(array("password" => hash('sha512', $password . $salt), "name" => $name, "email" => $email,
+            "salt" => $salt, "licenseid" => $licenseid, "idspeciality" => $idspeciality));
 
         return $stmt->fetch() == true;
     }
