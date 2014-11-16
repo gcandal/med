@@ -38,15 +38,15 @@
 </form>
 
 <form action="{$BASE_URL}pages/procedures/procedures.php">
-    <button type="submit">Ver Procedimentos</button>
+    <button type="submit">Ver Registos</button>
 </form>
 
 <form action="{$BASE_URL}pages/procedures/addprocedure.php">
-    <button type="submit">Adicionar Procedimento</button>
+    <button type="submit">Adicionar Registo</button>
 </form>
 
 <form action="{$BASE_URL}pages/procedures/invites.php">
-    <button type="submit">Ver Convites Procedimentos</button>
+    <button type="submit">Ver Convites Registos</button>
 </form>
 
 <form action="{$BASE_URL}pages/professionals/professionals.php">

@@ -23,7 +23,7 @@
             <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
-            Valor por K:
+            K cirúrgico:
             <input type="number" min="0" name="valueperk" placeholder="{$privatepayer.valueperk}" value="{$FORM_VALUES.valueperk}"/>
             <span>{$FIELD_ERRORS.valueperk}</span>
         </label>

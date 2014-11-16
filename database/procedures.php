@@ -5,7 +5,7 @@ function getProcedures($idAccount)
     global $conn;
 
     $stmt = $conn->prepare("SELECT idProcedure, paymentstatus, idprivatepayer, identitypayer, date,
-        totalRemun, personalRemun
+        totalRemun, role, generalRemun, firstAssistantRemun, secondAssistantRemun, instrumentistRemun, anesthetistRemun
          FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? ORDER BY date DESC");
 
     $stmt->execute(array($idAccount));
@@ -24,6 +24,27 @@ function getProcedures($idAccount)
         } else {
             $procedure['payerName'] = 'Não Definido';
             $procedure['idpayer'] = 0;
+        }
+
+        switch ($procedure['role']) {
+            case 'General':
+                $procedure['personalremun'] = $procedure['generalremun'];
+                break;
+            case 'FirstAssistant':
+                $procedure['personalremun'] = $procedure['firstassistantremun'];
+                break;
+            case 'SecondAssistant':
+                $procedure['personalremun'] = $procedure['secondassistantremun'];
+                break;
+            case 'Anesthetist':
+                $procedure['personalremun'] = $procedure['anesthetistremun'];
+                break;
+            case 'Instrumentist':
+                $procedure['personalremun'] = $procedure['instrumentistremun'];
+                break;
+            default:
+                $procedure['personalremun'] = 0;
+                break;
         }
     }
 
@@ -80,43 +101,56 @@ function isPrivatePayer($idPrivatePayer)
     return $stmt->fetch() == true;
 }
 
-function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $personalRemun, $valuePerK, $idprivatepayer, $identitypayer)
+function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK, $idprivatepayer, $identitypayer, $role,
+                      $generalRemun, $firstAssistantRemun, $secondAssistantRemun, $anesthetistRemun, $insturmentistRemun)
 {
     global $conn;
 
-    //$code = hash('sha256', $paymentStatus + date('Y-m-d H:i:s')); // NEEDS TO BE CHANGED
     if (!is_numeric($totalRemun) || $totalRemun < 0)
         $totalRemun = 0;
-
-    if (!is_numeric($personalRemun) || $personalRemun < 0)
-        $personalRemun = 0;
 
     if (!is_numeric($valuePerK) || $valuePerK < 0)
         $valuePerK = 0;
 
     if (strtotime($date)) {
-        $stmt = $conn->prepare("INSERT INTO PROCEDURE(idgeneral, paymentstatus, date, identitypayer,
-                                idprivatepayer, totalremun, personalremun, valueperk)
-                                VALUES(:idaccount, :paymentStatus, :date, :identitypayer,
-                                :idprivatepayer, :totalremun, :personalremun, :valueperk);");
+        $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, identitypayer,
+                                idprivatepayer, totalremun, valueperk, generalRemun,
+                                firstAssistantRemun, secondAssistantRemun,
+                                anesthetistRemun, instrumentistRemun)
 
-        $stmt->execute(array("idaccount" => $idAccount, "paymentStatus" => $paymentStatus, "date" => $date,
+                                VALUES(:paymentStatus, :date, :identitypayer,
+                                :idprivatepayer, :totalremun, :valueperk,
+                                :generalRemun, :firstAssistantRemun, :secondAssistantRemun,
+                                :anesthetistRemun, :instrumentistRemun);");
+
+        $stmt->execute(array("paymentStatus" => $paymentStatus, "date" => $date,
             "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer,
-            "totalremun" => $totalRemun, "personalremun" => $personalRemun, "valueperk" => $valuePerK));
+            "totalremun" => $totalRemun, "valueperk" => $valuePerK,
+            "generalRemun" => $generalRemun, "firstAssistantRemun" => $firstAssistantRemun,
+            "secondAssistantRemun" => $secondAssistantRemun,
+            "anesthetistRemun" => $anesthetistRemun, "instrumentistRemun" => $insturmentistRemun));
     } else {
-        $stmt = $conn->prepare("INSERT INTO PROCEDURE(idgeneral, paymentstatus, date, identitypayer,
-                                idprivatepayer, totalremun, personalremun, valueperk)
-                                VALUES(:idaccount, :paymentStatus, CURRENT_TIMESTAMP,
-                                :identitypayer, :idprivatepayer, :totalremun, :personalremun, :valueperk);");
+        $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, identitypayer,
+                                idprivatepayer, totalremun, valueperk, generalRemun,
+                                firstAssistantRemun, secondAssistantRemun,
+                                anesthetistRemun, instrumentistRemun)
 
-        $stmt->execute(array("idaccount" => $idAccount, "paymentStatus" => $paymentStatus,
+                                VALUES(:paymentStatus, CURRENT_TIMESTAMP,
+                                :identitypayer, :idprivatepayer, :totalremun, :valueperk,
+                                :generalRemun, :firstAssistantRemun, :secondAssistantRemun,
+                                :anesthetistRemun, :instrumentistRemun);");
+
+        $stmt->execute(array("paymentStatus" => $paymentStatus,
             "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer,
-                "totalremun" => $totalRemun, "personalremun" => $personalRemun, "valueperk" => $valuePerK));
+            "totalremun" => $totalRemun, "valueperk" => $valuePerK,
+            "generalRemun" => $generalRemun, "firstAssistantRemun" => $firstAssistantRemun,
+            "secondAssistantRemun" => $secondAssistantRemun,
+            "anesthetistRemun" => $anesthetistRemun, "instrumentistRemun" => $insturmentistRemun));
     }
 
     $id = $conn->lastInsertId('procedure_idprocedure_seq');
 
-    addProcedureToAccount($id, $idAccount);
+    addProcedureToAccount($id, $idAccount, $role);
 
     return $id;
 }
@@ -127,8 +161,8 @@ function addSubProcedures($idProcedure, $subProcedures)
 
     $groupedSubProcedures = array();
 
-    foreach($subProcedures as &$subProcedure) {
-        if($groupedSubProcedures[$subProcedure])
+    foreach ($subProcedures as &$subProcedure) {
+        if ($groupedSubProcedures[$subProcedure])
             $groupedSubProcedures[$subProcedure] += 1;
         else
             $groupedSubProcedures[$subProcedure] = 1;
@@ -140,17 +174,17 @@ function addSubProcedures($idProcedure, $subProcedures)
                           VALUES(:idProcedure, :idProcedureType, :quantity)");
 
             $stmt->execute(array(":idProcedure" => $idProcedure, ":idProcedureType" => $subProcedure,
-                                 ":quantity" => $count));
+                ":quantity" => $count));
         }
     }
 }
 
-function addProcedureToAccount($idProcedure, $idAccount)
+function addProcedureToAccount($idProcedure, $idAccount, $role)
 {
     global $conn;
 
-    $stmt = $conn->prepare("INSERT INTO PROCEDUREACCOUNT VALUES(:idprocedure, :idaccount)");
-    $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount));
+    $stmt = $conn->prepare("INSERT INTO PROCEDUREACCOUNT VALUES(:idprocedure, :idaccount, :role)");
+    $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount, "role" => $role));
 
     return $stmt->fetch();
 }
@@ -280,16 +314,6 @@ function addAnesthetist($idProfessional, $idProcedure)
     return $stmt->fetch();
 }
 
-function addMaster($idProfessional, $idProcedure)
-{
-    global $conn;
-
-    $stmt = $conn->prepare("UPDATE PROCEDURE SET idmaster = :idmaster WHERE idprocedure = :idprocedure;");
-    $stmt->execute(array(":idmaster" => $idProfessional, ":idprocedure" => $idProcedure));
-
-    return $stmt->fetch();
-}
-
 function getProcedureProfessionals($idAccount, $idProcedure)
 {
     global $conn;
@@ -302,7 +326,7 @@ function getProcedureProfessionals($idAccount, $idProcedure)
     $ids = $stmt->fetch();
     $professionals = array();
 
-    $stmt = $conn->prepare("SELECT Speciality.name as speciality, Professional.name, idProfessional, nif, licenseid, email, remuneration FROM SPECIALITY, PROFESSIONAL
+    $stmt = $conn->prepare("SELECT Speciality.name AS speciality, Professional.name, idProfessional, nif, licenseid, email, remuneration FROM SPECIALITY, PROFESSIONAL
                 WHERE Professional.idProfessional = :idProfessional
                 AND (Professional.idSpeciality IS NULL OR Speciality.idSpeciality = Professional.idSpeciality)");
 
@@ -310,11 +334,11 @@ function getProcedureProfessionals($idAccount, $idProcedure)
     $functionNames = array('Primeiro Assistente', 'Segundo Assistente', 'Anestesista', 'Instrumentista');
     $i = 0;
 
-    foreach($functions as $function) {
+    foreach ($functions as $function) {
         $stmt->execute(array("idProfessional" => $ids[$function]));
         $result = $stmt->fetch();
 
-        if($result) {
+        if ($result) {
             $result['function'] = $functionNames[$i];
             $professionals[$function] = $result;
         }
@@ -402,10 +426,11 @@ function cleanShareds()
     $stmt->execute();
 }
 
-function getProcedureTypesForAutocomplete() {
+function getProcedureTypesForAutocomplete()
+{
     global $conn;
 
-    $stmt = $conn->prepare("SELECT idproceduretype id, name as label, k FROM proceduretype");
+    $stmt = $conn->prepare("SELECT idproceduretype id, name AS label, k FROM proceduretype");
     $stmt->execute();
 
     return $stmt->fetchAll();

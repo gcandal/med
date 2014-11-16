@@ -15,12 +15,12 @@ $idprocedure = $_POST['idprocedure'];
 try {
     deleteProcedure($idprocedure, $idaccount);
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a apagar procedimento ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a apagar registo ' . $e->getMessage();
 
     header("Location: $BASE_URL" . 'pages/procedures/procedures.php');
     exit;
 }
 
-$_SESSION['success_messages'][] = 'Procedimento apagado com sucesso';
+$_SESSION['success_messages'][] = 'Registo apagado com sucesso';
 header("Location: $BASE_URL" . "pages/procedures/procedures.php");
 ?>

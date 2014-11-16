@@ -16,15 +16,16 @@
 
 {if $EMAIL}
     <h1>Dr. {$USERNAME},</h1>
-    <h2>Tem {$OPENPROCEDURES.number} procedimentos por concluir.</h2>
-    <p><a href="{$BASE_URL}pages/procedures/addprocedure.php">Adicionar Procedimento</a></p>
+    <h2>Tem {$OPENPROCEDURES.number} registos por concluir.</h2>
+    <p><a href="{$BASE_URL}pages/procedures/addprocedure.php">Adicionar Registo</a></p>
     <table class="procedureTable" border="1">
         <tr>
             <th>Data</th>
             <th>Estado</th>
             <th>Pagador</th>
-            <th>Sub-Procedumentos</th>
+            <th>Cirurgias</th>
             <th>Equipa</th>
+            <th>Função</th>
             <th>Valor</th>
             <th>Partilhar</th>
             <th>Apagar</th>
@@ -43,19 +44,30 @@
                 {/if}
                 <td>
                     {foreach $procedure.subprocedures as $subprocedure}
-                        {$subprocedure.quantity}x {$subprocedure.name}<br>
+                        {$subprocedure.quantity}x {$subprocedure.name}
+                        <br>
                     {/foreach}
                 </td>
                 <td>
                     <a href="{$BASE_URL}pages/procedures/professionals.php?idProcedure={$procedure.idprocedure}">Ver</a>
                 </td>
                 <td>
-                    {if $procedure.wasassistant}
-                        Pessoal: {$procedure.personalremun}
-                    {else}
-                        Total: {$procedure.totalremun}
+                    {if $procedure.role == 'General'}
+                        Cirurgião Geral
+                    {elseif $procedure.role == 'FirstAssistant'}
+                        Primeiro Assitente
+                    {elseif $procedure.role == 'SecondAssistant'}
+                        Segundo Assistente
+                    {elseif $procedure.role == 'Anesthetist'}
+                        Anestesista
+                    {elseif $procedure.role == 'Instrumentist'}
+                        Instrumentista
                     {/if}
-                    &euro;</td>
+                </td>
+                <td>
+                    Pessoal: {$procedure.personalremun}&euro;<br>
+                    Total: {$procedure.totalremun}&euro;
+                </td>
                 <td>
                     {if !$procedure.wasassistant}
                         <form action="{$BASE_URL}actions/procedures/shareprocedure.php" method="post">

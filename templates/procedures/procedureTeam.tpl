@@ -1,7 +1,7 @@
 {include file='common/header.tpl'}
 
 {if $EMAIL}
-    <h1>Profissionais</h1>
+    <h1>Equipa</h1>
     {foreach $PROFESSIONALS as $professional}
         <h2>Função: {$professional.function}</h2>
         <p>Nome: {$professional.name} </p>

@@ -117,7 +117,10 @@ try {
     global $conn;
     $conn->beginTransaction();
 
-    $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['personalRemun'], $_POST['valuePerK'], $idprivatepayer, $identitypayer);
+    $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
+        $idprivatepayer, $identitypayer, $_POST['role'],
+        $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
+        $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
 
     if (count($subProcedures) > 0) {
         addSubProcedures($idProcedure, $subProcedures);
@@ -145,13 +148,13 @@ try {
 
     $conn->commit();
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a adicionar procedimento ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a adicionar registo ' . $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 
     header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
     exit;
 }
 
-$_SESSION['success_messages'][] = 'Procedimento adicionado com sucesso';
+$_SESSION['success_messages'][] = 'Registo adicionado com sucesso';
 
 header("Location: $BASE_URL" . 'pages/procedures/procedures.php');

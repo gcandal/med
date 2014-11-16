@@ -19,7 +19,7 @@ if ($_POST['idinvitingaccount'] && $_POST['idprocedure']) {
         acceptShared($idProcedure, $idInvitingAccount, $licenseIdInvited, $idAccount);
     } catch (PDOException $e) {
         if (strpos($e->getMessage(), 'procedureaccount_pkey') !== false) {
-            $_SESSION['error_messages'][] = 'Já tinha adicionado este procedimento';
+            $_SESSION['error_messages'][] = 'Já tinha adicionado este registo';
             rejectShared($idProcedure, $idInvitingAccount, $licenseIdInvited);
         } else $_SESSION['error_messages'][] = 'Erro a aceitar partilha ' . $e->getMessage();
 

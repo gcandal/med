@@ -20,12 +20,14 @@ DROP DOMAIN IF EXISTS LicenseId;
 DROP TYPE IF EXISTS ProcedurePaymentStatus;
 DROP TYPE IF EXISTS EntityType;
 DROP TYPE IF EXISTS OrgAuthorizationType;
+DROP TYPE IF EXISTS RoleInProcedureType;
 
 ------------------------------------------------------------------------
 
 CREATE TYPE ProcedurePaymentStatus AS ENUM ('Recebi', 'Paguei', 'Pendente');
 CREATE TYPE EntityType AS ENUM ('Hospital', 'Insurance');
 CREATE TYPE OrgAuthorizationType AS ENUM ('AdminVisible', 'AdminNotVisible', 'Visible', 'NotVisible');
+CREATE TYPE RoleInProcedureType AS ENUM ('General', 'FirstAssistant', 'SecondAssistant', 'Anesthetist', 'Instrumentist');
 
 ------------------------------------------------------------------------
 
@@ -49,13 +51,13 @@ CREATE TABLE Speciality (
 );
 
 CREATE TABLE Account (
-  idAccount SERIAL PRIMARY KEY,
-  name      VARCHAR(40) NOT NULL,
-  email     Email       NOT NULL UNIQUE,
-  password  CHAR(128)   NOT NULL,
-  salt      CHAR(128)   NOT NULL,
-  licenseId LicenseId   NOT NULL UNIQUE,
-  speciality INTEGER NOT NULL REFERENCES Speciality (idSpeciality) ON DELETE SET DEFAULT DEFAULT 3
+  idAccount  SERIAL PRIMARY KEY,
+  name       VARCHAR(40) NOT NULL,
+  email      Email       NOT NULL UNIQUE,
+  password   CHAR(128)   NOT NULL,
+  salt       CHAR(128)   NOT NULL,
+  licenseId  LicenseId   NOT NULL UNIQUE,
+  speciality INTEGER     NOT NULL REFERENCES Speciality (idSpeciality) ON DELETE SET DEFAULT DEFAULT 3
 );
 
 CREATE TABLE LoginAttempts (
@@ -115,31 +117,36 @@ CREATE TABLE ProcedureType (
 );
 
 CREATE TABLE Procedure (
-  idProcedure       SERIAL PRIMARY KEY,
-  paymentStatus     ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
-  idPrivatePayer    INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
-  idEntityPayer     INTEGER REFERENCES EntityPayer (idEntityPayer),
-  idGeneral         INTEGER REFERENCES Professional (idProfessional),
-  idFirstAssistant  INTEGER REFERENCES Professional (idProfessional),
-  idSecondAssistant INTEGER REFERENCES Professional (idProfessional),
-  idAnesthetist     INTEGER REFERENCES Professional (idProfessional),
-  idInstrumentist   INTEGER REFERENCES Professional (idProfessional),
-  date              DATE                   NOT NULL DEFAULT CURRENT_DATE,
-  valuePerK         FLOAT,
-  totalRemun        FLOAT DEFAULT 0,
-  personalRemun     FLOAT DEFAULT 0
+  idProcedure          SERIAL PRIMARY KEY,
+  paymentStatus        ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
+  idPrivatePayer       INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
+  idEntityPayer        INTEGER REFERENCES EntityPayer (idEntityPayer),
+  idGeneral            INTEGER REFERENCES Professional (idProfessional),
+  idFirstAssistant     INTEGER REFERENCES Professional (idProfessional),
+  idSecondAssistant    INTEGER REFERENCES Professional (idProfessional),
+  idAnesthetist        INTEGER REFERENCES Professional (idProfessional),
+  idInstrumentist      INTEGER REFERENCES Professional (idProfessional),
+  generalRemun         INTEGER DEFAULT 0,
+  firstAssistantRemun  INTEGER DEFAULT 0,
+  secondAssistantRemun INTEGER DEFAULT 0,
+  anesthetistRemun     INTEGER DEFAULT 0,
+  instrumentistRemun   INTEGER DEFAULT 0,
+  date                 DATE                   NOT NULL DEFAULT CURRENT_DATE,
+  valuePerK            FLOAT,
+  totalRemun           FLOAT DEFAULT 0
 );
 
 CREATE TABLE ProcedureAccount (
-  idProcedure INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
-  idAccount   INTEGER NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  idProcedure INTEGER             NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idAccount   INTEGER             NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  role        RoleInProcedureType NOT NULL,
   PRIMARY KEY (idProcedure, idAccount)
 );
 
 CREATE TABLE ProcedureProcedureType (
   idProcedure     INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
   idProcedureType INTEGER NOT NULL REFERENCES ProcedureType (idProcedureType) ON DELETE CASCADE,
-  quantity INTEGER NOT NULL DEFAULT 1,
+  quantity        INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (idProcedure, idProcedureType)
 );
 
@@ -233,7 +240,8 @@ BEGIN
     FROM Professional, Procedure, Account
     WHERE idProcedure = NEW.idProcedure AND Account.idAccount = NEW.idAccount AND (
       idProfessional = idgeneral OR idProfessional = idfirstassistant OR idProfessional = idsecondassistant OR
-      idProfessional = idinstrumentist OR idProfessional = idanesthetist) AND Professional.idAccount != NEW.idAccount AND Professional.licenseid != Account.licenseid ;
+      idProfessional = idinstrumentist OR idProfessional = idanesthetist) AND Professional.idAccount != NEW.idAccount
+          AND Professional.licenseid != Account.licenseid;
 
   INSERT INTO PrivatePayer (idaccount, name, nif, valuePerK)
     SELECT
@@ -4448,7 +4456,7 @@ INSERT INTO Account VALUES (DEFAULT, 'José', 'a@a.pt',
                             '445fff776df2293d242b261ba0f0d35be6c5b5a5110394fe8942a21e4d7af759fa277f608c3553ee7b3f8f64fce174b31146746ca8ef67dd37eedf70fe79ef9d',
                             'bea95c126335da5b92c91de01635311ede91a58f0ca0d9cb0344462333c35c9ef12977e976e2e8332861cff2c4efa42c653214b626ed96a76ba19ed0e414b71a',
                             '123456789',
-                             DEFAULT);
+                            DEFAULT);
 
 INSERT INTO Account VALUES (DEFAULT, 'b', 'b@b.pt',
                             '6b9f904771f21b6d9d017582d9a001c41eef2dd5128ff80fd1985d8f1f2e62fe5e23b4e77c16adea3e86eaf8353acc55e93f982419c9f87356e3a805ef7fae16',
@@ -4474,9 +4482,9 @@ INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, '111111111',
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-22 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-07-02 20:36:43.206615');
-INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, DEFAULT, 0, 0);
-INSERT INTO ProcedureAccount VALUES (1, 1);
-INSERT INTO ProcedureAccount VALUES (1, 2);
+INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, DEFAULT, 0);
+INSERT INTO ProcedureAccount VALUES (1, 1, 'FirstAssistant');
+INSERT INTO ProcedureAccount VALUES (1, 2, 'General');
 SELECT
   share_procedure_with_all(1, 1);
 INSERT INTO OrgAuthorization VALUES (1, 2, 'Visible');
