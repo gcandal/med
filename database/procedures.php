@@ -150,7 +150,7 @@ function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK
 
     $id = $conn->lastInsertId('procedure_idprocedure_seq');
 
-    addProcedureToAccount($id, $idAccount, $role);
+    addProcedureToAccount($id, $idAccount, $role, false);
 
     return $id;
 }
@@ -179,58 +179,15 @@ function addSubProcedures($idProcedure, $subProcedures)
     }
 }
 
-function addProcedureToAccount($idProcedure, $idAccount, $role)
+function addProcedureToAccount($idProcedure, $idAccount, $role, $readOnly)
 {
     global $conn;
 
-    $stmt = $conn->prepare("INSERT INTO PROCEDUREACCOUNT VALUES(:idprocedure, :idaccount, :role)");
-    $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount, "role" => $role));
+    $stmt = $conn->prepare("INSERT INTO PROCEDUREACCOUNT VALUES(:idprocedure, :idaccount, :role, :readOnly)");
+    $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount,
+        "role" => $role, "readOnly" => $readOnly));
 
     return $stmt->fetch();
-}
-
-function editProcedurePrivatePayer($idProcedure, $idPrivatePayer)
-{
-    global $conn;
-
-    $stmt = $conn->prepare("UPDATE PROCEDURE SET idprivatepayer = ?
-                                WHERE $idProcedure = ?;");
-    $stmt->execute(array($idPrivatePayer, $idProcedure));
-
-    return $stmt->fetch() == true;
-}
-
-function editProcedureEntityPayer($idProcedure, $idEntityPayer)
-{
-    global $conn;
-
-    $stmt = $conn->prepare("UPDATE PROCEDURE SET identitypayer = ?
-                                WHERE $idProcedure = ?;");
-    $stmt->execute(array($idEntityPayer, $idProcedure));
-
-    return $stmt->fetch() == true;
-}
-
-function editProcedureDate($idProcedure, $date)
-{
-    global $conn;
-
-    $stmt = $conn->prepare("UPDATE PROCEDURE SET date = ?
-                                WHERE $idProcedure = ?;");
-    $stmt->execute(array($date, $idProcedure));
-
-    return $stmt->fetch() == true;
-}
-
-function editProcedureTotalValue($idProcedure, $totalValue)
-{
-    global $conn;
-
-    $stmt = $conn->prepare("UPDATE PROCEDURE SET totalValue = ?
-                                WHERE $idProcedure = ?;");
-    $stmt->execute(array($totalValue, $idProcedure));
-
-    return $stmt->fetch() == true;
 }
 
 function removeSubProcedure($idProcedure, $idProcedureType)
@@ -352,13 +309,11 @@ function getProcedureProfessionals($idAccount, $idProcedure)
 function shareProcedure($idprocedure, $idinviting, $licenseid)
 {
     global $conn;
-    echo 3;
+
     if ($licenseid === 'all') {
-        echo 1;
         $stmt = $conn->prepare("SELECT share_procedure_with_all(:idprocedure, :idaccount)");
         $stmt->execute(array("idprocedure" => $idprocedure, "idaccount" => $idinviting));
     } else {
-        echo 2;
         $stmt = $conn->prepare("INSERT INTO ProcedureInvitation(idProcedure, idInvitingAccount, licenseIdInvited)
                                 VALUES (:idprocedure, :idaccount, :licenseid)");
 
@@ -406,12 +361,7 @@ function deleteShared($idProcedure, $idInvitingAccount, $licenseIdInvited)
 
 function acceptShared($idProcedure, $idInvitingAccount, $licenseIdInvited, $idAccount)
 {
-    global $conn;
-
-    $stmt = $conn->prepare("INSERT INTO ProcedureAccount(idProcedure, idAccount)
-                            VALUES (:idProcedure, :idAccount)");
-
-    $stmt->execute(array("idProcedure" => $idProcedure, "idAccount" => $idAccount));
+    addProcedureToAccount($idAccount, $idAccount, "General", false);
 
     deleteShared($idProcedure, $idInvitingAccount, $licenseIdInvited);
 }

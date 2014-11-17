@@ -105,9 +105,7 @@ CREATE TABLE Professional (
   name           VARCHAR(40),
   nif            NIF,
   licenseId      LicenseId,
-  email          VARCHAR(120),
-  createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  remuneration   FLOAT
+  createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ProcedureType (
@@ -140,6 +138,7 @@ CREATE TABLE ProcedureAccount (
   idProcedure INTEGER             NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
   idAccount   INTEGER             NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   role        RoleInProcedureType NOT NULL,
+  readOnly    BOOLEAN             NOT NULL DEFAULT TRUE,
   PRIMARY KEY (idProcedure, idAccount)
 );
 
@@ -161,11 +160,11 @@ CREATE TABLE OrgInvitation (
 );
 
 CREATE TABLE ProcedureInvitation (
-  idProcedure       INTEGER   NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
-  idInvitingAccount INTEGER   NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
-  licenseIdInvited  LicenseId NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
-  wasRejected       BOOL      NOT NULL DEFAULT FALSE,
-
+  idProcedure       INTEGER             NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idInvitingAccount INTEGER             NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  licenseIdInvited  LicenseId           NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
+  wasRejected       BOOL                NOT NULL DEFAULT FALSE,
+  role              roleinproceduretype NOT NULL,
   PRIMARY KEY (idProcedure, idInvitingAccount, licenseIdInvited)
 );
 
@@ -173,24 +172,22 @@ CREATE OR REPLACE FUNCTION share_procedure_with_all(idp INTEGER, ida INTEGER)
   RETURNS VOID AS $$
 DECLARE
 BEGIN
-  IF NOT EXISTS(SELECT
-                  *
-                FROM ProcedureAccount
-                WHERE idprocedure = idp AND idaccount = ida)
-  THEN
-    RETURN;
-  END IF;
-
-  INSERT INTO ProcedureInvitation (idprocedure, idinvitingaccount, licenseidinvited)
+  INSERT INTO ProcedureInvitation (idprocedure, idinvitingaccount, licenseidinvited, role)
     SELECT
       idp,
       ida,
-      licenseid
+      licenseid,
+      CASE WHEN Professional.idProfessional = idgeneral THEN 'General'
+      WHEN Professional.idProfessional = idfirstassistant THEN 'FirstAssistant'
+      WHEN Professional.idProfessional = idsecondassistant THEN 'SecondAssistant'
+      WHEN Professional.idProfessional = idanesthetist THEN 'Instrumentist'
+      ELSE 'Anesthetist' END :: roleinproceduretype
     FROM Procedure, Professional
     WHERE
       Procedure.idprocedure = idp
       AND licenseid IS NOT NULL
-      AND (Professional.idProfessional = idfirstassistant
+      AND (Professional.idProfessional = idgeneral
+           OR Professional.idProfessional = idfirstassistant
            OR Professional.idProfessional = idsecondassistant
            OR Professional.idProfessional = idanesthetist
            OR Professional.idProfessional = idinstrumentist)
@@ -266,6 +263,30 @@ BEGIN
     WHERE idProcedure = NEW.idProcedure AND EntityPayer.idEntityPayer = Procedure.idPrivatePayer AND
           idAccount != NEW.idAccount;
 
+  RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insert_professional_trigger()
+  RETURNS TRIGGER AS $$
+DECLARE
+BEGIN
+  IF EXISTS(SELECT
+              1
+            FROM Professional
+            WHERE Professional.idAccount = NEW.idAccount
+                  AND Professional.name = NEW.name)
+  THEN
+    UPDATE Professional
+    SET licenseId  = NEW.licenseId,
+      nif          = NEW.nif,
+      createdon    = CURRENT_TIMESTAMP,
+      idspeciality = NEW.idspeciality
+    WHERE Professional.idAccount = NEW.idAccount
+          AND Professional.name = NEW.name;
+
+    RETURN NULL;
+  END IF;
 
   RETURN NEW;
 END
@@ -280,6 +301,11 @@ DROP TRIGGER IF EXISTS insert_procedureaccount_trigger ON ProcedureAccount;
 CREATE TRIGGER insert_procedureaccount_trigger
 AFTER INSERT ON ProcedureAccount
 FOR EACH ROW EXECUTE PROCEDURE insert_procedureaccount_trigger();
+
+DROP TRIGGER IF EXISTS insert_professional_trigger ON Professional;
+CREATE TRIGGER insert_professional_trigger
+BEFORE INSERT ON Professional
+FOR EACH ROW EXECUTE PROCEDURE insert_professional_trigger();
 
 INSERT INTO ProcedureType VALUES (DEFAULT, 'Queratoscopia fotográfica', 15);
 INSERT INTO ProcedureType VALUES (DEFAULT, 'Glotografia', 10);
@@ -4481,10 +4507,10 @@ INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal incompleto', NULL, '98
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, '111111111', '2014-06-02 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-22 20:36:43.206615');
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-07-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, '159268753', '2014-07-02 20:36:43.206615');
 INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, DEFAULT, 0);
-INSERT INTO ProcedureAccount VALUES (1, 1, 'FirstAssistant');
-INSERT INTO ProcedureAccount VALUES (1, 2, 'General');
+INSERT INTO ProcedureAccount VALUES (1, 1, 'FirstAssistant', TRUE);
+INSERT INTO ProcedureAccount VALUES (1, 2, 'General', TRUE);
 SELECT
   share_procedure_with_all(1, 1);
 INSERT INTO OrgAuthorization VALUES (1, 2, 'Visible');
