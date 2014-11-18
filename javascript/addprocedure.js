@@ -21,6 +21,7 @@ const instrumentistRemun = $('#instrumentistRemun');
 const instrumentistName = $('#instrumentistName');
 const anesthetistName = $('#anesthetistName');
 const anesthetistK = $('#anesthetistK');
+const generalK = $('#generalK');
 const nSubProcedures = $('#nSubProcedures');
 const submitButton = $("#submitButton");
 const role = $('#role');
@@ -46,65 +47,38 @@ $(document).ready(function () {
         if (totalType.val() == 'auto') {
             enableField(totalRemun, true);
 
-            getTotalRemuneration();
-            fillFirstAssistantRemuneration();
-            fillSecondAssistantRemuneration();
-            fillInstrumentistRemuneration();
-            fillAnesthetistRemuneration();
-            adjustGeneralRemuneration();
+            updateRemunerations();
         } else {
             enableField(totalRemun, false);
         }
     });
 
     totalRemun.bind("paste drop input change cut", function () {
-        getTotalRemuneration();
-        fillFirstAssistantRemuneration();
-        fillSecondAssistantRemuneration();
-        fillInstrumentistRemuneration();
-        fillAnesthetistRemuneration();
-        adjustGeneralRemuneration();
+        updateRemunerations();
     });
 
     entityType.change(function () {
         updatePayerVisibility();
-        getTotalRemuneration();
-        fillFirstAssistantRemuneration();
-        fillSecondAssistantRemuneration();
-        fillInstrumentistRemuneration();
-        fillAnesthetistRemuneration();
-        adjustGeneralRemuneration();
+        updateRemunerations();
     });
 
     role.change(function () {
-        professionalRows.show();
-        $('#' + $(this).val() + 'Row').hide();
+        fillProfessionalRow($(this).val());
     });
 
     $("#entityName").change(function () {
         updatePayerVisibility();
-        getTotalRemuneration();
-        fillFirstAssistantRemuneration();
-        fillSecondAssistantRemuneration();
-        fillInstrumentistRemuneration();
-        fillAnesthetistRemuneration();
-        adjustGeneralRemuneration();
+        updateRemunerations();
     });
 
     $("#privateName").change(function () {
         updatePayerVisibility();
-        getTotalRemuneration();
-        fillFirstAssistantRemuneration();
-        fillSecondAssistantRemuneration();
-        fillInstrumentistRemuneration();
-        fillAnesthetistRemuneration();
-        adjustGeneralRemuneration();
+        updateRemunerations();
     });
 
     const subProcedures = $("#subProcedures");
     subProcedures.on('change', '.subProcedure', function () {
-        getTotalRemuneration();
-        adjustGeneralRemuneration();
+        updateRemunerations();
         $($(this).siblings()[1]).val($(this).find(":selected").text());
         $($(this).siblings()[0]).val(subProceduresList[$(this).val() - 1].k);
     });
@@ -114,42 +88,33 @@ $(document).ready(function () {
         removeSubProcedure($(this).parent().attr("id").split("subProcedure")[1]);
     });
 
-    $("select#function").change(function () {
-        updateFunctionVisibility();
-    });
-
     valuePerK.bind("paste drop input change cut", function () {
-        getTotalRemuneration();
-        fillFirstAssistantRemuneration();
-        fillSecondAssistantRemuneration();
-        fillInstrumentistRemuneration();
-        fillAnesthetistRemuneration();
-        adjustGeneralRemuneration();
+        updateRemunerations();
     });
 
     firstAssistantName.bind("paste drop input change cut", function () {
         fillFirstAssistantRemuneration();
-        adjustGeneralRemuneration();
+        fillGeneralRemuneration();
     });
 
     secondAssistantName.bind("paste drop input change cut", function () {
         fillSecondAssistantRemuneration();
-        adjustGeneralRemuneration();
+        fillGeneralRemuneration();
     });
 
     instrumentistName.bind("paste drop input change cut", function () {
         fillInstrumentistRemuneration();
-        adjustGeneralRemuneration();
+        fillGeneralRemuneration();
     });
 
     anesthetistName.bind("paste drop input change cut", function () {
         fillAnesthetistRemuneration();
-        adjustGeneralRemuneration();
+        fillGeneralRemuneration();
     });
 
     anesthetistK.change(function () {
         fillAnesthetistRemuneration();
-        adjustGeneralRemuneration();
+        fillGeneralRemuneration();
     });
 
     $.ajax({
@@ -188,6 +153,21 @@ $(document).ready(function () {
 
 });
 
+var previousRoleName = 'None';
+var fillProfessionalRow = function (roleName) {
+    var currentRoleFields = $("#" + roleName + "Row");
+    currentRoleFields.children().first().children().first().val(myName);
+    currentRoleFields.children().first().next().next().children().first().val(myLicenseId);
+
+    if (previousRoleName !== 'None') {
+        var previousRoleFields = $("#" + previousRoleName + "Row");
+        previousRoleFields.children().first().children().first().val("");
+        previousRoleFields.children().first().next().next().children().first().val("");
+    }
+
+    previousRoleName = roleName;
+};
+
 var getSubProcedureTypes = function () {
     var result = "";
     for (var i = 0; i < subProcedureTypes.length; i++) {
@@ -201,12 +181,7 @@ var addSubProcedure = function () {
     $(subProcedureTemplate({number: subProcedures, type: getSubProcedureTypes()}))
         .fadeIn('slow').appendTo('#subProcedures');
 
-    getTotalRemuneration();
-    fillFirstAssistantRemuneration();
-    fillSecondAssistantRemuneration();
-    fillInstrumentistRemuneration();
-    fillAnesthetistRemuneration();
-    adjustGeneralRemuneration();
+    updateRemunerations();
 };
 
 var fillValuePerK = function (type) {
@@ -263,27 +238,36 @@ var getEntityValuePerK = function () {
     return 'Valor Indefinido. Edite Entidade.';
 };
 
-var adjustGeneralRemuneration = function () {
+var updateRemunerations = function () {
+    fillTotalRemuneration();
+    fillFirstAssistantRemuneration();
+    fillSecondAssistantRemuneration();
+    fillInstrumentistRemuneration();
+    fillAnesthetistRemuneration();
+    fillGeneralRemuneration();
+}
+
+var fillGeneralRemuneration = function () {
     var total = totalRemun.val();
 
     if (thereIsAFirstAssistant()) {
         total -= firstAssistantRemun.val();
-
     }
 
     if (thereIsASecondAssistant()) {
         total -= secondAssistantRemun.val();
-
     }
 
     if (thereIsAnInstrumentist()) {
         total -= instrumentistRemun.val();
-
     }
 
     if (thereIsAnAnesthetist()) {
         total -= anesthetistRemun.val();
     }
+
+    if (totalRemun.val() > 0)
+        generalK.text(Math.floor((total / totalRemun.val()) * 100) + '%');
 
     generalRemun.val(total);
 };
@@ -373,6 +357,7 @@ var fillAnesthetistRemuneration = function () {
                 }
 
                 remun = k * valuePerK.val();
+
                 break;
         }
         anesthetistRemun.val(remun);
@@ -385,11 +370,11 @@ var removeSubProcedure = function (subProcedureNr) {
     $("#subProcedure" + subProcedureNr).remove();
     subProcedures--;
     nSubProcedures.val(subProcedures);
-    getTotalRemuneration();
-    adjustGeneralRemuneration();
+
+    updateRemunerations();
 };
 
-var getTotalRemuneration = function () {
+var fillTotalRemuneration = function () {
     if (totalType.val() == 'auto') {
         var total = 0.0;
 

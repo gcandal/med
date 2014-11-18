@@ -128,18 +128,18 @@
                 <th>Percentagem de K</th>
                 <th>Remuneração</th>
             </tr>
-            <tr id="GeneralRow" class="professionalRow" style="display: none;">
+            <tr id="GeneralRow">
                 <td><input type="text" name="generalName" class="professionalName" id="generalName"
-                           value="{$FORM_VALUES.GENERALNAME}"/></td>
+                           value="{$NAME}"/></td>
                 <td>Cirurgião Principal</td>
                 <td><input type="text" name="generaltLicenseId" class="professionalLicenseId"
-                           value="{$FORM_VALUES.GENERALLICENSEID}"/></td>
-                <td>20%</td>
+                           value="{$LICENSEID}"/></td>
+                <td id="generalK">100%</td>
                 <td><input type="text" name="generalRemun" id="generalRemun"
                            style="background-color: lightgrey" readonly
                            value="0"></td>
             </tr>
-            <tr id="FirstAssistantRow" class="professionalRow">
+            <tr id="FirstAssistantRow">
                 <td><input type="text" name="firstAssistantName" class="professionalName" id="firstAssistantName"
                            value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
                 <td>1º Ajudante</td>
@@ -150,7 +150,7 @@
                            style="background-color: lightgrey" readonly
                            value="0"></td>
             </tr>
-            <tr id="SecondAssistantRow" class="professionalRow">
+            <tr id="SecondAssistantRow">
                 <td><input type="text" name="secondAssistantName" class="professionalName" id="secondAssistantName"
                            value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                 <td>2º Ajudante</td>
@@ -161,7 +161,7 @@
                            style="background-color: lightgrey" readonly
                            value="0"></td>
             </tr>
-            <tr id="InstrumentistRow" class="professionalRow">
+            <tr id="InstrumentistRow">
                 <td><input type="text" name="instrumentistName" class="professionalName" id="instrumentistName"
                            value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                 <td>Instrumentista</td>
@@ -173,7 +173,7 @@
                            value="0"></td>
             </tr>
 
-            <tr id="AnesthetistRow" class="professionalRow">
+            <tr id="AnesthetistRow">
                 <td><input type="text" name="anesthetistName" class="professionalName" id="anesthetistName"
                            value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                 <td>Anestesista</td>
@@ -218,6 +218,8 @@
         {/literal}
     </script>
     <script type="text/javascript">
+        var myName = "{$NAME}";
+        var myLicenseId = "{$LICENSEID}";
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
