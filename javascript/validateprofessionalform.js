@@ -26,7 +26,7 @@ $(document).ready(function () {
     isValid(nifProfessional, errorMessageNifProfessional);
     isValid(licenseIdProfessional, errorMessageLicenseIdProfessional);
 
-    if (method !== "addProfessional") {
+    if (method !== "addProfessional" && method !== "editProfessional") {
         isValid(nameProfessional, errorMessageNameProfessional);
     }
     else {
@@ -38,7 +38,7 @@ var checkValidNameProfessional = function () {
     nameProfessional.bind("paste drop input change cut", function () {
         var textName = $(this).val();
 
-        if (method === "addProfessional" && textName.length == 0)
+        if ( (method === "addProfessional" || method === "editProfessional" ) && textName.length == 0)
             return isInvalid($(this), "Nome é obrigatório", errorMessageNameProfessional);
 
         return isValid($(this), errorMessageNameProfessional);

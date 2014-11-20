@@ -4,8 +4,8 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-    <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/addprocedure.php">
-
+    <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/editprocedure.php">
+        <input type="hidden" value="{$PROCEDURE.idprocedure}"/>
         <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>
         <span class="errorMessagePrivate" id="errorMessageNifPrivate"></span>
         <span class="errorMessageEntity" id="errorMessageNameEntity"></span>
@@ -16,7 +16,7 @@
 
         <label>
             Data:
-            <input type="date" name="date" placeholder="Data do Registo" value="{$FORM_VALUES.DATE}"/>
+            <input type="date" name="date" placeholder="Data do Registo" value="{$PROCEDURE.date}"/>
         </label>
         <label>
             Função:
@@ -24,16 +24,16 @@
                 <option value="General">Cirurgião Principal</option>
                 <option value="FirstAssistant">Primeiro Asistente</option>
                 <option value="SecondAssistant">Segundo Assistente</option>
-                <option value="Instrumentist">Insturmentista</option>
                 <option value="Anesthetist">Anestesista</option>
+                <option value="Instrumentist">Insturmentista</option>
             </select>
         </label>
-        <button id="submitButton" type="submit" disabled>Submeter</button>
+        <button id="submitButton" type="submit" disabled>Editar</button>
         <br>
 
         <label>
             Estado de pagamento:
-            <select name="status" required>
+            <select name="status" id="paymentStatus" required>
                 <option value="Pendente">Pendente</option>
                 <option value="Recebi">Recebi</option>
                 <option value="Paguei">Paguei</option>
@@ -41,6 +41,7 @@
         </label>
 
         <p>Cirurgias</p>
+
         <p id="subProcedureMenu">
             <input type="hidden" name="nSubProcedures" id="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>
@@ -130,55 +131,51 @@
             </tr>
             <tr id="GeneralRow">
                 <td><input type="text" name="generalName" class="professionalName" id="generalName"
-                           value="{$FORM_VALUES.GENERALNAME}"/></td>
+                           value="{$PROCEDURE.professionals.general.name}"/></td>
                 <td>Cirurgião Principal</td>
                 <td><input type="text" name="generaltLicenseId" class="professionalLicenseId"
-                           value="{$FORM_VALUES.GENERALLICENSEID}"/></td>
+                           value="{$PROCEDURE.professionals.general.licenseid}"/></td>
                 <td id="generalK">100%</td>
                 <td><input type="text" name="generalRemun" id="generalRemun"
-                           style="background-color: lightgrey" readonly
-                           value="0"></td>
+                           style="background-color: lightgrey" readonly></td>
             </tr>
             <tr id="FirstAssistantRow">
                 <td><input type="text" name="firstAssistantName" class="professionalName" id="firstAssistantName"
-                           value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
+                           value="{$PROCEDURE.professionals.firstassistant.name}"/></td>
                 <td>1º Ajudante</td>
                 <td><input type="text" name="firstAssistantLicenseId" class="professionalLicenseId"
-                           value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/></td>
+                           value="{$PROCEDURE.professionals.firstassistant.licenseid}"/></td>
                 <td>20%</td>
                 <td><input type="text" name="firstAssistantRemun" id="firstAssistantRemun"
-                           style="background-color: lightgrey" readonly
-                           value="0"></td>
+                           style="background-color: lightgrey" readonly></td>
             </tr>
             <tr id="SecondAssistantRow">
                 <td><input type="text" name="secondAssistantName" class="professionalName" id="secondAssistantName"
-                           value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
+                           value="{$PROCEDURE.professionals.secondassistant.name}"/></td>
                 <td>2º Ajudante</td>
                 <td><input type="text" name="secondAssistantLicenseId" class="professionalLicenseId"
-                           value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/></td>
+                           value="{$PROCEDURE.professionals.secondassistant.licenseid}"/></td>
                 <td>10%</td>
                 <td><input type="text" name="secondAssistantRemun" id="secondAssistantRemun"
-                           style="background-color: lightgrey" readonly
-                           value="0"></td>
+                           style="background-color: lightgrey" readonly></td>
             </tr>
             <tr id="InstrumentistRow">
                 <td><input type="text" name="instrumentistName" class="professionalName" id="instrumentistName"
-                           value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
+                           value="{$PROCEDURE.professionals.instrumentist.name}"/></td>
                 <td>Instrumentista</td>
                 <td><input type="text" name="instrumentistAssistantLicenseId" class="professionalLicenseId"
-                           value="{$FORM_VALUES.INSTRUMENTISTLICENSEID}"/></td>
+                           value="{$PROCEDURE.professionals.instrumentist.licenseid}"/></td>
                 <td>10%</td>
                 <td><input type="text" name="instrumentistRemun" id="instrumentistRemun"
-                           style="background-color: lightgrey" readonly
-                           value="0"></td>
+                           style="background-color: lightgrey" readonly></td>
             </tr>
 
             <tr id="AnesthetistRow">
                 <td><input type="text" name="anesthetistName" class="professionalName" id="anesthetistName"
-                           value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
+                           value="{$PROCEDURE.professionals.anesthetist.name}"/></td>
                 <td>Anestesista</td>
                 <td><input type="text" name="anesthetistAssistantLicenseId" class="professionalLicenseId"
-                           value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/></td>
+                           value="{$PROCEDURE.professionals.anesthetist.licenseid}"/></td>
                 <td>
                     <select id="anesthetistK" name="anesthetistK">
                         <option value="25">25%</option>
@@ -187,7 +184,7 @@
                     </select>
                 </td>
                 <td><input type="text" name="anesthetistRemun" id="anesthetistRemun"
-                           style="background-color: lightgrey" readonly value="0">
+                           style="background-color: lightgrey" readonly>
                 </td>
             </tr>
             <tr>
@@ -200,7 +197,7 @@
                         <option value="manual">Manual</option>
                     </select></td>
                 <td><input type="text" name="totalRemun" id="totalRemun" style="background-color: lightgrey"
-                           readonly value="0"></td>
+                           readonly value="{$PROCEDURE.totalremun}"></td>
             </tr>
         </table>
     </form>
@@ -211,7 +208,7 @@
                 <select name="subProcedure{{number}}" class="subProcedure">
                     {{{type}}}<br>
                 </select>
-                <input value="15" type="text" size="3" disabled >
+                <input value="15" type="text" size="3" disabled>
                 <input class="subProcedureName" value="Queratoscopia fotográfica" type="text">
                 <button class="removeSubProcedureButton" subProcedureNr="{{number}}">X</button>
             </span>
@@ -224,8 +221,26 @@
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
         var baseUrl = {$BASE_URL};
-        var method = "addProcedure";
-        $("#entityType").val("{$ENTITYTYPE}");
+        var method = "editProcedure";
+
+        $("#paymentStatus").val("{$PROCEDURE.paymentstatus}");
+        $("#role").val("{$PROCEDURE.role}");
+
+        var editProcedurePayer = {literal}{{/literal}id: {$PROCEDURE.idpayer}{literal}}{/literal};
+        var editSubProcedures = {$PROCEDURE.subprocedures|json_encode};
+        var editAnesthetistK = {$PROCEDURE.anesthetistk};
+
+        {if $PROCEDURE.hasmanualk}
+        var editHasManualK = true;
+        {else}
+        var editHasManualK = false;
+        {/if}
+
+        {if $PROCEDURE.idprivatepayer > 0}
+        editProcedurePayer['payerType'] = "Private";
+        {else}
+        editProcedurePayer['payerType'] = "Entity";
+        {/if}
     </script>
     <script src="{$BASE_URL}javascript/addpayer.js"></script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>

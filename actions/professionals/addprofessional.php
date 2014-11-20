@@ -19,7 +19,7 @@ if(!$_POST['name']) {
 $idAccount = $_SESSION['idaccount'];
 
 try {
-    addProfessional($_POST['name'], $_POST['nif'], $idAccount, $_POST['licenseId'], "", 0, $_POST['speciality']);
+    addProfessional($_POST['name'], $_POST['nif'], $idAccount, $_POST['licenseId'], "", $_POST['speciality']);
 } catch (PDOException $e) {
     $_SESSION['error_messages'][] = 'Erro a criar profissional ' . $e->getMessage();
     $_SESSION['form_values'] = $_POST;

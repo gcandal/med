@@ -13,8 +13,8 @@ $idAccount = $_SESSION['idaccount'];
 $idProcedure = $_GET['idProcedure'];
 
 $professionals = getProcedureProfessionals($idAccount, $idProcedure);
-
+var_dump($professionals); exit;
 $smarty->assign('PROFESSIONALS', $professionals);
-$smarty->display('procedures/procedureTeam.tpl');
+$smarty->display('procedures/professionals.tpl');
 
 

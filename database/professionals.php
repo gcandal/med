@@ -9,7 +9,7 @@ function getSpecialities()
     return $stmt->fetchAll();
 }
 
-function addProfessional($name, $NIF, $idAccount, $licenseID, $email, $remuneration, $specialityId)
+function addProfessional($name, $NIF, $idAccount, $licenseID, $email, $specialityId)
 {
     global $conn;
 
@@ -19,19 +19,23 @@ function addProfessional($name, $NIF, $idAccount, $licenseID, $email, $remunerat
         $licenseID = NULL;
     if ($email === "")
         $email = NULL;
-    if ($remuneration === "")
-        $remuneration = NULL;
     if ($specialityId === NULL || $specialityId === 0)
         $specialityId = 3;
 
-    $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name, nif, idaccount, licenseid, email, remuneration, idspeciality)
-                            VALUES(:name, :nif, :idaccount, :licenseid, :email, :remuneration, :idspeciality);");
-
+    $stmt = $conn->prepare("INSERT INTO PROFESSIONAL(name, nif, idaccount, licenseid, email, idspeciality)
+                            VALUES(:name, :nif, :idaccount, :licenseid, :email, :idspeciality);");
     $stmt->execute(array(":name" => $name, ":nif" => $NIF, ":idaccount" => $idAccount,
-        ":licenseid" => $licenseID, ":email" => $email, ":remuneration" => $remuneration,
-        ":idspeciality" => $specialityId));
+        ":licenseid" => $licenseID, ":email" => $email, ":idspeciality" => $specialityId));
 
-    return $conn->lastInsertId('professional_idprofessional_seq');
+    // Due to possible non-insertion because of trigger,
+    // otherwise use $conn->lastInsertId('professional_idprofessional_seq')
+
+    $stmt = $conn->prepare("SELECT idprofessional FROM Professional
+                                WHERE idAccount = :idAccount AND name = :name");
+    $stmt->execute(array(":idAccount" => $idAccount, ":name" => $name));
+
+    $result = $stmt->fetch();
+    return $result['idprofessional'];
 }
 
 function getRecentProfessionals($idaccount, $speciality, $name)
@@ -40,7 +44,7 @@ function getRecentProfessionals($idaccount, $speciality, $name)
 
     /*
     if ($speciality == -1) {
-        $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, idspeciality, Professional.idProfessional
+        $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, idspeciality, Professional . idProfessional
                             FROM Professional
                             WHERE Professional . idAccount = :idAccount AND Professional . name LIKE :name
                             ORDER BY Professional . createdOn DESC
@@ -49,7 +53,7 @@ function getRecentProfessionals($idaccount, $speciality, $name)
         $stmt->execute(array("idAccount" => $idaccount, "name" => $name . '%'));
 
     } else {
-        $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, Professional.idProfessional
+        $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, Professional . idProfessional
                             FROM Professional
                             WHERE Professional . idSpeciality = :speciality AND Professional . idAccount = :idAccount AND Professional . name LIKE :name
                             ORDER BY Professional . createdOn DESC
@@ -58,11 +62,10 @@ function getRecentProfessionals($idaccount, $speciality, $name)
         $stmt->execute(array("idAccount" => $idaccount, "speciality" => $speciality, "name" => $name . '%'));
     }
     */
-    $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, idspeciality, Professional.idProfessional
+    $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, idspeciality, Professional . idProfessional
                             FROM Professional
                             WHERE Professional . idAccount = :idAccount
-                            ORDER BY Professional . createdOn DESC
-                            LIMIT 3");
+                            ORDER BY Professional . createdOn DESC");
 
     $stmt->execute(array("idAccount" => $idaccount));
 
@@ -74,9 +77,9 @@ function getProfessionals($idaccount)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, Speciality.name AS speciality, Professional.idProfessional
+    $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, Speciality . name AS speciality, Professional . idProfessional
                             FROM Professional, Speciality
-                            WHERE Professional . idAccount = :idAccount AND Professional.idspeciality = Speciality.idspeciality");
+                            WHERE Professional . idAccount = :idAccount AND Professional . idspeciality = Speciality . idspeciality");
 
     $stmt->execute(array("idAccount" => $idaccount));
 
@@ -89,7 +92,7 @@ function getProfessional($idaccount, $idprofessional)
 
     $stmt = $conn->prepare("SELECT name, nif, licenseid, idProfessional, idspeciality
                             FROM Professional
-                            WHERE Professional.idprofessional = :idProfessional AND Professional . idAccount = :idAccount");
+                            WHERE Professional . idprofessional = :idProfessional AND Professional . idAccount = :idAccount");
 
     $stmt->execute(array("idAccount" => $idaccount, "idProfessional" => $idprofessional));
 

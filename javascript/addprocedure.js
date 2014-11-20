@@ -25,7 +25,6 @@ const generalK = $('#generalK');
 const nSubProcedures = $('#nSubProcedures');
 const submitButton = $("#submitButton");
 const role = $('#role');
-const professionalRows = $(".professionalRow");
 const subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
 
 var enableField = function (field, disable) {
@@ -62,9 +61,11 @@ $(document).ready(function () {
         updateRemunerations();
     });
 
+    fillProfessionalRow(role.val());
     role.change(function () {
         fillProfessionalRow($(this).val());
     });
+
 
     $("#entityName").change(function () {
         updatePayerVisibility();
@@ -113,9 +114,27 @@ $(document).ready(function () {
     });
 
     anesthetistK.change(function () {
-        fillAnesthetistRemuneration();
-        fillGeneralRemuneration();
+        updateRemunerations();
     });
+
+    if (method === "editProcedure") {
+        var editProcedurePayerType = editProcedurePayer['payerType'];
+        entityType.val(editProcedurePayerType);
+        $("#" + editProcedurePayerType.toLowerCase() + "name").val(editProcedurePayer['idpayer']);
+        updatePayerVisibility();
+
+        $.each(editSubProcedures, function (i, v) {
+            addNSubProcedureById(v['idproceduretype'], v['quantity']);
+        });
+
+        if (anesthetistName.val() !== "")
+            anesthetistK.val(editAnesthetistK);
+
+        if(editHasManualK) {
+            totalType.val("manual");
+            enableField(totalRemun, false);
+        }
+    }
 
     $.ajax({
         url: baseUrl + "actions/professionals/getrecentprofessionals.php",
@@ -149,23 +168,29 @@ $(document).ready(function () {
             console.log(c);
         }
     });
-
-
 });
 
-var previousRoleName = 'None';
+var previousRole = '';
 var fillProfessionalRow = function (roleName) {
     var currentRoleFields = $("#" + roleName + "Row");
-    currentRoleFields.children().first().children().first().val(myName);
-    currentRoleFields.children().first().next().next().children().first().val(myLicenseId);
+    var currentRoleName = currentRoleFields.children().first().children().first();
+    var currentRoleLicenseId = currentRoleFields.children().first().next().next().children().first();
 
-    if (previousRoleName !== 'None') {
-        var previousRoleFields = $("#" + previousRoleName + "Row");
-        previousRoleFields.children().first().children().first().val("");
-        previousRoleFields.children().first().next().next().children().first().val("");
-    }
+    currentRoleName.val(myName);
+    enableField(currentRoleName, true);
+    currentRoleLicenseId.val(myLicenseId);
+    enableField(currentRoleLicenseId, true);
 
-    previousRoleName = roleName;
+    var previousRoleFields = $("#" + previousRole + "Row");
+    var previousRoleName = previousRoleFields.children().first().children().first();
+    var previousRoleLicenseId = previousRoleFields.children().first().next().next().children().first();
+
+    previousRoleName.val("");
+    enableField(previousRoleName, false);
+    previousRoleLicenseId.val("");
+    enableField(previousRoleLicenseId, false);
+
+    previousRole = roleName;
 };
 
 var getSubProcedureTypes = function () {
@@ -184,58 +209,69 @@ var addSubProcedure = function () {
     updateRemunerations();
 };
 
+var addNSubProcedureById = function (id, n) {
+    if (n <= 0) {
+        updateRemunerations();
+        return;
+    }
+
+    nSubProcedures.val(++subProcedures);
+    var newSubP = $(subProcedureTemplate({number: subProcedures, type: getSubProcedureTypes()}));
+
+    newSubP.appendTo('#subProcedures');
+    var newSubPInfo = subProceduresList[id - 1];
+    $(newSubP.children().first()).val(id);
+    $(newSubP.children().first().next()).val(newSubPInfo['k']);
+    $(newSubP.children().first().next().next()).val(newSubPInfo['label']);
+
+    addNSubProcedureById(id, n - 1);
+};
+
 var fillValuePerK = function (type) {
-    var valueperk;
+    var curreantPayerValuePerK;
     switch (type) {
         case 'private':
-            valuePerK.val(getPrivateValuePerK());
+            curreantPayerValuePerK = getPrivateValuePerK();
             break;
         case 'entity':
-            valuePerK.val(getEntityValuePerK());
+            curreantPayerValuePerK = getEntityValuePerK();
             break;
         case 'none':
-            valueperk = 0;
-            valuePerK.val(0);
+            curreantPayerValuePerK = 0;
             break;
         default:
             break;
     }
 
-    if (isNaN(valueperk))
-        return 0;
-    else
-        return valueperk;
+    valuePerK.val(curreantPayerValuePerK);
+
+    if (curreantPayerValuePerK === 0)
+        enableField(valuePerK, false);
 };
 
+// TODO refactor
 var getPrivateValuePerK = function () {
     for (var i = 0; i < privatePayers.length; i++) {
         if (privatePayers[i].idprivatepayer == $('[name=privateName]').val()) {
             if (isNumeric(privatePayers[i].valueperk)) {
-                submitButton.attr('disabled', false);
                 return privatePayers[i].valueperk;
-            }
-
+            } else return 0;
         }
     }
 
-    submitButton.attr('disabled', true);
-
-    return 'Valor Indefinido. Edite Privado.';
+    return 0;
 };
 
 var getEntityValuePerK = function () {
     for (var i = 0; i < entityPayers.length; i++) {
         if (entityPayers[i].identitypayer == $('[name=entityName]').val()) {
             if (isNumeric(entityPayers[i].valueperk)) {
-                submitButton.attr('disabled', false);
                 return entityPayers[i].valueperk;
-            }
+            } else return 0;
         }
     }
 
-    submitButton.attr('disabled', true);
-
-    return 'Valor Indefinido. Edite Entidade.';
+    return 0;
 };
 
 var updateRemunerations = function () {
@@ -420,11 +456,10 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, true);
-
-            submitButton.attr('disabled', false);
-
             fillValuePerK('private');
             payerType.val("Private");
+
+            checkSubmitButton();
             break;
         case 'Entity':
             privatePayer.hide();
@@ -433,10 +468,10 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, true);
-            submitButton.attr('disabled', false);
-
             fillValuePerK('entity');
             payerType.val("Entity");
+
+            checkSubmitButton();
             break;
         case 'NewPrivate':
             privatePayer.hide();
@@ -445,10 +480,10 @@ var updatePayerVisibility = function () {
             newPrivatePayer.show();
 
             enableField(valuePerK, false);
-            checkSubmitButton();
-
             fillValuePerK('none');
             payerType.val("NewPrivate");
+
+            checkSubmitButton();
             break;
         case 'NewEntity':
             privatePayer.hide();
@@ -457,10 +492,10 @@ var updatePayerVisibility = function () {
             newPrivatePayer.hide();
 
             enableField(valuePerK, false);
-            checkSubmitButton();
-
             fillValuePerK('none');
             payerType.val("NewEntity");
+
+            checkSubmitButton();
             break;
         default:
             break;

@@ -17,13 +17,10 @@ $username = getUserById($idaccount);
 $entities['Entidade'] = getEntityPayers($idaccount);
 $entities['Privado'] = getPrivatePayers($idaccount);
 $procedureTypes = getProcedureTypes();
-$specialities = getSpecialities();
 $smarty->assign('USERNAME', $username);
 $smarty->assign('ENTITIES', $entities);
 $smarty->assign('PROCEDURETYPES', $procedureTypes);
-$smarty->assign('SPECIALITIES', $specialities);
 
-//if(!$_SESSION['entityType'])
 $_SESSION['entityType'] = "NewPrivate";
 
 $smarty->assign('ENTITYTYPE', $_SESSION['entityType']);

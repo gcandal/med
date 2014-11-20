@@ -103,6 +103,7 @@ CREATE TABLE Professional (
   idSpeciality   INTEGER NOT NULL REFERENCES Speciality (idSpeciality),
   idAccount      INTEGER NOT NULL REFERENCES Account (idAccount),
   name           VARCHAR(40),
+  email          EMAIL,
   nif            NIF,
   licenseId      LicenseId,
   createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -115,23 +116,21 @@ CREATE TABLE ProcedureType (
 );
 
 CREATE TABLE Procedure (
-  idProcedure          SERIAL PRIMARY KEY,
-  paymentStatus        ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
-  idPrivatePayer       INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
-  idEntityPayer        INTEGER REFERENCES EntityPayer (idEntityPayer),
-  idGeneral            INTEGER REFERENCES Professional (idProfessional),
-  idFirstAssistant     INTEGER REFERENCES Professional (idProfessional),
-  idSecondAssistant    INTEGER REFERENCES Professional (idProfessional),
-  idAnesthetist        INTEGER REFERENCES Professional (idProfessional),
-  idInstrumentist      INTEGER REFERENCES Professional (idProfessional),
-  generalRemun         FLOAT DEFAULT 0,
-  firstAssistantRemun  FLOAT DEFAULT 0,
-  secondAssistantRemun FLOAT DEFAULT 0,
-  anesthetistRemun     FLOAT DEFAULT 0,
-  instrumentistRemun   FLOAT DEFAULT 0,
-  date                 DATE                   NOT NULL DEFAULT CURRENT_DATE,
-  valuePerK            FLOAT,
-  totalRemun           FLOAT DEFAULT 0
+  idProcedure           SERIAL PRIMARY KEY,
+  paymentStatus         ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
+  idPrivatePayer        INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
+  idEntityPayer         INTEGER REFERENCES EntityPayer (idEntityPayer),
+  idGeneral             INTEGER REFERENCES Professional (idProfessional),
+  idFirstAssistant      INTEGER REFERENCES Professional (idProfessional),
+  idSecondAssistant     INTEGER REFERENCES Professional (idProfessional),
+  idAnesthetist         INTEGER REFERENCES Professional (idProfessional),
+  idInstrumentist       INTEGER REFERENCES Professional (idProfessional),
+  date                  DATE                   NOT NULL DEFAULT CURRENT_DATE,
+  valuePerK             FLOAT,
+  totalRemun            FLOAT DEFAULT 0,
+  personalRemun         FLOAT DEFAULT 0,
+  hasManualK            BOOLEAN                NOT NULL DEFAULT FALSE,
+  anesthetistK VARCHAR(5)
 );
 
 CREATE TABLE ProcedureAccount (
@@ -277,13 +276,14 @@ BEGIN
             WHERE Professional.idAccount = NEW.idAccount
                   AND Professional.name = NEW.name)
   THEN
-    UPDATE Professional
-    SET licenseId  = NEW.licenseId,
-      nif          = NEW.nif,
-      createdon    = CURRENT_TIMESTAMP,
-      idspeciality = NEW.idspeciality
-    WHERE Professional.idAccount = NEW.idAccount
-          AND Professional.name = NEW.name;
+
+    IF NEW.licenseId IS NOT NULL
+    THEN
+      UPDATE Professional
+      SET licenseId = NEW.licenseId
+      WHERE Professional.idAccount = NEW.idAccount
+            AND Professional.name = NEW.name AND Professional.licenseId IS NULL;
+    END IF;
 
     RETURN NULL;
   END IF;
@@ -4502,14 +4502,17 @@ INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Hospital', '2014-07-01', '2014-07-0
 INSERT INTO OrgAuthorization VALUES (1, 1, 'AdminVisible');
 INSERT INTO OrgInvitation VALUES (1, 1, '111111111', FALSE);
 INSERT INTO OrgInvitation VALUES (1, 1, '012345678', FALSE, FALSE, '2014-06-02 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal', '123456789', '987654321', '2014-06-02 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 2, 1, 'asdrubal incompleto', NULL, '987654321', '2014-06-02 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, '111111111', '2014-06-02 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, '2014-06-22 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '2014-06-12 20:36:43.206615');
-INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, '159268753', '2014-07-02 20:36:43.206615');
+INSERT INTO Professional
+VALUES (DEFAULT, 2, 1, 'asdrubal', NULL, '123456789', '987654321', '2014-06-02 20:36:43.206615');
+INSERT INTO Professional
+VALUES (DEFAULT, 2, 1, 'asdrubal incompleto', NULL, NULL, '987654321', '2014-06-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Manel', NULL, NULL, '111111111', '2014-06-02 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, NULL, '2014-06-22 20:36:43.206615');
+INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, NULL, '2014-06-12 20:36:43.206615');
+INSERT INTO Professional
+VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '159268753', '2014-07-02 20:36:43.206615');
 INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, DEFAULT, 0);
-INSERT INTO ProcedureAccount VALUES (1, 1, 'FirstAssistant', TRUE);
+INSERT INTO ProcedureAccount VALUES (1, 1, 'FirstAssistant', FALSE);
 INSERT INTO ProcedureAccount VALUES (1, 2, 'General', TRUE);
 SELECT
   share_procedure_with_all(1, 1);

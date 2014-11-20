@@ -15,7 +15,7 @@
 </style>
 
 {if $EMAIL}
-    <h1>Dr. {$USERNAME},</h1>
+    <h1>Dr. {$NAME},</h1>
     <h2>Tem {$OPENPROCEDURES.number} registos por concluir.</h2>
     <p><a href="{$BASE_URL}pages/procedures/addprocedure.php">Adicionar Registo</a></p>
     <table class="procedureTable" border="1">
@@ -24,10 +24,10 @@
             <th>Estado</th>
             <th>Pagador</th>
             <th>Cirurgias</th>
-            <th>Equipa</th>
             <th>Função</th>
             <th>Valor</th>
             <th>Partilhar</th>
+            <th>Detalhes</th>
             <th>Apagar</th>
         </tr>
 
@@ -49,11 +49,8 @@
                     {/foreach}
                 </td>
                 <td>
-                    <a href="{$BASE_URL}pages/procedures/professionals.php?idProcedure={$procedure.idprocedure}">Ver</a>
-                </td>
-                <td>
                     {if $procedure.role == 'General'}
-                        Cirurgião Geral
+                        Cirurgião Principal
                     {elseif $procedure.role == 'FirstAssistant'}
                         Primeiro Assitente
                     {elseif $procedure.role == 'SecondAssistant'}
@@ -69,10 +66,18 @@
                     Total: {$procedure.totalremun}&euro;
                 </td>
                 <td>
-                    {if !$procedure.wasassistant}
+                    {if !$procedure.readonly}
                         <form action="{$BASE_URL}actions/procedures/shareprocedure.php" method="post">
                             <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
                             <button type="submit">Partilhar</button>
+                        </form>
+                    {/if}
+                </td>
+                <td>
+                    {if !$procedure.readonly}
+                        <form action="{$BASE_URL}pages/procedures/editprocedure.php" method="post">
+                            <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
+                            <button type="submit">Ver</button>
                         </form>
                     {/if}
                 </td>

@@ -12,7 +12,6 @@ if (!$_SESSION['email']) {
 }
 
 $idAccount = $_SESSION['idaccount'];
-$username = $_SESSION['name'];
 
 $openProcedures = getNumberOfOpenProcedures($idAccount);
 $procedures = getProcedures($idAccount);
@@ -21,7 +20,6 @@ foreach ($procedures as $key => $procedure) {
     $procedures[$key]["subprocedures"] = getSubProcedures($procedure['idprocedure']);
 }
 
-$smarty->assign('USERNAME', $username);
 $smarty->assign('OPENPROCEDURES', $openProcedures);
 $smarty->assign('PROCEDURES', $procedures);
 $smarty->display('procedures/procedures.tpl');
