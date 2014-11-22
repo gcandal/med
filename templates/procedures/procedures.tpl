@@ -62,7 +62,7 @@
                     {/if}
                 </td>
                 <td>
-                    Pessoal: {$procedure.personalremun}&euro;<br>
+                   <!-- Pessoal: {$procedure.personalremun}&euro;<br> -->
                     Total: {$procedure.totalremun}&euro;
                 </td>
                 <td>
@@ -74,12 +74,10 @@
                     {/if}
                 </td>
                 <td>
-                    {if !$procedure.readonly}
-                        <form action="{$BASE_URL}pages/procedures/editprocedure.php" method="post">
-                            <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
-                            <button type="submit">Ver</button>
-                        </form>
-                    {/if}
+                    <form action="{$BASE_URL}pages/procedures/procedure.php" method="get">
+                        <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
+                        <button type="submit">Ver</button>
+                    </form>
                 </td>
                 <td>
                     <form action="{$BASE_URL}actions/procedures/deleteprocedure.php" method="post">

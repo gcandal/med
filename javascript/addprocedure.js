@@ -134,6 +134,8 @@ $(document).ready(function () {
             totalType.val("manual");
             enableField(totalRemun, false);
         }
+
+        updateRemunerations();
     }
 
     $.ajax({
@@ -404,8 +406,10 @@ var fillAnesthetistRemuneration = function () {
 
 var removeSubProcedure = function (subProcedureNr) {
     $("#subProcedure" + subProcedureNr).remove();
-    subProcedures--;
-    nSubProcedures.val(subProcedures);
+
+    //Commented out due to how add/edit procedure works
+    //subProcedures--;
+    //nSubProcedures.val(subProcedures);
 
     updateRemunerations();
 };

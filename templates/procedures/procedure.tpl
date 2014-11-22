@@ -4,8 +4,10 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
+
+
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/editprocedure.php">
-        <input type="hidden" value="{$PROCEDURE.idprocedure}"/>
+        <input type="hidden" name="idprocedure" value="{$PROCEDURE.idprocedure}"/>
         <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>
         <span class="errorMessagePrivate" id="errorMessageNifPrivate"></span>
         <span class="errorMessageEntity" id="errorMessageNameEntity"></span>
@@ -228,7 +230,8 @@
 
         var editProcedurePayer = {literal}{{/literal}id: {$PROCEDURE.idpayer}{literal}}{/literal};
         var editSubProcedures = {$PROCEDURE.subprocedures|json_encode};
-        var editAnesthetistK = {$PROCEDURE.anesthetistk};
+        var editAnesthetistK = "{$PROCEDURE.anesthetistk}";
+
 
         {if $PROCEDURE.hasmanualk}
         var editHasManualK = true;

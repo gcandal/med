@@ -11,6 +11,13 @@ if (!$_SESSION['email']) {
     exit;
 }
 
+if(isReadOnly($_POST['idprocedure'], $_SESSION['idaccount'])) {
+    $_SESSION['error_messages'][] = 'Não tem permissão para editar este procedimento';
+
+    header("Location: $BASE_URL" . 'pages/procedures/.php');
+    exit;
+}
+
 $type = $_POST['payerType'];
 $_SESSION['entityType'] = $type;
 
@@ -51,7 +58,7 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
         $_SESSION['field_errors']['name' . $suffix] = 'Nome já existe';
         $_SESSION['form_values'] = $_POST;
 
-        header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+        header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
         exit;
     }
 
@@ -66,7 +73,7 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
 
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
             exit;
         }
     } else {
@@ -79,7 +86,7 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
             $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
             exit;
         }
 
@@ -94,7 +101,7 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
 
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
             exit;
         }
     }
@@ -107,25 +114,31 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 $idAccount = $_SESSION['idaccount'];
+$idProcedure = $_POST['idprocedure'];
 $role = $_POST['role'];
-$hasManualK = $_POST['totalType'] === 'manual';
 
 for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
-    $subProcedures[] = $_POST["subProcedure$i"];
+    $current_subProcedure = $_POST["subProcedure$i"];
+
+    if($current_subProcedure)
+        $subProcedures[] = $current_subProcedure;
 }
 
 try {
     global $conn;
     $conn->beginTransaction();
 
-    $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
+    $hasManualK = $_POST['totalType'] === 'manual';
+    editProcedure($idAccount, $idProcedure, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
         $idprivatepayer, $identitypayer, $role, $_POST['anesthetistK'], $hasManualK,
         $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
         $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
 
+
     if (count($subProcedures) > 0) {
-        addSubProcedures($idProcedure, $subProcedures);
+        editSubProcedures($idProcedure, $subProcedures);
     }
 
     if ($_POST['generalName'] !== "" && $role !== 'General') {
@@ -155,13 +168,13 @@ try {
 
     $conn->commit();
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a adicionar registo ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a editar registo ' . $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 
-    header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+    header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
     exit;
 }
 
-$_SESSION['success_messages'][] = 'Registo adicionado com sucesso';
+$_SESSION['success_messages'][] = 'Registo editado com sucesso';
 
-header("Location: $BASE_URL" . 'pages/procedures/procedures.php');
+header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);

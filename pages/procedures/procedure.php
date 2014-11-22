@@ -11,7 +11,7 @@ if (!$_SESSION['email']) {
 }
 
 $idAccount = $_SESSION['idaccount'];
-$idProcedure = $_POST['idprocedure'];
+$idProcedure = $_GET['idprocedure'];
 $procedure = getProcedure($idAccount, $idProcedure);
 
 if (!$procedure) {
@@ -37,6 +37,6 @@ $smarty->assign('ENTITIES', $entities);
 $smarty->assign('PROCEDURETYPES', $procedureTypes);
 $smarty->assign('PROCEDURE', $procedure);
 
-$smarty->display('procedures/editprocedure.tpl');
+$smarty->display('procedures/procedure.tpl');
 
 

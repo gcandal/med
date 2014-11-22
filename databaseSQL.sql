@@ -116,21 +116,25 @@ CREATE TABLE ProcedureType (
 );
 
 CREATE TABLE Procedure (
-  idProcedure           SERIAL PRIMARY KEY,
-  paymentStatus         ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
-  idPrivatePayer        INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
-  idEntityPayer         INTEGER REFERENCES EntityPayer (idEntityPayer),
-  idGeneral             INTEGER REFERENCES Professional (idProfessional),
-  idFirstAssistant      INTEGER REFERENCES Professional (idProfessional),
-  idSecondAssistant     INTEGER REFERENCES Professional (idProfessional),
-  idAnesthetist         INTEGER REFERENCES Professional (idProfessional),
-  idInstrumentist       INTEGER REFERENCES Professional (idProfessional),
-  date                  DATE                   NOT NULL DEFAULT CURRENT_DATE,
-  valuePerK             FLOAT,
-  totalRemun            FLOAT DEFAULT 0,
-  personalRemun         FLOAT DEFAULT 0,
-  hasManualK            BOOLEAN                NOT NULL DEFAULT FALSE,
-  anesthetistK VARCHAR(5)
+  idProcedure          SERIAL PRIMARY KEY,
+  paymentStatus        ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
+  idPrivatePayer       INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
+  idEntityPayer        INTEGER REFERENCES EntityPayer (idEntityPayer),
+  idGeneral            INTEGER REFERENCES Professional (idProfessional),
+  idFirstAssistant     INTEGER REFERENCES Professional (idProfessional),
+  idSecondAssistant    INTEGER REFERENCES Professional (idProfessional),
+  idAnesthetist        INTEGER REFERENCES Professional (idProfessional),
+  idInstrumentist      INTEGER REFERENCES Professional (idProfessional),
+  date                 DATE                   NOT NULL DEFAULT CURRENT_DATE,
+  valuePerK            FLOAT,
+  totalRemun           FLOAT DEFAULT 0,
+  generalRemun         FLOAT DEFAULT 0,
+  firstAssistantRemun  FLOAT DEFAULT 0,
+  secondAssistantRemun FLOAT DEFAULT 0,
+  anesthetistRemun     FLOAT DEFAULT 0,
+  instrumentistRemun   FLOAT DEFAULT 0,
+  hasManualK           BOOLEAN                NOT NULL DEFAULT FALSE,
+  anesthetistK         VARCHAR(5)
 );
 
 CREATE TABLE ProcedureAccount (
@@ -292,6 +296,46 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION edit_procedure_trigger()
+  RETURNS TRIGGER AS $$
+DECLARE
+BEGIN /*
+  INSERT INTO ProcedureAccount (idprocedure, idinvitingaccount, licenseidinvited, role)
+    SELECT
+      idp,
+      ida,
+      licenseid,
+      CASE WHEN Professional.idProfessional = idgeneral THEN 'General'
+      WHEN Professional.idProfessional = idfirstassistant THEN 'FirstAssistant'
+      WHEN Professional.idProfessional = idsecondassistant THEN 'SecondAssistant'
+      WHEN Professional.idProfessional = idanesthetist THEN 'Instrumentist'
+      ELSE 'Anesthetist' END :: roleinproceduretype
+    FROM Procedure, Professional
+    WHERE
+      Procedure.idprocedure = idp
+      AND licenseid IS NOT NULL
+      AND (Professional.idProfessional = idgeneral
+           OR Professional.idProfessional = idfirstassistant
+           OR Professional.idProfessional = idsecondassistant
+           OR Professional.idProfessional = idanesthetist
+           OR Professional.idProfessional = idinstrumentist)
+      AND NOT EXISTS(SELECT
+                       *
+                     FROM procedureinvitation
+                     WHERE procedureinvitation.idprocedure = idp AND
+                           procedureinvitation.idInvitingAccount = ida AND
+                           procedureinvitation.licenseidinvited = licenseid)
+      AND NOT EXISTS(SELECT
+                       *
+                     FROM account, procedureaccount
+                     WHERE procedureaccount.idprocedure = idp AND
+                           procedureaccount.idaccount = account.idaccount AND
+                           account.licenseid = Professional.licenseid);
+*/
+  RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
 DROP TRIGGER IF EXISTS delete_procedureaccount_trigger ON ProcedureAccount;
 CREATE TRIGGER delete_procedureaccount_trigger
 AFTER DELETE ON ProcedureAccount
@@ -301,6 +345,11 @@ DROP TRIGGER IF EXISTS insert_procedureaccount_trigger ON ProcedureAccount;
 CREATE TRIGGER insert_procedureaccount_trigger
 AFTER INSERT ON ProcedureAccount
 FOR EACH ROW EXECUTE PROCEDURE insert_procedureaccount_trigger();
+
+DROP TRIGGER IF EXISTS edit_procedure_trigger ON ProcedureAccount;
+CREATE TRIGGER edit_procedure_trigger
+AFTER UPDATE ON Procedure
+FOR EACH ROW EXECUTE PROCEDURE edit_procedure_trigger();
 
 DROP TRIGGER IF EXISTS insert_professional_trigger ON Professional;
 CREATE TRIGGER insert_professional_trigger
