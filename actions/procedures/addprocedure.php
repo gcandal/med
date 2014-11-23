@@ -115,12 +115,32 @@ for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
     $subProcedures[] = $_POST["subProcedure$i"];
 }
 
+switch($role) {
+    case 'General':
+        $personalRemun = $_POST['generalRemun'];
+        break;
+    case'FirstAssistant':
+        $personalRemun = $_POST['firstAssistantRemun'];
+        break;
+    case 'SecondAssistant':
+        $personalRemun = $_POST['secondAssistantRemun'];
+        break;
+    case'Instrumentist':
+        $personalRemun = $_POST['instrumentistRemun'];
+        break;
+    case 'Anesthetist':
+        $personalRemun = $_POST['anesthetistRemun'];
+        break;
+    default:
+        $personalRemun = 0;
+}
+
 try {
     global $conn;
     $conn->beginTransaction();
 
     $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
-        $idprivatepayer, $identitypayer, $role, $_POST['anesthetistK'], $hasManualK,
+        $idprivatepayer, $identitypayer, $role, $_POST['anesthetistK'], $hasManualK, $personalRemun,
         $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
         $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
 

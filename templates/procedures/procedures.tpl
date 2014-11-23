@@ -62,7 +62,7 @@
                     {/if}
                 </td>
                 <td>
-                   <!-- Pessoal: {$procedure.personalremun}&euro;<br> -->
+                    Pessoal: {$procedure.personalremun}&euro;<br>
                     Total: {$procedure.totalremun}&euro;
                 </td>
                 <td>

@@ -5,7 +5,7 @@ function getProcedures($idAccount)
     global $conn;
 
     $stmt = $conn->prepare("SELECT idProcedure, paymentstatus, idprivatepayer, identitypayer, date,
-        totalRemun, role, readonly
+        totalRemun, role, readonly, personalremun
          FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? ORDER BY date DESC");
 
     $stmt->execute(array($idAccount));
@@ -25,7 +25,6 @@ function getProcedures($idAccount)
             $procedure['payerName'] = 'Não Definido';
             $procedure['idpayer'] = 0;
         }
-        break;
     }
 
     return $procedures;
@@ -127,7 +126,7 @@ function isPrivatePayer($idPrivatePayer)
 }
 
 function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK, $idprivatepayer, $identitypayer, $role,
-                      $anesthetistK, $hasManualK,
+                      $anesthetistK, $hasManualK, $personalRemun,
                       $generalRemun, $firstAssistantRemun, $secondAssistantRemun,
                       $anesthetistRemun, $instrumentistRemun)
 {
@@ -179,13 +178,13 @@ function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK
 
     $id = $conn->lastInsertId('procedure_idprocedure_seq');
 
-    addProcedureToAccount($id, $idAccount, $role, 'false');
+    addProcedureToAccount($id, $idAccount, $role, 'false', $personalRemun);
 
     return $id;
 }
 
 function editProcedure($idAccount, $idProcedure, $paymentStatus, $date, $totalRemun, $valuePerK, $idprivatepayer,
-                       $identitypayer, $role, $anesthetistK, $hasManualK,
+                       $identitypayer, $role, $anesthetistK, $hasManualK, $personalRemun,
                        $generalRemun, $firstAssistantRemun, $secondAssistantRemun,
                        $anesthetistRemun, $instrumentistRemun)
 {
@@ -235,7 +234,7 @@ function editProcedure($idAccount, $idProcedure, $paymentStatus, $date, $totalRe
         $stmt->execute();
     }
 
-    editProcedureAccount($idProcedure, $idAccount, $role, 'false');
+    editProcedureAccount($idProcedure, $idAccount, $role, 'false', $personalRemun);
 }
 
 function editSubProcedures($idProcedure, $subProcedures)
@@ -273,25 +272,27 @@ function addSubProcedures($idProcedure, $subProcedures)
     return $groupedSubProcedures;
 }
 
-function addProcedureToAccount($idProcedure, $idAccount, $role, $readOnly)
+function addProcedureToAccount($idProcedure, $idAccount, $role, $readOnly, $personalRemun)
 {
     global $conn;
 
-    $stmt = $conn->prepare("INSERT INTO PROCEDUREACCOUNT VALUES(:idprocedure, :idaccount, :role, :readOnly)");
+    $stmt = $conn->prepare("INSERT INTO PROCEDUREACCOUNT VALUES(:idprocedure, :idaccount, :role, :readOnly,
+                                                                :personalRemun)");
     $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount,
-        "role" => $role, "readOnly" => $readOnly));
+        "role" => $role, "readOnly" => $readOnly, "personalRemun" => $personalRemun));
 
     $stmt->fetch();
 }
 
-function editProcedureAccount($idProcedure, $idAccount, $role, $readOnly)
+function editProcedureAccount($idProcedure, $idAccount, $role, $readOnly, $personalRemun)
 {
     global $conn;
 
-    $stmt = $conn->prepare("UPDATE PROCEDUREACCOUNT SET role = :role, readonly = :readOnly
+    $stmt = $conn->prepare("UPDATE PROCEDUREACCOUNT SET role = :role, readonly = :readOnly,
+                            personalremun = :personalRemun
                             WHERE idProcedure = :idProcedure AND idAccount = :idAccount");
     $stmt->execute(array("idProcedure" => $idProcedure, "idAccount" => $idAccount,
-        "role" => $role, "readOnly" => $readOnly));
+        "role" => $role, "readOnly" => $readOnly, "personalRemun" => $personalRemun));
 
     $stmt->fetch();
 }
@@ -303,17 +304,6 @@ function removeSubProcedure($idProcedure, $idProcedureType)
     $stmt = $conn->prepare("DELETE FROM PROCEDUREPROCEDURETYPE WHERE idprocedure = ? AND idproceduretype = ?");
 
     $stmt->execute(array($idProcedure, $idProcedureType));
-
-    return $stmt->fetch();
-}
-
-function removeProfessionalFromProcedure($idProcedure, $idProfessional)
-{
-    global $conn;
-
-    $stmt = $conn->prepare("DELETE FROM PROCEDUREPROFESSIONAL WHERE idprocedure = ? AND idprofessional = ?");
-
-    $stmt->execute(array($idProcedure, $idProfessional));
 
     return $stmt->fetch();
 }
@@ -437,11 +427,23 @@ function deleteShared($idProcedure, $idInvitingAccount, $licenseIdInvited)
 
 function acceptShared($idProcedure, $idInvitingAccount, $licenseIdInvited, $idAccount)
 {
-    addProcedureToAccount($idAccount, $idAccount, "General", true);
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT role, personalremun FROM ProcedureInvitation
+                            WHERE idProcedure = :idProcedure
+                            AND idInvitingAccount = :idInvitingAccount
+                            AND licenseIdInvited = :licenseIdInvited");
+
+    $stmt->execute(array("idProcedure" => $idProcedure, "idInvitingAccount" => $idInvitingAccount,
+        "licenseIdInvited" => $licenseIdInvited));
+
+    $result = $stmt->fetch();
+
+    addProcedureToAccount($idProcedure, $idAccount, $result['role'], true, $result['personalremun']);
 
     deleteShared($idProcedure, $idInvitingAccount, $licenseIdInvited);
 }
-
+/*
 function cleanShareds()
 {
     global $conn;
@@ -451,7 +453,7 @@ function cleanShareds()
 
     $stmt->execute();
 }
-
+*/
 function getProcedureTypesForAutocomplete()
 {
     global $conn;

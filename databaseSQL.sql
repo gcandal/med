@@ -138,10 +138,11 @@ CREATE TABLE Procedure (
 );
 
 CREATE TABLE ProcedureAccount (
-  idProcedure INTEGER             NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
-  idAccount   INTEGER             NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
-  role        RoleInProcedureType NOT NULL,
-  readOnly    BOOLEAN             NOT NULL DEFAULT TRUE,
+  idProcedure   INTEGER             NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idAccount     INTEGER             NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  role          RoleInProcedureType NOT NULL,
+  readOnly      BOOLEAN             NOT NULL DEFAULT TRUE,
+  personalremun FLOAT               NOT NULL DEFAULT 0,
   PRIMARY KEY (idProcedure, idAccount)
 );
 
@@ -168,6 +169,7 @@ CREATE TABLE ProcedureInvitation (
   licenseIdInvited  LicenseId           NOT NULL, -- Não tem referência para manter anonimato, ON DELETE CASCADE
   wasRejected       BOOL                NOT NULL DEFAULT FALSE,
   role              roleinproceduretype NOT NULL,
+  personalRemun     FLOAT               NOT NULL,
   PRIMARY KEY (idProcedure, idInvitingAccount, licenseIdInvited)
 );
 
@@ -175,7 +177,7 @@ CREATE OR REPLACE FUNCTION share_procedure_with_all(idp INTEGER, ida INTEGER)
   RETURNS VOID AS $$
 DECLARE
 BEGIN
-  INSERT INTO ProcedureInvitation (idprocedure, idinvitingaccount, licenseidinvited, role)
+  INSERT INTO ProcedureInvitation (idprocedure, idinvitingaccount, licenseidinvited, role, personalremun)
     SELECT
       idp,
       ida,
@@ -184,7 +186,12 @@ BEGIN
       WHEN Professional.idProfessional = idfirstassistant THEN 'FirstAssistant'
       WHEN Professional.idProfessional = idsecondassistant THEN 'SecondAssistant'
       WHEN Professional.idProfessional = idanesthetist THEN 'Instrumentist'
-      ELSE 'Anesthetist' END :: roleinproceduretype
+      ELSE 'Anesthetist' END :: roleinproceduretype,
+      CASE WHEN Professional.idProfessional = idgeneral THEN generalRemun
+      WHEN Professional.idProfessional = idfirstassistant THEN firstAssistantRemun
+      WHEN Professional.idProfessional = idsecondassistant THEN secondAssistantRemun
+      WHEN Professional.idProfessional = idanesthetist THEN instrumentistRemun
+      ELSE anesthetistRemun END
     FROM Procedure, Professional
     WHERE
       Procedure.idprocedure = idp
@@ -299,39 +306,55 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION edit_procedure_trigger()
   RETURNS TRIGGER AS $$
 DECLARE
-BEGIN /*
-  INSERT INTO ProcedureAccount (idprocedure, idinvitingaccount, licenseidinvited, role)
-    SELECT
-      idp,
-      ida,
-      licenseid,
-      CASE WHEN Professional.idProfessional = idgeneral THEN 'General'
-      WHEN Professional.idProfessional = idfirstassistant THEN 'FirstAssistant'
-      WHEN Professional.idProfessional = idsecondassistant THEN 'SecondAssistant'
-      WHEN Professional.idProfessional = idanesthetist THEN 'Instrumentist'
-      ELSE 'Anesthetist' END :: roleinproceduretype
-    FROM Procedure, Professional
-    WHERE
-      Procedure.idprocedure = idp
-      AND licenseid IS NOT NULL
-      AND (Professional.idProfessional = idgeneral
-           OR Professional.idProfessional = idfirstassistant
-           OR Professional.idProfessional = idsecondassistant
-           OR Professional.idProfessional = idanesthetist
-           OR Professional.idProfessional = idinstrumentist)
-      AND NOT EXISTS(SELECT
-                       *
-                     FROM procedureinvitation
-                     WHERE procedureinvitation.idprocedure = idp AND
-                           procedureinvitation.idInvitingAccount = ida AND
-                           procedureinvitation.licenseidinvited = licenseid)
-      AND NOT EXISTS(SELECT
-                       *
-                     FROM account, procedureaccount
-                     WHERE procedureaccount.idprocedure = idp AND
-                           procedureaccount.idaccount = account.idaccount AND
-                           account.licenseid = Professional.licenseid);
-*/
+  arow record;
+BEGIN
+-- TODO -> apagar procedureaccount/invites de contas cujos licenseid não estão no procedure
+
+  FOR arow IN SELECT
+               idProfessional, Account.idAccount, Account.licenseId
+             FROM Procedure, Professional, Account
+             WHERE
+               Procedure.idprocedure = NEW.idProcedure
+               AND (Professional.idProfessional = idgeneral
+                    OR Professional.idProfessional = idfirstassistant
+                    OR Professional.idProfessional = idsecondassistant
+                    OR Professional.idProfessional = idanesthetist
+                    OR Professional.idProfessional = idinstrumentist)
+               AND Professional.licenseid IS NOT NULL
+               AND Account.licenseid = Professional.licenseid
+  LOOP
+    UPDATE ProcedureAccount
+    SET
+      role          = CASE WHEN arow.idProfessional = NEW.idgeneral THEN 'General'
+                      WHEN arow.idProfessional = NEW.idfirstassistant THEN 'FirstAssistant'
+                      WHEN arow.idProfessional = NEW.idsecondassistant THEN 'SecondAssistant'
+                      WHEN arow.idProfessional = NEW.idanesthetist THEN 'Instrumentist'
+                      ELSE 'Anesthetist' END :: roleinproceduretype,
+
+      personalRemun = CASE WHEN arow.idProfessional = NEW.idgeneral THEN NEW.generalRemun
+                      WHEN arow.idProfessional = NEW.idfirstassistant THEN NEW.firstAssistantRemun
+                      WHEN arow.idProfessional = NEW.idsecondassistant THEN NEW.secondAssistantRemun
+                      WHEN arow.idProfessional = NEW.idanesthetist THEN NEW.instrumentistRemun
+                      ELSE NEW.anesthetistRemun END
+    WHERE idAccount = arow.idAccount AND idProcedure = NEW.idProcedure;
+
+    UPDATE ProcedureInvitation
+    SET
+      role          = CASE WHEN arow.idProfessional = NEW.idgeneral THEN 'General'
+                      WHEN arow.idProfessional = NEW.idfirstassistant THEN 'FirstAssistant'
+                      WHEN arow.idProfessional = NEW.idsecondassistant THEN 'SecondAssistant'
+                      WHEN arow.idProfessional = NEW.idanesthetist THEN 'Instrumentist'
+                      ELSE 'Anesthetist' END :: roleinproceduretype,
+
+      personalRemun = CASE WHEN arow.idProfessional = NEW.idgeneral THEN NEW.generalRemun
+                      WHEN arow.idProfessional = NEW.idfirstassistant THEN NEW.firstAssistantRemun
+                      WHEN arow.idProfessional = NEW.idsecondassistant THEN NEW.secondAssistantRemun
+                      WHEN arow.idProfessional = NEW.idanesthetist THEN NEW.instrumentistRemun
+                      ELSE NEW.anesthetistRemun END
+    WHERE licenseIdinvited = arow.licenseId;
+  END LOOP;
+
+
   RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
@@ -4560,9 +4583,4 @@ INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze', NULL, NULL, NULL, '20
 INSERT INTO Professional VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, NULL, '2014-06-12 20:36:43.206615');
 INSERT INTO Professional
 VALUES (DEFAULT, 1, 1, 'Quim Ze Completo', NULL, NULL, '159268753', '2014-07-02 20:36:43.206615');
-INSERT INTO Procedure VALUES (DEFAULT, DEFAULT, 1, NULL, 1, 2, 3, 4, NULL, DEFAULT, 0);
-INSERT INTO ProcedureAccount VALUES (1, 1, 'FirstAssistant', FALSE);
-INSERT INTO ProcedureAccount VALUES (1, 2, 'General', TRUE);
-SELECT
-  share_procedure_with_all(1, 1);
 INSERT INTO OrgAuthorization VALUES (1, 2, 'Visible');
