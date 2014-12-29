@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS OrgInvitation;
 DROP TABLE IF EXISTS ProcedureInvitation;
 DROP TABLE IF EXISTS OrgAuthorization;
+DROP TABLE IF EXISTS ProcedureOrganization;
 DROP TABLE IF EXISTS Organization;
 DROP TABLE IF EXISTS ProcedureProcedureType;
 DROP TABLE IF EXISTS ProcedureAccount;
@@ -51,13 +52,17 @@ CREATE TABLE Speciality (
 );
 
 CREATE TABLE Account (
-  idAccount  SERIAL PRIMARY KEY,
-  name       VARCHAR(40) NOT NULL,
-  email      Email       NOT NULL UNIQUE,
-  password   CHAR(128)   NOT NULL,
-  salt       CHAR(128)   NOT NULL,
-  licenseId  LicenseId   NOT NULL UNIQUE,
-  speciality INTEGER     NOT NULL REFERENCES Speciality (idSpeciality) ON DELETE SET DEFAULT DEFAULT 3
+  idAccount     SERIAL PRIMARY KEY,
+  name          VARCHAR(40) NOT NULL,
+  email         Email       NOT NULL UNIQUE,
+  password      CHAR(128)   NOT NULL,
+  salt          CHAR(128)   NOT NULL,
+  licenseId     LicenseId   NOT NULL UNIQUE,
+  speciality    INTEGER     NOT NULL REFERENCES Speciality (idSpeciality) ON DELETE SET DEFAULT DEFAULT 3,
+  validUntil    DATE        NOT NULL                                                            DEFAULT CURRENT_DATE -
+                                                                                                        INTERVAL '1 day',
+  freeRegisters INTEGER     NOT NULL                                                            DEFAULT 1,
+  CHECK (freeRegisters >= -1)
 );
 
 CREATE TABLE LoginAttempts (
@@ -127,12 +132,12 @@ CREATE TABLE Procedure (
   idInstrumentist      INTEGER REFERENCES Professional (idProfessional),
   date                 DATE                   NOT NULL DEFAULT CURRENT_DATE,
   valuePerK            FLOAT,
-  totalRemun           FLOAT DEFAULT 0,
-  generalRemun         FLOAT DEFAULT 0,
-  firstAssistantRemun  FLOAT DEFAULT 0,
-  secondAssistantRemun FLOAT DEFAULT 0,
-  anesthetistRemun     FLOAT DEFAULT 0,
-  instrumentistRemun   FLOAT DEFAULT 0,
+  totalRemun           FLOAT                           DEFAULT 0,
+  generalRemun         FLOAT                           DEFAULT 0,
+  firstAssistantRemun  FLOAT                           DEFAULT 0,
+  secondAssistantRemun FLOAT                           DEFAULT 0,
+  anesthetistRemun     FLOAT                           DEFAULT 0,
+  instrumentistRemun   FLOAT                           DEFAULT 0,
   hasManualK           BOOLEAN                NOT NULL DEFAULT FALSE,
   anesthetistK         VARCHAR(5)
 );
@@ -144,6 +149,13 @@ CREATE TABLE ProcedureAccount (
   readOnly      BOOLEAN             NOT NULL DEFAULT TRUE,
   personalremun FLOAT               NOT NULL DEFAULT 0,
   PRIMARY KEY (idProcedure, idAccount)
+);
+
+CREATE TABLE ProcedureOrganization (
+  idProcedure    INTEGER NOT NULL REFERENCES Procedure (idProcedure) ON DELETE CASCADE,
+  idOrganization INTEGER NOT NULL REFERENCES Organization (idOrganization) ON DELETE CASCADE,
+  idAccount      INTEGER NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
+  PRIMARY KEY (idProcedure, idAccount, idOrganization)
 );
 
 CREATE TABLE ProcedureProcedureType (
@@ -201,14 +213,12 @@ BEGIN
            OR Professional.idProfessional = idsecondassistant
            OR Professional.idProfessional = idanesthetist
            OR Professional.idProfessional = idinstrumentist)
-      AND NOT EXISTS(SELECT
-                       *
+      AND NOT EXISTS(SELECT *
                      FROM procedureinvitation
                      WHERE procedureinvitation.idprocedure = idp AND
                            procedureinvitation.idInvitingAccount = ida AND
                            procedureinvitation.licenseidinvited = licenseid)
-      AND NOT EXISTS(SELECT
-                       *
+      AND NOT EXISTS(SELECT *
                      FROM account, procedureaccount
                      WHERE procedureaccount.idprocedure = idp AND
                            procedureaccount.idaccount = account.idaccount AND
@@ -220,8 +230,7 @@ CREATE OR REPLACE FUNCTION delete_procedureaccount_trigger()
   RETURNS TRIGGER AS $$
 DECLARE
 BEGIN
-  IF NOT EXISTS(SELECT
-                  idprocedure
+  IF NOT EXISTS(SELECT idprocedure
                 FROM ProcedureAccount
                 WHERE idProcedure = OLD.idProcedure)
   THEN
@@ -281,8 +290,7 @@ CREATE OR REPLACE FUNCTION insert_professional_trigger()
   RETURNS TRIGGER AS $$
 DECLARE
 BEGIN
-  IF EXISTS(SELECT
-              1
+  IF EXISTS(SELECT 1
             FROM Professional
             WHERE Professional.idAccount = NEW.idAccount
                   AND Professional.name = NEW.name)
@@ -306,22 +314,24 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION edit_procedure_trigger()
   RETURNS TRIGGER AS $$
 DECLARE
-  arow record;
+  arow RECORD;
 BEGIN
 -- TODO -> apagar procedureaccount/invites de contas cujos licenseid não estão no procedure
 
   FOR arow IN SELECT
-               idProfessional, Account.idAccount, Account.licenseId
-             FROM Procedure, Professional, Account
-             WHERE
-               Procedure.idprocedure = NEW.idProcedure
-               AND (Professional.idProfessional = idgeneral
-                    OR Professional.idProfessional = idfirstassistant
-                    OR Professional.idProfessional = idsecondassistant
-                    OR Professional.idProfessional = idanesthetist
-                    OR Professional.idProfessional = idinstrumentist)
-               AND Professional.licenseid IS NOT NULL
-               AND Account.licenseid = Professional.licenseid
+                idProfessional,
+                Account.idAccount,
+                Account.licenseId
+              FROM Procedure, Professional, Account
+              WHERE
+                Procedure.idprocedure = NEW.idProcedure
+                AND (Professional.idProfessional = idgeneral
+                     OR Professional.idProfessional = idfirstassistant
+                     OR Professional.idProfessional = idsecondassistant
+                     OR Professional.idProfessional = idanesthetist
+                     OR Professional.idProfessional = idinstrumentist)
+                AND Professional.licenseid IS NOT NULL
+                AND Account.licenseid = Professional.licenseid
   LOOP
     UPDATE ProcedureAccount
     SET
@@ -4554,7 +4564,9 @@ INSERT INTO Account VALUES (DEFAULT, 'José', 'a@a.pt',
                             '445fff776df2293d242b261ba0f0d35be6c5b5a5110394fe8942a21e4d7af759fa277f608c3553ee7b3f8f64fce174b31146746ca8ef67dd37eedf70fe79ef9d',
                             'bea95c126335da5b92c91de01635311ede91a58f0ca0d9cb0344462333c35c9ef12977e976e2e8332861cff2c4efa42c653214b626ed96a76ba19ed0e414b71a',
                             '123456789',
-                            DEFAULT);
+                            DEFAULT,
+                            CURRENT_DATE + INTERVAL '1 year',
+                            -1);
 
 INSERT INTO Account VALUES (DEFAULT, 'b', 'b@b.pt',
                             '6b9f904771f21b6d9d017582d9a001c41eef2dd5128ff80fd1985d8f1f2e62fe5e23b4e77c16adea3e86eaf8353acc55e93f982419c9f87356e3a805ef7fae16',

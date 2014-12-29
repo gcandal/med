@@ -25,9 +25,30 @@ function getProcedures($idAccount)
             $procedure['payerName'] = 'Não Definido';
             $procedure['idpayer'] = 0;
         }
+
+        $organization = getOrganizationForProcedure($procedure['idprocedure'], $idAccount);
+
+        if ($organization) {
+            $procedure['organizationName'] = $organization['name'];
+            $procedure['idorganization'] = $organization['idorganization'];
+        }
     }
 
     return $procedures;
+}
+
+function getOrganizationForProcedure($idProcedure, $idAccount)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT name, Organization.idOrganization FROM Organization, ProcedureOrganization
+                            WHERE ProcedureOrganization.idProcedure = :idProcedure
+                            AND ProcedureOrganization.idAccount = :idAccount
+                            AND Organization.idOrganization = ProcedureOrganization.idOrganization");
+
+    $stmt->execute(array("idProcedure" => $idProcedure, "idAccount" => $idAccount));
+
+    return $stmt->fetch();
 }
 
 function getProcedure($idAccount, $idProcedure)
@@ -35,7 +56,7 @@ function getProcedure($idAccount, $idProcedure)
     global $conn;
 
     $stmt = $conn->prepare("SELECT idProcedure, paymentstatus, idprivatepayer, identitypayer, date,
-        totalRemun, role, hasManualK, anesthetistK
+        totalRemun, role, hasManualK, anesthetistK, readonly
          FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? AND idProcedure = ?
          ORDER BY date DESC");
 
@@ -58,6 +79,13 @@ function getProcedure($idAccount, $idProcedure)
         $procedure['payerName'] = 'Não Definido';
         $procedure['idpayer'] = 0;
     }
+
+    $organization = getOrganizationForProcedure($procedure['idprocedure'], $idAccount);
+
+    if ($organization) {
+        $procedure['organizationName'] = $organization['name'];
+        $procedure['idorganization'] = $organization['idorganization'];
+    } else $procedure['idorganization'] = -1;
 
     return $procedure;
 }
@@ -125,7 +153,8 @@ function isPrivatePayer($idPrivatePayer)
     return $stmt->fetch() == true;
 }
 
-function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK, $idprivatepayer, $identitypayer, $role,
+function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK,
+                      $idprivatepayer, $identitypayer, $role,
                       $anesthetistK, $hasManualK, $personalRemun,
                       $generalRemun, $firstAssistantRemun, $secondAssistantRemun,
                       $anesthetistRemun, $instrumentistRemun)
@@ -178,9 +207,42 @@ function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK
 
     $id = $conn->lastInsertId('procedure_idprocedure_seq');
 
+    decrementFreeRegisters($idAccount);
     addProcedureToAccount($id, $idAccount, $role, 'false', $personalRemun);
 
     return $id;
+}
+
+function decrementFreeRegisters($idAccount)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("UPDATE ACCOUNT SET freeRegisters = freeRegisters - 1
+                            WHERE idAccount = :idaccount AND freeRegisters > 0");
+    $stmt->execute(array(":idaccount" => $idAccount));
+}
+
+function incrementFreeRegisters($idAccount)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("UPDATE ACCOUNT SET freeRegisters = freeRegisters + 1
+                            WHERE idAccount = :idaccount AND freeRegisters > -1");
+    $stmt->execute(array(":idaccount" => $idAccount));
+}
+
+function getFreeRegisters($idAccount)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT freeRegisters FROM Account
+                            WHERE idAccount = :idAccount");
+
+    $stmt->execute(array(":idAccount" => $idAccount));
+
+    $result = $stmt->fetch();
+
+    return $result['freeregisters'];
 }
 
 function editProcedure($idAccount, $idProcedure, $paymentStatus, $date, $totalRemun, $valuePerK, $idprivatepayer,
@@ -272,6 +334,42 @@ function addSubProcedures($idProcedure, $subProcedures)
     return $groupedSubProcedures;
 }
 
+function addProcedureToOrganization($idProcedure, $idOrganization, $idAccount)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("INSERT INTO ProcedureOrganization
+                            VALUES(:idprocedure, :idorganization, :idaccount)");
+    $stmt->execute(array("idprocedure" => $idProcedure, "idorganization" => $idOrganization,
+        "idaccount" => $idAccount));
+}
+
+function editProcedureFromOrganization($idProcedure, $idOrganization, $idAccount)
+{
+    global $conn;
+
+    if ($idOrganization == -1) {
+        $stmt = $conn->prepare("DELETE FROM ProcedureOrganization
+                            WHERE idProcedure = :idprocedure AND idAccount = :idaccount");
+
+        $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount));
+    } else {
+        $stmt = $conn->prepare("SELECT 1 FROM ProcedureOrganization
+                            WHERE idProcedure = :idprocedure AND idAccount = :idaccount");
+
+        $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount));
+
+        if($stmt->fetch()) {
+            $stmt = $conn->prepare("UPDATE ProcedureOrganization
+                            SET idOrganization = :idorganization
+                            WHERE idProcedure = :idprocedure AND idAccount = :idaccount");
+
+            $stmt->execute(array("idprocedure" => $idProcedure, "idorganization" => $idOrganization,
+                "idaccount" => $idAccount));
+        } else addProcedureToOrganization($idProcedure, $idOrganization, $idAccount);
+    }
+}
+
 function addProcedureToAccount($idProcedure, $idAccount, $role, $readOnly, $personalRemun)
 {
     global $conn;
@@ -280,8 +378,6 @@ function addProcedureToAccount($idProcedure, $idAccount, $role, $readOnly, $pers
                                                                 :personalRemun)");
     $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount,
         "role" => $role, "readOnly" => $readOnly, "personalRemun" => $personalRemun));
-
-    $stmt->fetch();
 }
 
 function editProcedureAccount($idProcedure, $idAccount, $role, $readOnly, $personalRemun)
@@ -305,12 +401,23 @@ function removeSubProcedure($idProcedure, $idProcedureType)
 
     $stmt->execute(array($idProcedure, $idProcedureType));
 
+
     return $stmt->fetch();
 }
 
 function deleteProcedure($idProcedure, $idAccount)
 {
     global $conn;
+    $stmt = $conn->prepare("SELECT readonly FROM PROCEDUREACCOUNT
+                WHERE ProcedureAccount.idAccount = :idAccount AND ProcedureAccount.idProcedure = :idProcedure");
+
+    $stmt->execute(array("idProcedure" => $idProcedure, "idAccount" => $idAccount));
+
+    $readonly = $stmt->fetch();
+
+    if ($readonly && !$readonly['readonly'])
+        incrementFreeRegisters($idAccount);
+
     $stmt = $conn->prepare("DELETE FROM ProcedureAccount WHERE idprocedure = :idprocedure
                              AND idaccount = :idaccount");
     $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount));
@@ -387,7 +494,7 @@ function shareProcedure($idprocedure, $idinviting, $licenseid)
     }
 }
 
-function getInvites($licenseid)
+function getProcedureInvites($licenseid)
 {
     global $conn;
 
@@ -443,6 +550,7 @@ function acceptShared($idProcedure, $idInvitingAccount, $licenseIdInvited, $idAc
 
     deleteShared($idProcedure, $idInvitingAccount, $licenseIdInvited);
 }
+
 /*
 function cleanShareds()
 {

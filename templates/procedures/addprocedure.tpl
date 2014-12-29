@@ -40,13 +40,26 @@
             </select>
         </label>
 
+
         <p>Cirurgias</p>
+
         <p id="subProcedureMenu">
             <input type="hidden" name="nSubProcedures" id="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>
-            <br>
         </p>
+        <br>
+
         <p id="subProcedures"></p>
+
+        <label>
+            Organização:
+            <select name="organization" required>
+                <option value="-1">Nenhuma</option>
+                {foreach $ORGANIZATIONS as $organization}
+                    <option value="{$organization.idorganization}">{$organization.name}</option>
+                {/foreach}
+            </select>
+        </label><br/>
 
         <label>
             Pagador:
@@ -211,7 +224,7 @@
                 <select name="subProcedure{{number}}" class="subProcedure">
                     {{{type}}}<br>
                 </select>
-                <input value="15" type="text" size="3" disabled >
+                <input value="15" type="text" size="3" disabled>
                 <input class="subProcedureName" value="Queratoscopia fotográfica" type="text">
                 <button class="removeSubProcedureButton" subProcedureNr="{{number}}">X</button>
             </span>

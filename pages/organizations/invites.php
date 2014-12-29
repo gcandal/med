@@ -10,7 +10,7 @@ if (!$_SESSION['email']) {
 }
 
 $licenseid = $_SESSION['licenseid'];
-$invites = getInvites($licenseid);
+$invites = getOrganizationInvites($licenseid);
 $sent = getSentInvites($_SESSION['idaccount']);
 
 $smarty->assign('INVITES', $invites);

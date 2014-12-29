@@ -10,8 +10,7 @@ if (!$_SESSION['email']) {
 }
 
 $licenseid = $_SESSION['licenseid'];
-$invites = getInvites($licenseid);
+$invites = getProcedureInvites($licenseid);
 
 $smarty->assign('INVITES', $invites);
 $smarty->display('procedures/invites.tpl');
-?>

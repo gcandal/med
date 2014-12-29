@@ -22,6 +22,7 @@
         <tr>
             <th>Data</th>
             <th>Estado</th>
+            <th>Organização</th>
             <th>Pagador</th>
             <th>Cirurgias</th>
             <th>Função</th>
@@ -35,13 +36,14 @@
             <tr class="procedure{$procedure.paymentstatus}">
                 <td>{$procedure.date}</td>
                 <td>{$procedure.paymentstatus}</td>
-                {if $procedure.idpayer == 0}
-                    <td>{$procedure.payerName}</td>
-                {else}
-                    <td>
-                        <a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a>
-                    </td>
-                {/if}
+                <td>
+                    {if $procedure.idorganization}
+                        <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
+                            {$procedure.organizationName}
+                        </a>
+                    {/if}
+                </td>
+                <td><a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a></td>
                 <td>
                     {foreach $procedure.subprocedures as $subprocedure}
                         {$subprocedure.quantity}x {$subprocedure.name}

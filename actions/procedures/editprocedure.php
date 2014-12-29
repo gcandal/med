@@ -11,10 +11,10 @@ if (!$_SESSION['email']) {
     exit;
 }
 
-if(isReadOnly($_POST['idprocedure'], $_SESSION['idaccount'])) {
+if (isReadOnly($_POST['idprocedure'], $_SESSION['idaccount'])) {
     $_SESSION['error_messages'][] = 'Não tem permissão para editar este procedimento';
 
-    header("Location: $BASE_URL" . 'pages/procedures/.php');
+    header("Location: $BASE_URL" . 'pages/procedures/procedure.php?idprocedure=' . $_POST['idprocedure']);
     exit;
 }
 
@@ -37,7 +37,7 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
 
     $name = $_POST['name' . $suffix];
     $nif = $_POST['nif' . $suffix];
-    if(!$nif)
+    if (!$nif)
         $nif = null;
     $valueperk = $_POST['valuePerK'];
     if (!$valueperk) $valueperk = null;
@@ -122,11 +122,11 @@ $role = $_POST['role'];
 for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
     $current_subProcedure = $_POST["subProcedure$i"];
 
-    if($current_subProcedure)
+    if ($current_subProcedure)
         $subProcedures[] = $current_subProcedure;
 }
 
-switch($role) {
+switch ($role) {
     case 'General':
         $personalRemun = $_POST['generalRemun'];
         break;
@@ -185,6 +185,9 @@ try {
         $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, $_POST['anesthetistLicenseId'], "", 1);
         addProfessionalToProcedure($idProf, $idProcedure, "anesthetist");
     }
+
+    editProcedureFromOrganization($idProcedure, $_POST['organization'], $idAccount);
+
 
     $conn->commit();
 } catch (PDOException $e) {

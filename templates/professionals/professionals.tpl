@@ -4,7 +4,7 @@
     <h1>Profissionais</h1>
     {foreach $PROFESSIONALS as $professional}
         <p>Nome: {$professional.name} </p>
-        <p>Cédula OM: {$professional.licenseid}</p>
+        <p>Cédula: {$professional.licenseid}</p>
         <p>NIF: {$professional.nif} </p>
         <p>Especialidade: {$professional.speciality}</p>
         <form action="{$BASE_URL}pages/professionals/editprofessional.php">

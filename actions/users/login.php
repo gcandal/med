@@ -37,16 +37,24 @@
         exit;
     }
 
+    if( strtotime($current_user['validuntil']) < strtotime("now")) {
+        $_SESSION['error_messages'][] = 'A sua conta expirou em ' . $current_user['validuntil'];
+
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
+    }
     $password = hash('sha512', $password . $current_user['salt']);
 
     if ($current_user['password'] === $password) {
         session_regenerate_id(true);
         $_SESSION['email'] = $current_user['email'];
         $_SESSION['name'] = $current_user['name'];
+        $_SESSION['validuntil'] = $current_user['validuntil'];
+        $_SESSION['freeregisters'] = $current_user['freeregisters'];
         $_SESSION['idaccount'] = $current_user['idaccount'];
         $_SESSION['licenseid'] = $current_user['licenseid'];
 
-        $_SESSION['success_messages'][] = 'Login successful';
+        $_SESSION['success_messages'][] = 'Login successful ';
         var_dump($_SESSION);
     } else {
         try {

@@ -4,8 +4,6 @@
     {foreach $ERROR_MESSAGES as $error}
         <p>{$error}</p>
     {/foreach}
-
-
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/editprocedure.php">
         <input type="hidden" name="idprocedure" value="{$PROCEDURE.idprocedure}"/>
         <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>
@@ -30,6 +28,8 @@
                 <option value="Instrumentist">Insturmentista</option>
             </select>
         </label>
+
+        <input type="hidden" name="readonly" value="{$PROCEDURE.readonly}"/>
         <button id="submitButton" type="submit" disabled>Editar</button>
         <br>
 
@@ -50,6 +50,16 @@
             <br>
         </p>
         <p id="subProcedures"></p>
+
+        <label>
+            Organização:
+            <select name="organization" id="idOrganization" required>
+                <option value="-1">Nenhuma</option>
+                {foreach $ORGANIZATIONS as $organization}
+                    <option value="{$organization.idorganization}">{$organization.name}</option>
+                {/foreach}
+            </select>
+        </label><br/>
 
         <label>
             Pagador:
@@ -226,6 +236,7 @@
         var method = "editProcedure";
 
         $("#paymentStatus").val("{$PROCEDURE.paymentstatus}");
+        $("#idOrganization").val("{$PROCEDURE.idorganization}");
         $("#role").val("{$PROCEDURE.role}");
 
         var editProcedurePayer = {literal}{{/literal}id: {$PROCEDURE.idpayer}{literal}}{/literal};
@@ -243,6 +254,11 @@
         editProcedurePayer['payerType'] = "Private";
         {else}
         editProcedurePayer['payerType'] = "Entity";
+        {/if}
+
+        {if $PROCEDURE.readonly}
+        $("input, select, #addSubProcedure").attr("disabled", true);
+        $("#idOrganization").attr("disabled", false);
         {/if}
     </script>
     <script src="{$BASE_URL}javascript/addpayer.js"></script>

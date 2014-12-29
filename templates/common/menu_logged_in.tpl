@@ -1,5 +1,12 @@
 <p>{$EMAIL}</p>
 <p>{$LICENSEID}</p>
+<p>Válida até: {$VALIDUNTIL}</p>
+<p>Registos por usar:
+    {if $FREEREGISTERS == -1}
+        ilimitado
+    {else}
+        {$FREEREGISTERS}
+    {/if}</p>
 
 {foreach $SUCCESS_MESSAGES as $success}
     <p>{$success}</p>

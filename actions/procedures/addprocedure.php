@@ -11,6 +11,15 @@ if (!$_SESSION['email']) {
     exit;
 }
 
+$_SESSION['freeregisters'] = getFreeRegisters($_SESSION['idaccount']);
+if (!$_SESSION['freeregisters']) {
+    $_SESSION['freeregisters'] = 0;
+    $_SESSION['error_messages'][] = 'Não pode fazer mais registos';
+    header('Location: ' . $BASE_URL);
+
+    exit;
+}
+
 $type = $_POST['payerType'];
 $_SESSION['entityType'] = $type;
 
@@ -30,7 +39,7 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
 
     $name = $_POST['name' . $suffix];
     $nif = $_POST['nif' . $suffix];
-    if(!$nif)
+    if (!$nif)
         $nif = null;
     $valueperk = $_POST['valuePerK'];
     if (!$valueperk) $valueperk = null;
@@ -115,7 +124,7 @@ for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
     $subProcedures[] = $_POST["subProcedure$i"];
 }
 
-switch($role) {
+switch ($role) {
     case 'General':
         $personalRemun = $_POST['generalRemun'];
         break;
@@ -173,6 +182,10 @@ try {
         addProfessionalToProcedure($idProf, $idProcedure, "anesthetist");
     }
 
+    if($_POST['organization'] >= 0) {
+        addProcedureToOrganization($idProcedure, $_POST['organization'], $idAccount);
+    }
+
     $conn->commit();
 } catch (PDOException $e) {
     $_SESSION['error_messages'][] = 'Erro a adicionar registo ' . $e->getMessage();
@@ -182,6 +195,7 @@ try {
     exit;
 }
 
+$_SESSION['freeregisters'] = getFreeRegisters($idAccount);
 $_SESSION['success_messages'][] = 'Registo adicionado com sucesso';
 
 header("Location: $BASE_URL" . 'pages/procedures/procedures.php');

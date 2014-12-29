@@ -4,8 +4,8 @@ include_once($BASE_DIR . 'database/procedures.php');
 
 if (!$_SESSION['email'] || !$_POST['idprocedure']) {
     $_SESSION['error_messages'][] = 'Tem que fazer login';
-    //header('Location: ' . $BASE_URL);
-var_dump($_POST);
+
+    header('Location: ' . $BASE_URL);
     exit;
 }
 
@@ -21,6 +21,7 @@ try {
     exit;
 }
 
+$_SESSION['freeregisters'] = getFreeRegisters($idaccount);
 $_SESSION['success_messages'][] = 'Registo apagado com sucesso';
+
 header("Location: $BASE_URL" . "pages/procedures/procedures.php");
-?>

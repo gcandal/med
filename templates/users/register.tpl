@@ -24,8 +24,8 @@
             <span>{$FIELD_ERRORS.email}</span><br/>
         </label>
         <label>
-            Cédula OM:
-            <input type="text" name="licenseid" id="licenseId" placeholder="Cédula OM" value="{$FORM_VALUES.licenseid}"
+            Cédula:
+            <input type="text" name="licenseid" id="licenseId" placeholder="Cédula" value="{$FORM_VALUES.licenseid}"
                    {literal}pattern="\d+"{/literal} maxlength="9" required/>
             <span>{$FIELD_ERRORS.licenseid}</span><br/>
         </label>

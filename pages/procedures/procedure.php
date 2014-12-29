@@ -1,6 +1,7 @@
 <?php
 include_once('../../config/init.php');
 include_once($BASE_DIR . 'database/procedures.php');
+include_once($BASE_DIR . 'database/organizations.php');
 include_once($BASE_DIR . 'database/payers.php');
 
 if (!$_SESSION['email']) {
@@ -21,19 +22,14 @@ if (!$procedure) {
     exit;
 }
 
-if($procedure['readonly']) {
-    $_SESSION['error_messages'][] = 'Não tem permissão para editar este registo 0';
-    header('Location: ' . $BASE_URL);
-
-    exit;
-}
-
 $procedure["subprocedures"] = getSubProceduresIds($procedure['idprocedure']);
 $procedure["professionals"] = getProcedureProfessionals($idAccount, $idProcedure);
 $entities['Entidade'] = getEntityPayers($idAccount);
 $entities['Privado'] = getPrivatePayers($idAccount);
+$organizations = getOrganizations($idAccount);
 $procedureTypes = getProcedureTypes();
 $smarty->assign('ENTITIES', $entities);
+$smarty->assign('ORGANIZATIONS', $organizations);
 $smarty->assign('PROCEDURETYPES', $procedureTypes);
 $smarty->assign('PROCEDURE', $procedure);
 

@@ -122,7 +122,7 @@ function editOrganizationVisibility($idorganization, $accountid, $visibility)
     $stmt->execute(array("idOrganization" => $idorganization, "idAccount" => $accountid, "visibility" => $visibility));
 }
 
-function getInvites($licenseid)
+function getOrganizationInvites($licenseid)
 {
     global $conn;
 
