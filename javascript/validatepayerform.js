@@ -1,5 +1,5 @@
 const nif = $('#nifEntity, #nifPrivate');
-const nifRegex = new RegExp('\\d{9}');
+const nifRegex = new RegExp('^\\d{9}$');
 const namePayer = $('#nameEntity, #namePrivate');
 const contracts = $("#contractstart, #contractend");
 const submitButtonPrivate = $("#submitButtonPrivate, #submitButton");

@@ -251,10 +251,9 @@ var fillValuePerK = function (type) {
         enableField(valuePerK, false);
 };
 
-// TODO refactor
 var getPrivateValuePerK = function () {
     for (var i = 0; i < privatePayers.length; i++) {
-        if (privatePayers[i].idprivatepayer == $('[name=privateName]').val()) {
+        if (privatePayers[i].idprivatepayer == $('#privateName').val()) {
             if (isNumeric(privatePayers[i].valueperk)) {
                 return privatePayers[i].valueperk;
             } else return 0;
@@ -266,7 +265,7 @@ var getPrivateValuePerK = function () {
 
 var getEntityValuePerK = function () {
     for (var i = 0; i < entityPayers.length; i++) {
-        if (entityPayers[i].identitypayer == $('[name=entityName]').val()) {
+        if (entityPayers[i].identitypayer == $('#entityName').val()) {
             if (isNumeric(entityPayers[i].valueperk)) {
                 return entityPayers[i].valueperk;
             } else return 0;
@@ -283,7 +282,7 @@ var updateRemunerations = function () {
     fillInstrumentistRemuneration();
     fillAnesthetistRemuneration();
     fillGeneralRemuneration();
-}
+};
 
 var fillGeneralRemuneration = function () {
     var total = totalRemun.val();

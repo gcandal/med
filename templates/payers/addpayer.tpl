@@ -67,8 +67,7 @@
         <label>
             NIF:
             <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" required
-                   value="{$FORM_VALUES.nif}"
-                   {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+                   value="{$FORM_VALUES.nif}" maxlength="9"/>
             <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
         </label>
 

@@ -3,7 +3,7 @@ const nifProfessional = $('.professionalNif');
 const licenseIdProfessional = $('.professionalLicenseId');
 if (typeof submitButton === 'undefined')
     var submitButton = $("#submitButton");
-var professionalNifRegex = new RegExp('\\d{9}');
+var professionalNifRegex = new RegExp('^\\d{9}$');
 const errorMessageNameProfessional = $('#errorMessageNameProfessional');
 const errorMessageNifProfessional = $('#errorMessageNifProfessional');
 const errorMessageLicenseIdProfessional = $('#errorMessageLicenseIdProfessional');

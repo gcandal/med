@@ -11,6 +11,14 @@ if (!$_SESSION['email']) {
     exit;
 }
 
+if($_POST['readonly'] == 1) {
+    editProcedureFromOrganization($_POST['idprocedure'], $_POST['organization'], $_SESSION['idaccount']);
+    $_SESSION['success_messages'][] = 'Registo editado com sucesso';
+
+    header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $_POST['idprocedure']);
+    exit;
+}
+
 if (isReadOnly($_POST['idprocedure'], $_SESSION['idaccount'])) {
     $_SESSION['error_messages'][] = 'Não tem permissão para editar este procedimento';
 

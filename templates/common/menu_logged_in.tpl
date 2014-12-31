@@ -32,6 +32,14 @@
     <button type="submit">Adicionar Pagador</button>
 </form>
 
+<form action="{$BASE_URL}pages/patients/patients.php">
+    <button type="submit">Ver Pacientes</button>
+</form>
+
+<form action="{$BASE_URL}pages/patients/addpatient.php">
+    <button type="submit">Adicionar Paciente</button>
+</form>
+
 <form action="{$BASE_URL}pages/organizations/organizations.php">
     <button type="submit">Ver Organizações</button>
 </form>

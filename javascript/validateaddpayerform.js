@@ -13,7 +13,7 @@ $(document).ready(function () {
 });
 
 var checkValidNIF = function () {
-    var nifRegex = new RegExp('\\d{9}');
+    var nifRegex = new RegExp('^\\d{9}$');
 
     nif.bind("paste drop input change cut", function () {
         var text = $(this).val();

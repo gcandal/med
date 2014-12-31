@@ -1,6 +1,6 @@
 const formEntidade = $("#formentidade");
 const formPrivado = $("#formprivado");
-const entityTypeInput = $("#entityTypeInput"); // TODO resolver isto
+const entityTypeInput = $("#entityTypeInput");
 const entityType = $('#entityType');
 const isEdit = false;
 const errorMessageNifPrivate = $('#errorMessageNifPrivate');
@@ -42,7 +42,11 @@ var updateFormVisibility = function () {
             errorMessageDate.show();
             errorMessageNifPrivate.hide();
             errorMessageNamePrivate.hide();
-            //entityTypeInput.val("Hospital");
+
+            if($("#entityType option:selected").text() === 'Hospital')
+                entityTypeInput.val("Hospital");
+            else
+                entityTypeInput.val("Insurance");
             break;
         default:
             errorMessageNifEntity.hide();

@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS Professional;
 DROP TABLE IF EXISTS LoginAttempts;
 DROP TABLE IF EXISTS PrivatePayer;
 DROP TABLE IF EXISTS EntityPayer;
+DROP TABLE IF EXISTS Patient;
 DROP TABLE IF EXISTS Account;
 DROP TABLE IF EXISTS Speciality;
 
@@ -22,6 +23,7 @@ DROP TYPE IF EXISTS ProcedurePaymentStatus;
 DROP TYPE IF EXISTS EntityType;
 DROP TYPE IF EXISTS OrgAuthorizationType;
 DROP TYPE IF EXISTS RoleInProcedureType;
+DROP TYPE IF EXISTS Cellphone;
 
 ------------------------------------------------------------------------
 
@@ -43,6 +45,10 @@ CHECK (VALUE ~ '\d{9}');
 CREATE DOMAIN LicenseId CHAR(9)
 CONSTRAINT validLicenseId
 CHECK (VALUE ~ '\d+');
+
+CREATE DOMAIN Cellphone VARCHAR(14)
+CONSTRAINT validCellphone
+CHECK (VALUE ~ '^((\+|00)\d{1,3})?\d{9}$');
 
 ------------------------------------------------------------------------
 
@@ -88,7 +94,8 @@ CREATE TABLE PrivatePayer (
   idAccount      INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   name           VARCHAR(40) NOT NULL,
   nif            NIF,
-  valuePerK      REAL
+  valuePerK      REAL,
+  createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE EntityPayer (
@@ -100,6 +107,7 @@ CREATE TABLE EntityPayer (
   type          EntityType,
   nif           NIF,
   valuePerK     REAL,
+  createdOn     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CHECK (contractStart < contractEnd)
 );
 
@@ -114,6 +122,16 @@ CREATE TABLE Professional (
   createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE Patient (
+  idPatient     SERIAL PRIMARY KEY,
+  idAccount     INTEGER NOT NULL REFERENCES Account (idAccount),
+  name          VARCHAR(40),
+  nif           NIF,
+  cellphone     CELLPHONE,
+  beneficiaryNr VARCHAR(40),
+  createdOn     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE ProcedureType (
   idProcedureType SERIAL PRIMARY KEY,
   name            VARCHAR(256) NOT NULL,
@@ -125,6 +143,7 @@ CREATE TABLE Procedure (
   paymentStatus        ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
   idPrivatePayer       INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
   idEntityPayer        INTEGER REFERENCES EntityPayer (idEntityPayer),
+  idPatient            INTEGER REFERENCES Patient (idPatient),
   idGeneral            INTEGER REFERENCES Professional (idProfessional),
   idFirstAssistant     INTEGER REFERENCES Professional (idProfessional),
   idSecondAssistant    INTEGER REFERENCES Professional (idProfessional),
@@ -207,12 +226,12 @@ BEGIN
     FROM Procedure, Professional
     WHERE
       Procedure.idprocedure = idp
-      AND licenseid IS NOT NULL
       AND (Professional.idProfessional = idgeneral
            OR Professional.idProfessional = idfirstassistant
            OR Professional.idProfessional = idsecondassistant
            OR Professional.idProfessional = idanesthetist
            OR Professional.idProfessional = idinstrumentist)
+      AND licenseid IS NOT NULL
       AND NOT EXISTS(SELECT *
                      FROM procedureinvitation
                      WHERE procedureinvitation.idprocedure = idp AND
@@ -295,14 +314,10 @@ BEGIN
             WHERE Professional.idAccount = NEW.idAccount
                   AND Professional.name = NEW.name)
   THEN
-
-    IF NEW.licenseId IS NOT NULL
-    THEN
-      UPDATE Professional
-      SET licenseId = NEW.licenseId
-      WHERE Professional.idAccount = NEW.idAccount
-            AND Professional.name = NEW.name AND Professional.licenseId IS NULL;
-    END IF;
+    UPDATE Professional
+    SET licenseId = NEW.licenseId
+    WHERE Professional.idAccount = NEW.idAccount
+          AND Professional.name = NEW.name;
 
     RETURN NULL;
   END IF;
@@ -316,7 +331,17 @@ CREATE OR REPLACE FUNCTION edit_procedure_trigger()
 DECLARE
   arow RECORD;
 BEGIN
--- TODO -> apagar procedureaccount/invites de contas cujos licenseid não estão no procedure
+  DELETE FROM ProcedureInvitation
+  WHERE idProcedure = NEW.idProcedure
+        AND licenseIdInvited NOT IN
+            (SELECT licenseid
+             FROM Professional
+             WHERE (Professional.idProfessional = NEW.idgeneral
+                    OR Professional.idProfessional = NEW.idfirstassistant
+                    OR Professional.idProfessional = NEW.idsecondassistant
+                    OR Professional.idProfessional = NEW.idanesthetist
+                    OR Professional.idProfessional = NEW.idinstrumentist)
+                   AND licenseid IS NOT NULL);
 
   FOR arow IN SELECT
                 idProfessional,

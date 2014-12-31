@@ -5,7 +5,7 @@
         <p>{$error}</p>
     {/foreach}
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/editprocedure.php">
-        <input type="hidden" name="idprocedure" value="{$PROCEDURE.idprocedure}"/>
+        <input type="hidden" id="idProcedure" name="idprocedure" value="{$PROCEDURE.idprocedure}"/>
         <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>
         <span class="errorMessagePrivate" id="errorMessageNifPrivate"></span>
         <span class="errorMessageEntity" id="errorMessageNameEntity"></span>
@@ -29,7 +29,7 @@
             </select>
         </label>
 
-        <input type="hidden" name="readonly" value="{$PROCEDURE.readonly}"/>
+        <input type="hidden" id="readOnly" name="readonly" value="{$PROCEDURE.readonly}"/>
         <button id="submitButton" type="submit" disabled>Editar</button>
         <br>
 
@@ -258,13 +258,15 @@
 
         {if $PROCEDURE.readonly}
         $("input, select, #addSubProcedure").attr("disabled", true);
-        $("#idOrganization").attr("disabled", false);
+        $("#idOrganization, #readOnly, #idProcedure").attr("disabled", false);
         {/if}
     </script>
     <script src="{$BASE_URL}javascript/addpayer.js"></script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
-    <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
-    <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
+    {if !$PROCEDURE.readonly}
+        <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
+        <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
+    {/if}
 {else}
     <p>Tem que fazer login!</p>
 {/if}
