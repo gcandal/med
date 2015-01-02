@@ -9,6 +9,6 @@ if (isset($_SESSION['idpatient'])) {
 } else
     $idpatient = $_GET['idpatient'];
 
-$patient = getPatient($idpatient);
+$patient = getPatient($idpatient, $_SESSION['idaccount']);
 $smarty->assign('patient', $patient);
 $smarty->display('patients/editpatient.tpl');

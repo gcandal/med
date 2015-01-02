@@ -5,6 +5,7 @@ include_once($BASE_DIR . 'database/professionals.php');
 include_once($BASE_DIR . 'database/organizations.php');
 include_once($BASE_DIR . 'database/users.php');
 include_once($BASE_DIR . 'database/payers.php');
+include_once($BASE_DIR . 'database/patients.php');
 
 if (!$_SESSION['email']) {
     $_SESSION['error_messages'][] = 'Tem que fazer login';
@@ -25,14 +26,16 @@ if (!$_SESSION['freeregisters'] || $_SESSION['freeregisters'] < -1) {
 $idaccount = $_SESSION['idaccount'];
 $username = getUserById($idaccount);
 $organizations = getOrganizations($idaccount);
+$patients = getOrganizations($idaccount);
 $entities['Entidade'] = getEntityPayers($idaccount);
 $entities['Privado'] = getPrivatePayers($idaccount);
+$patients = getPatients($idaccount);
 $procedureTypes = getProcedureTypes();
 $smarty->assign('USERNAME', $username);
 $smarty->assign('ENTITIES', $entities);
+$smarty->assign('PATIENTS', $patients);
 $smarty->assign('ORGANIZATIONS', $organizations);
 $smarty->assign('PROCEDURETYPES', $procedureTypes);
-
 $_SESSION['entityType'] = "Private";
 $smarty->assign('ENTITYTYPE', $_SESSION['entityType']);
 

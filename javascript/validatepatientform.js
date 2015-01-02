@@ -1,12 +1,20 @@
-const nifPatient = $('#nifPatient');
-const nifRegex = new RegExp('^\\d{9}$');
 const cellphoneRegex = new RegExp('^((\\+|00)\\d{1,3})?\\d{9}$');
-const namePatient = $('#namePatient');
-const cellphonePatient = $('#cellphonePatient');
-const submitButton = $("#submitButton");
-const errorMessageNifPatient = $("#errorMessageNifPatient");
-const errorMessageNamePatient = $("#errorMessageNamePatient");
-const errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
+if (typeof nifRegex === 'undefined')
+    var nifRegex = new RegExp('^\\d{9}$');
+if (typeof nifPatient === 'undefined')
+    var nifPatient = $('#nifPatient');
+if (typeof namePatient === 'undefined')
+    var namePatient = $('#namePatient');
+if (typeof cellphonePatient === 'undefined')
+    var cellphonePatient = $('#cellphonePatient');
+if (typeof submitButton === 'undefined')
+    var submitButton = $("#submitButton");
+if (typeof submitButton === 'undefined')
+    var errorMessageNifPatient = $("#errorMessageNifPatient");
+if (typeof submitButton === 'undefined')
+    var errorMessageNamePatient = $("#errorMessageNamePatient");
+if (typeof submitButton === 'undefined')
+    var errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
 
 if (typeof checkSubmitButton === 'undefined') {
     var noErrorMessages = function () {
@@ -31,14 +39,16 @@ $(document).ready(function () {
         checkValidCellphone($(this));
     });
 
-    if (!isEdit) {
-        isInvalidPatient(namePatient, "Nome obrigatório", errorMessageNamePatient);
-    } else {
-        isValidPatient(namePatient, errorMessageNamePatient);
-    }
+    if (typeof method === "undefined") {
+        if (!isEdit) {
+            isInvalidPatient(namePatient, "Nome obrigatório", errorMessageNamePatient);
+        } else {
+            isValidPatient(namePatient, errorMessageNamePatient);
+        }
 
-    isValidPatient(nifPatient, errorMessageNifPatient);
-    isValidPatient(cellphonePatient, errorMessageCellphonePatient);
+        isValidPatient(nifPatient, errorMessageNifPatient);
+        isValidPatient(cellphonePatient, errorMessageCellphonePatient);
+    }
 });
 
 var checkValidNIF = function (field) {
@@ -64,7 +74,7 @@ var checkValidName = function (field) {
     }
 };
 
-var checkValidCellphone = function(field) {
+var checkValidCellphone = function (field) {
     var text = field.val();
 
     if (!isEdit && !cellphoneRegex.test(text))

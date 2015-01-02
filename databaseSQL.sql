@@ -315,7 +315,7 @@ BEGIN
                   AND Professional.name = NEW.name)
   THEN
     UPDATE Professional
-    SET licenseId = NEW.licenseId
+    SET licenseId = NEW.licenseId, idSpeciality = NEW.idSpeciality
     WHERE Professional.idAccount = NEW.idAccount
           AND Professional.name = NEW.name;
 

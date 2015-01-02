@@ -115,6 +115,43 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
     }
 }
 
+if (isset($_POST['idPatient'])) {
+    if ($_POST['idPatient'] == -2) {
+        $name = $_POST['namePatient'];
+        $nif = $_POST['nifPatient'];
+        if (!$nif) $nif = null;
+        $cellphone = $_POST['cellphonePatient'];
+        if (!$cellphone) $cellphone = null;
+        $beneficiarynr = $_POST['beneficiaryNrPatient'];
+        if (!$beneficiarynr) $beneficiarynr = null;
+        $accountId = $_SESSION['idaccount'];
+
+        if (!$_POST['name']) $_SESSION['field_errors']['name'] = 'Nome é obrigatório';
+
+        if ($_SESSION['field_erors'][0]) {
+            $_SESSION['error_messages'][] = 'Alguns campos em falta';
+            $_SESSION['form_values'] = $_POST;
+
+            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            exit;
+        }
+
+        try {
+            $idpatient = createPatient($name, $accountId, $nif, $cellphone, $beneficiarynr);
+        } catch (PDOException $e) {
+            if (strpos($e->getMessage(), 'validnif') !== false) {
+                $_SESSION['error_messages'][] = 'NIF inválido';
+                $_SESSION['field_errors']['nif'] = 'NIF inválido';
+            } else $_SESSION['error_messages'][] = 'Erro a criar paciente ' . $e->getMessage();
+
+            $_SESSION['form_values'] = $_POST;
+
+            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            exit;
+        }
+    } else $idpatient = $_POST['idPatient'];
+} else $idpatient = false;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +232,7 @@ try {
     }
 
     editProcedureFromOrganization($idProcedure, $_POST['organization'], $idAccount);
-
+    editProcedurePatient($idProcedure, $idpatient);
 
     $conn->commit();
 } catch (PDOException $e) {

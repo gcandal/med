@@ -25,6 +25,15 @@ const generalK = $('#generalK');
 const nSubProcedures = $('#nSubProcedures');
 const submitButton = $("#submitButton");
 const role = $('#role');
+const idPatient = $("#idPatient");
+const patientForm = $("#patientForm");
+const namePatient = $("#namePatient");
+const nifPatient = $("#nifPatient");
+const cellphonePatient = $("#cellphonePatient");
+const beneficiaryNrPatient = $("#beneficiaryNrPatient");
+const errorMessageNifPatient = $("#errorMessageNifPatient");
+const errorMessageNamePatient = $("#errorMessageNamePatient");
+const errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
 const subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
 
 var enableField = function (field, disable) {
@@ -60,6 +69,11 @@ $(document).ready(function () {
         updatePayerVisibility();
         updateRemunerations();
     });
+
+    idPatient.change(function() {
+        updatePatientInfo();
+    });
+    updatePatientInfo();
 
     fillProfessionalRow(role.val());
     role.change(function () {
@@ -229,6 +243,69 @@ var addNSubProcedureById = function (id, n) {
     addNSubProcedureById(id, n - 1);
 };
 
+var updatePatientInfo = function() {
+    var id = idPatient.val();
+
+    switch(id) {
+        //Novo
+        case "-2":
+            disablePatientForm(false);
+            erasePatientForm();
+            disablePatientValidations(false);
+
+            break;
+        //Nenhum
+        case "-1":
+            disablePatientForm(true);
+            erasePatientForm();
+            disablePatientValidations(true);
+
+            break;
+        //Já existente
+        default:
+            fillPatientForm(id);
+            disablePatientForm(true);
+            disablePatientValidations(true);
+
+            break;
+    }
+};
+
+var disablePatientForm = function(disable) {
+    patientForm.find("input").attr("disabled", disable);
+};
+
+var disablePatientValidations = function(disable) {
+    if(disable) {
+        errorMessageNifPatient.text("");
+        errorMessageNamePatient.text("");
+        errorMessageCellphonePatient.text("");
+        patientForm.find("input").css("border", "");
+    } else {
+        if (!isEdit) {
+            isInvalidPatient(namePatient, "Nome obrigatório", errorMessageNamePatient);
+        } else {
+            isValidPatient(namePatient, errorMessageNamePatient);
+        }
+
+        isValidPatient(nifPatient, errorMessageNifPatient);
+        isValidPatient(cellphonePatient, errorMessageCellphonePatient);
+    }
+};
+
+var fillPatientForm = function(id) {
+    var patient = getPatient(id);
+
+    namePatient.val(patient.name);
+    nifPatient.val(patient.nif);
+    cellphonePatient.val(patient.cellphone);
+    beneficiaryNrPatient.val(patient.beneficiarynr);
+};
+
+var erasePatientForm = function() {
+    patientForm.find("input").val("");
+};
+
 var fillValuePerK = function (type) {
     var curreantPayerValuePerK;
     switch (type) {
@@ -273,6 +350,16 @@ var getEntityValuePerK = function () {
     }
 
     return 0;
+};
+
+var getPatient = function(id) {
+    for (var i = 0; i < patients.length; i++) {
+        if (patients[i].idpatient == id) {
+            return patients[i];
+        }
+    }
+
+    return false;
 };
 
 var updateRemunerations = function () {

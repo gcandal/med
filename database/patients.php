@@ -1,12 +1,12 @@
 <?php
 
-function getPatient($idPatient)
+function getPatient($idPatient, $idAccount)
 {
     global $conn;
 
     $stmt = $conn->prepare("SELECT * FROM patient
-                            WHERE idpatient = ?");
-    $stmt->execute(array($idPatient));
+                            WHERE idpatient = ? AND idAccount = ?");
+    $stmt->execute(array($idPatient, $idAccount));
 
     return $stmt->fetch();
 }

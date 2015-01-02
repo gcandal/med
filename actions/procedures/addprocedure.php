@@ -3,6 +3,7 @@ include_once('../../config/init.php');
 include_once($BASE_DIR . 'database/procedures.php');
 include_once($BASE_DIR . 'database/professionals.php');
 include_once($BASE_DIR . 'database/payers.php');
+include_once($BASE_DIR . 'database/patients.php');
 
 if (!$_SESSION['email']) {
     $_SESSION['error_messages'][] = 'Tem que fazer login';
@@ -109,6 +110,43 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
     }
 }
 
+if (isset($_POST['idPatient'])) {
+    if ($_POST['idPatient'] == -2) {
+        $name = $_POST['namePatient'];
+        $nif = $_POST['nifPatient'];
+        if (!$nif) $nif = null;
+        $cellphone = $_POST['cellphonePatient'];
+        if (!$cellphone) $cellphone = null;
+        $beneficiarynr = $_POST['beneficiaryNrPatient'];
+        if (!$beneficiarynr) $beneficiarynr = null;
+        $accountId = $_SESSION['idaccount'];
+
+        if (!$_POST['name']) $_SESSION['field_errors']['name'] = 'Nome é obrigatório';
+
+        if ($_SESSION['field_erors'][0]) {
+            $_SESSION['error_messages'][] = 'Alguns campos em falta';
+            $_SESSION['form_values'] = $_POST;
+
+            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            exit;
+        }
+
+        try {
+            $idpatient = createPatient($name, $accountId, $nif, $cellphone, $beneficiarynr);
+        } catch (PDOException $e) {
+            if (strpos($e->getMessage(), 'validnif') !== false) {
+                $_SESSION['error_messages'][] = 'NIF inválido';
+                $_SESSION['field_errors']['nif'] = 'NIF inválido';
+            } else $_SESSION['error_messages'][] = 'Erro a criar paciente ' . $e->getMessage();
+
+            $_SESSION['form_values'] = $_POST;
+
+            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            exit;
+        }
+    } else $idpatient = $_POST['idPatient'];
+} else $idpatient = false;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +154,7 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 $idAccount = $_SESSION['idaccount'];
 $role = $_POST['role'];
 $hasManualK = $_POST['totalType'] === 'manual';
@@ -182,8 +221,12 @@ try {
         addProfessionalToProcedure($idProf, $idProcedure, "anesthetist");
     }
 
-    if($_POST['organization'] >= 0) {
+    if ($_POST['organization'] >= 0) {
         addProcedureToOrganization($idProcedure, $_POST['organization'], $idAccount);
+    }
+
+    if ($idpatient) {
+        editProcedurePatient($idProcedure, $idpatient);
     }
 
     $conn->commit();

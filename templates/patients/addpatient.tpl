@@ -25,7 +25,7 @@
 
         <label>
             Telefone:
-            <input type="text" name="cellphone" id="cellphonePatient" placeholder="{$privatepayer.cellphone}"
+            <input type="text" name="cellphone" id="cellphonePatient" placeholder="Telefone"
                    value="{$FORM_VALUES.cellphone}"/>
             <span>{$FIELD_ERRORS.cellphone}</span>
         </label>
@@ -33,7 +33,7 @@
         <label>
             Nº Beneficiário:
             <input type="number" min="0" id="beneficiaryNrPatient" name="beneficiarynr"
-                   placeholder="{$patient.beneficiarynr}"
+                   placeholder="Nº Benefeciário"
                    value="{$FORM_VALUES.beneficiarynr}"/>
             <span>{$FIELD_ERRORS.nrbeneficiary}</span>
         </label>

@@ -13,6 +13,10 @@
         <span class="errorMessage" id="errorMessageNameProfessional"></span>
         <span class="errorMessage" id="errorMessageNifProfessional"></span>
         <span class="errorMessage" id="errorMessageLicenseIdProfessional"></span>
+        <span class="errorMessage" id="errorMessageNifPatient"></span>
+        <span class="errorMessage" id="errorMessageNamePatient"></span>
+        <span class="errorMessage" id="errorMessageCellphonePatient"></span>
+        <span class="errorMessage" id="errorMessageNrBeneficiaryPatient"></span>
 
         <label>
             Data:
@@ -99,8 +103,7 @@
                 <label>
                     NIF:
                     <input type="number" id="nifPrivate" name="nifPrivate" placeholder="NIF"
-                           value="{$FORM_VALUES.nifPrivate}"
-                           {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+                           value="{$FORM_VALUES.nifPrivate}"/>
                     <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
                 </label>
             </span>
@@ -115,8 +118,7 @@
                 <label>
                     NIF:
                     <input type="number" min="0" name="nifEntity" id="nifEntity" placeholder="NIF"
-                           value="{$FORM_VALUES.nifEntity}"
-                           {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+                           value="{$FORM_VALUES.nifEntity}"/>
                     <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
                 </label>
             </span>
@@ -129,8 +131,49 @@
                 <input type="number" name="valuePerK" id="valuePerK" min="0" step="0.01"
                        value="{$FORM_VALUES.VALUEPERK}"/>
             </label>
-        </span>
+        </span><br/>
 
+        <label>
+            Paciente:
+            <select name="idPatient" id="idPatient">
+                <option value="-1">Nenhum</option>
+                <option value="-2">Novo paciente</option>
+                {foreach $PATIENTS as $patient}
+                    <option value="{$patient.idpatient}">{$patient.name}</option>
+                {/foreach}
+            </select>
+        </label>
+
+        <span id="patientForm">
+            <label>
+                Nome:
+                <input type="text" name="namePatient" id="namePatient" placeholder="Nome" value="{$FORM_VALUES.name}" required
+                       maxlength="40"/>
+                <span>{$FIELD_ERRORS.name}</span>
+            </label>
+
+            <label>
+                NIF:
+                <input type="number" id="nifPatient" min="0" name="nifPatient" placeholder="NIF"
+                       value="{$FORM_VALUES.nif}"/>
+                <span>{$FIELD_ERRORS.nif}</span>
+            </label>
+
+            <label>
+                Telefone:
+                <input type="text" name="cellphonePatient" id="cellphonePatient" placeholder="Telefone"
+                       value="{$FORM_VALUES.cellphone}"/>
+                <span>{$FIELD_ERRORS.cellphone}</span>
+            </label>
+
+            <label>
+                Nº Beneficiário:
+                <input type="number" min="0" id="beneficiaryNrPatient" name="beneficiaryNrPatient"
+                       placeholder="Nº Beneficiário"
+                       value="{$FORM_VALUES.beneficiarynr}"/>
+                <span>{$FIELD_ERRORS.nrbeneficiary}</span>
+            </label>
+        </span>
 
         <p>Equipa</p>
         <table class="teamTable" border="1">
@@ -236,6 +279,7 @@
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
         var privatePayers = {$ENTITIES['Privado']|json_encode};
         var entityPayers = {$ENTITIES['Entidade']|json_encode};
+        var patients = {$PATIENTS|json_encode};
         var baseUrl = {$BASE_URL};
         var method = "addProcedure";
         $("#entityType").val("{$ENTITYTYPE}");
@@ -244,6 +288,7 @@
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
     <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
     <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
+    <script src="{$BASE_URL}javascript/validatepatientform.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}

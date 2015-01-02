@@ -51,6 +51,19 @@ function getOrganizationForProcedure($idProcedure, $idAccount)
     return $stmt->fetch();
 }
 
+function getPatientForProcedure($idProcedure)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT Patient.idpatient, name, nif, cellphone, beneficiarynr
+                            FROM Patient, Procedure
+                            WHERE Procedure.idProcedure = :idProcedure AND Patient.idPatient = Procedure.idPatient");
+
+    $stmt->execute(array("idProcedure" => $idProcedure));
+
+    return $stmt->fetch();
+}
+
 function getProcedure($idAccount, $idProcedure)
 {
     global $conn;
@@ -86,6 +99,17 @@ function getProcedure($idAccount, $idProcedure)
         $procedure['organizationName'] = $organization['name'];
         $procedure['idorganization'] = $organization['idorganization'];
     } else $procedure['idorganization'] = -1;
+
+    $patient = getPatientForProcedure($procedure['idprocedure']);
+
+    if ($patient) {
+        $procedure['patientName'] = $patient['name'];
+        $procedure['patientNif'] = $patient['nif'];
+        $procedure['patientCellphone'] = $patient['cellphone'];
+        $procedure['patientBenefeciaryNr'] = $patient['benefeciarynr'];
+        $procedure['idpatient'] = $patient['idpatient'];
+    } else $procedure['idpatient'] = -1;
+
 
     return $procedure;
 }
@@ -344,6 +368,24 @@ function addProcedureToOrganization($idProcedure, $idOrganization, $idAccount)
         "idaccount" => $idAccount));
 }
 
+function editProcedurePatient($idProcedure, $idPatient)
+{
+    global $conn;
+
+    if ($idPatient == -1) {
+        $stmt = $conn->prepare("UPDATE Procedure
+                            SET idpatient = NULL
+                            WHERE idprocedure = :idprocedure");
+
+        $stmt->execute(array("idprocedure" => $idProcedure));
+    } else {
+        $stmt = $conn->prepare("UPDATE Procedure
+                            SET idpatient = :idpatient
+                            WHERE idprocedure = :idprocedure");
+        $stmt->execute(array("idprocedure" => $idProcedure, "idpatient" => $idPatient));
+    }
+}
+
 function editProcedureFromOrganization($idProcedure, $idOrganization, $idAccount)
 {
     global $conn;
@@ -359,7 +401,7 @@ function editProcedureFromOrganization($idProcedure, $idOrganization, $idAccount
 
         $stmt->execute(array("idprocedure" => $idProcedure, "idaccount" => $idAccount));
 
-        if($stmt->fetch()) {
+        if ($stmt->fetch()) {
             $stmt = $conn->prepare("UPDATE ProcedureOrganization
                             SET idOrganization = :idorganization
                             WHERE idProcedure = :idprocedure AND idAccount = :idaccount");

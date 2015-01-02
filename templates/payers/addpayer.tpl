@@ -42,8 +42,7 @@
         <span id="dateerror"></span>
         <label>
             NIF:
-            <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" required value="{$FORM_VALUES.nif}"
-                   {literal}pattern="\d{9}"{/literal} maxlength="9"/>
+            <input type="number" min="0" name="nif" id="nifEntity" placeholder="NIF" required value="{$FORM_VALUES.nif}"/>
             <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
         </label>
         <label>
@@ -67,7 +66,7 @@
         <label>
             NIF:
             <input type="number" id="nifPrivate" min="0" name="nif" placeholder="NIF" required
-                   value="{$FORM_VALUES.nif}" maxlength="9"/>
+                   value="{$FORM_VALUES.nif}" />
             <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
         </label>
 

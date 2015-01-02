@@ -25,8 +25,7 @@
         </label>
         <label>
             Cédula:
-            <input type="text" name="licenseid" id="licenseId" placeholder="Cédula" value="{$FORM_VALUES.licenseid}"
-                   {literal}pattern="\d+"{/literal} maxlength="9" required/>
+            <input type="text" name="licenseid" id="licenseId" placeholder="Cédula" value="{$FORM_VALUES.licenseid}" required/>
             <span>{$FIELD_ERRORS.licenseid}</span><br/>
         </label>
         <label id="specialityLabel">
