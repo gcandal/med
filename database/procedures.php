@@ -608,7 +608,7 @@ function getProcedureTypesForAutocomplete()
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT idproceduretype id, name AS label, k FROM proceduretype");
+    $stmt = $conn->prepare("SELECT idproceduretype id, name AS label, k, c, code FROM proceduretype");
     $stmt->execute();
 
     return $stmt->fetchAll();

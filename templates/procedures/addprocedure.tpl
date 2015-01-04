@@ -267,8 +267,22 @@
                 <select name="subProcedure{{number}}" class="subProcedure">
                     {{{type}}}<br>
                 </select>
-                <input value="15" type="text" size="3" disabled>
-                <input class="subProcedureName" value="Queratoscopia fotográfica" type="text">
+                <label>
+                    Nome:
+                    <input class="subProcedureName" value="Consultas no Consultório - Não Especialista-1a. Consulta" type="text">
+                </label>
+                <label>
+                    K:
+                    <input value="10" type="text" size="3" disabled>
+                </label>
+                <label>
+                    C:
+                    <input value="0" type="text" size="3" disabled>
+                </label>
+                <label>
+                    Código:
+                    <input class="subProcedureCode" value="01.00.00.01" type="text" size="12">
+                </label>
                 <button class="removeSubProcedureButton" subProcedureNr="{{number}}">X</button>
             </span>
         {/literal}
