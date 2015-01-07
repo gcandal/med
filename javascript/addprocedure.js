@@ -26,6 +26,8 @@ const nSubProcedures = $('#nSubProcedures');
 const submitButton = $("#submitButton");
 const role = $('#role');
 const idPatient = $("#idPatient");
+const localAnesthesia = $("#localanesthesia");
+const anesthetistRow = $("#AnesthetistRow");
 const patientForm = $("#patientForm");
 const namePatient = $("#namePatient");
 const nifPatient = $("#nifPatient");
@@ -74,6 +76,13 @@ $(document).ready(function () {
         updatePatientInfo();
     });
     updatePatientInfo();
+
+    localAnesthesia.change(function() {
+        disableAnesthetistRow(localAnesthesia.prop("checked"));
+        fillInstrumentistRemuneration();
+        fillGeneralRemuneration();
+    });
+    disableAnesthetistRow(localAnesthesia.prop("checked"));
 
     fillProfessionalRow(role.val());
     role.change(function () {
@@ -209,6 +218,14 @@ var fillProfessionalRow = function (roleName) {
     enableField(previousRoleLicenseId, false);
 
     previousRole = roleName;
+};
+
+var disableAnesthetistRow = function(disable) {
+    if(disable) {
+        anesthetistName.val("");
+        anesthetistRow.hide();
+    } else anesthetistRow.show();
+
 };
 
 var getSubProcedureTypes = function () {

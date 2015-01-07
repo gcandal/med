@@ -69,7 +69,7 @@ function getProcedure($idAccount, $idProcedure)
     global $conn;
 
     $stmt = $conn->prepare("SELECT idProcedure, paymentstatus, idprivatepayer, identitypayer, date,
-        totalRemun, role, hasManualK, anesthetistK, readonly
+        totalRemun, role, hasManualK, anesthetistK, readonly, localanesthesia
          FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? AND idProcedure = ?
          ORDER BY date DESC");
 
@@ -179,7 +179,7 @@ function isPrivatePayer($idPrivatePayer)
 
 function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK,
                       $idprivatepayer, $identitypayer, $role,
-                      $anesthetistK, $hasManualK, $personalRemun,
+                      $anesthetistK, $hasManualK, $localAnesthesia, $personalRemun,
                       $generalRemun, $firstAssistantRemun, $secondAssistantRemun,
                       $anesthetistRemun, $instrumentistRemun)
 {
@@ -198,35 +198,39 @@ function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK
         $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, identitypayer,
                                 idprivatepayer, totalremun, valueperk,
                                 anesthetistK, hasmanualk, generalremun, firstassistantremun,
-                                secondassistantremun, anesthetistremun, instrumentistremun)
+                                secondassistantremun, anesthetistremun, instrumentistremun,
+                                localAnesthesia)
                                 VALUES(:paymentStatus, :date, :identitypayer,
                                 :idprivatepayer, :totalremun, :valueperk, :anesthetistK, :hasManualK,
                                 :generalRemun, :firstAssistantRemun, :secondAssistantRemun,
-                                :anesthetistRemun, :instrumentistRemun);");
+                                :anesthetistRemun, :instrumentistRemun, :localAnesthesia);");
 
         $stmt->execute(array("paymentStatus" => $paymentStatus, "date" => $date,
             "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer,
             "totalremun" => $totalRemun, "valueperk" => $valuePerK, "anesthetistK" => $anesthetistK,
             "hasManualK" => $hasManualK, "generalRemun" => $generalRemun,
             "firstAssistantRemun" => $firstAssistantRemun, "secondAssistantRemun" => $secondAssistantRemun,
-            "anesthetistRemun" => $anesthetistRemun, "instrumentistRemun" => $instrumentistRemun));
+            "anesthetistRemun" => $anesthetistRemun, "instrumentistRemun" => $instrumentistRemun,
+            "localAnesthesia" => $localAnesthesia));
     } else {
         $stmt = $conn->prepare("INSERT INTO PROCEDURE(paymentstatus, date, identitypayer,
                                 idprivatepayer, totalremun, valueperk,
                                 anesthetistK, hasmanualk, generalremun, firstassistantremun,
-                                secondassistantremun, anesthetistremun, instrumentistremun)
+                                secondassistantremun, anesthetistremun, instrumentistremun,
+                                localAnesthesia)
                                 VALUES(:paymentStatus, CURRENT_TIMESTAMP,
                                 :identitypayer, :idprivatepayer, :totalremun, :valueperk,
                                 :anesthetistK, :hasManualK,
                                 :generalRemun, :firstAssistantRemun, :secondAssistantRemun,
-                                :anesthetistRemun, :instrumentistRemun);");
+                                :anesthetistRemun, :instrumentistRemun, :localAnesthesia);");
 
         $stmt->execute(array("paymentStatus" => $paymentStatus,
             "identitypayer" => $identitypayer, "idprivatepayer" => $idprivatepayer,
             "totalremun" => $totalRemun, "valueperk" => $valuePerK, "anesthetistK" => $anesthetistK,
             "hasManualK" => $hasManualK, "generalRemun" => $generalRemun,
             "firstAssistantRemun" => $firstAssistantRemun, "secondAssistantRemun" => $secondAssistantRemun,
-            "anesthetistRemun" => $anesthetistRemun, "instrumentistRemun" => $instrumentistRemun));
+            "anesthetistRemun" => $anesthetistRemun, "instrumentistRemun" => $instrumentistRemun,
+            "localAnesthesia" => $localAnesthesia));
     }
 
     $id = $conn->lastInsertId('procedure_idprocedure_seq');

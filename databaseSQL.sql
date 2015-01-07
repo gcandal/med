@@ -160,6 +160,7 @@ CREATE TABLE Procedure (
   anesthetistRemun     FLOAT                           DEFAULT 0,
   instrumentistRemun   FLOAT                           DEFAULT 0,
   hasManualK           BOOLEAN                NOT NULL DEFAULT FALSE,
+  localAnesthesia      BOOLEAN                NOT NULL DEFAULT FALSE,
   anesthetistK         VARCHAR(5)
 );
 

@@ -42,11 +42,15 @@
                 <option value="Recebi">Recebi</option>
                 <option value="Paguei">Paguei</option>
             </select>
+        </label><br>
+
+
+        <label>
+            Anestesia local:
+            <input id="localanesthesia" name="localanesthesia" type="checkbox">
         </label>
 
-
         <p>Cirurgias</p>
-
         <p id="subProcedureMenu">
             <input type="hidden" name="nSubProcedures" id="nSubProcedures" value="0">
             <button type="button" id="addSubProcedure">Adicionar</button>

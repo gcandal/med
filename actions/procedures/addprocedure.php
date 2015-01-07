@@ -158,6 +158,12 @@ if (isset($_POST['idPatient'])) {
 $idAccount = $_SESSION['idaccount'];
 $role = $_POST['role'];
 $hasManualK = $_POST['totalType'] === 'manual';
+$localAnesthesia = $_POST['localanesthesia'] === 'on';
+
+if($localAnesthesia)
+    $localAnesthesia = 'true';
+else
+    $localAnesthesia = 'false';
 
 for ($i = 1; $i <= $_POST['nSubProcedures']; $i++) {
     $subProcedures[] = $_POST["subProcedure$i"];
@@ -188,7 +194,7 @@ try {
     $conn->beginTransaction();
 
     $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
-        $idprivatepayer, $identitypayer, $role, $_POST['anesthetistK'], $hasManualK, $personalRemun,
+        $idprivatepayer, $identitypayer, $role, $_POST['anesthetistK'], $hasManualK, $localAnesthesia, $personalRemun,
         $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
         $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
 
