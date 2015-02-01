@@ -1,42 +1,118 @@
 {include file='common/header.tpl'}
 
 {if $EMAIL}
-    {foreach $ERROR_MESSAGES as $error}
-        <p>{$error}</p>
-    {/foreach}
-    <span class="errorMessage" id="errorMessageNifPatient"></span>
-    <span class="errorMessage" id="errorMessageNamePatient"></span>
-    <span class="errorMessage" id="errorMessageCellphonePatient"></span>
-    <span class="errorMessage" id="errorMessageNrBeneficiaryPatient"></span>
-    <form method="post" action="{$BASE_URL}actions/patients/editpatient.php">
-        <input type="hidden" name="idpatient" value="{$patient.idpatient}"/>
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <div class="container">
+            <!-- start: PAGE HEADER -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- start: PAGE TITLE & BREADCRUMB -->
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="clip-grid-6 active"></i>
+                            <a href="#"> Doentes </a>
+                        </li>
+                    </ol>
+                    <div class="page-header">
+                        <h1>Editar doente</h1>
+                    </div>
+                    <!-- end: PAGE TITLE & BREADCRUMB -->
+                </div>
+            </div>
+            <!-- end: PAGE HEADER -->
+            <!-- start: PAGE CONTENT -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- start: FORM VALIDATION 1 PANEL -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-file-text-o"></i>
+                            Formulário de doentes
+                        </div>
+                        <div class="panel-body">
+                            <h2><i class="fa fa-pencil-square teal"></i> Registo de doentes</h2>
+                            <hr>
 
-        <label>
-            Nome:
-            <input type="text" name="name" id="namePatient" placeholder="{$patient.name}" value="{$FORM_VALUES.name}"
-                   maxlength="40"/>
-            <span>{$FIELD_ERRORS.name}</span>
-        </label>
-        <label>
-            NIF:
-            <input type="number" min="0" id="nifPatient" name="nif" placeholder="{$patient.nif}"
-                   value="{$FORM_VALUES.nif}"/>
-            <span>{$FIELD_ERRORS.nif}</span>
-        </label>
-        <label>
-            Telefone:
-            <input type="text" name="cellphone" id="cellphonePatient" placeholder="{$patient.cellphone}"
-                   value="{$FORM_VALUES.cellphone}"/>
-            <span>{$FIELD_ERRORS.cellphone}</span>
-        </label>
-        <label>
-            Nº Beneficiário:
-            <input type="number" min="0" id="beneficiaryNrPatient" name="beneficiarynr"
-                   placeholder="{$patient.beneficiarynr}" value="{$FORM_VALUES.nrbeneficiary}"/>
-            <span>{$FIELD_ERRORS.beneficiarynr}</span>
-        </label>
-        <button type="submit" id="submitButton">Editar</button>
-    </form>
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span id="errorMessageNifPatient" class="errorMessage"></span>
+                            </div>
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span id="errorMessageNamePatient" class="errorMessage"></span>
+                            </div>
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span id="errorMessageCellphonePatient" class="errorMessage"></span>
+                            </div>
+
+                            <form method="post" action="{$BASE_URL}actions/patients/addpatient.php" role="form" id="form">
+                                <input type="hidden" name="idpatient" value="{$patient.idpatient}"/>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="errorHandler alert alert-danger no-display">
+                                            <i class="fa fa-times-sign"></i> Ocorreu um erro. Por favor verifique o formulário.
+                                        </div>
+                                        <div class="successHandler alert alert-success no-display">
+                                            <i class="fa fa-ok"></i> Doente registado com sucesso
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Nome <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" placeholder="{$patient.name}" class="form-control" id="namePatient" name="name" value required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                NIF
+                                            </label>
+                                            <input type="number" placeholder="{$patient.nif}" class="form-control" id="nifPatient" name="nif">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Telefone
+                                            </label>
+                                            <input type="number" placeholder="{$patient.cellphone}" class="form-control" name="cellphone" id="cellphonePatient">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Nº de beneficiário
+                                            </label>
+                                            <input type="text" placeholder="{$patient.benefeciarynr}" class="form-control" id="beneficiaryNrPatient" name="beneficiarynr">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div>
+                                            <span class="symbol required"></span>Campos obrigatórios
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button class="btn btn-blue btn-block" type="submit" id="submitButton">
+                                            Registar <i class="fa fa-arrow-circle-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- end: FORM VALIDATION 1 PANEL -->
+                </div>
+            </div>
+            <!-- end: PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- end: PAGE -->
+
+    <span style="display: none" id="activeTab">editpatient</span>
     <script>
         const isEdit = true;
     </script>
@@ -44,4 +120,5 @@
 {else}
     <p>Tem que fazer login!</p>
 {/if}
+
 {include file='common/footer.tpl'}

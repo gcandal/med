@@ -1,9 +1,6 @@
 {include file='common/header.tpl'}
 
 {if $EMAIL}
-    {foreach $ERROR_MESSAGES as $error}
-        <p>{$error}</p>
-    {/foreach}
     <form id="formprocedure" method="post" action="{$BASE_URL}actions/procedures/editprocedure.php">
         <input type="hidden" id="idProcedure" name="idprocedure" value="{$PROCEDURE.idprocedure}"/>
         <span class="errorMessagePrivate" id="errorMessageNamePrivate"></span>

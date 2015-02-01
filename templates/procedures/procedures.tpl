@@ -1,96 +1,134 @@
 {include file='common/header.tpl'}
 
-<style>
-    .procedurePendente {
-        background-color: red;
-    }
-
-    .procedureRecebi {
-        background-color: yellow;
-    }
-
-    .procedurePaguei {
-        background-color: green;
-    }
-</style>
-
 {if $EMAIL}
-    <h1>Dr. {$NAME},</h1>
-    <h2>Tem {$OPENPROCEDURES.number} registos por concluir.</h2>
-    <p><a href="{$BASE_URL}pages/procedures/addprocedure.php">Adicionar Registo</a></p>
-    <table class="procedureTable" border="1">
-        <tr>
-            <th>Data</th>
-            <th>Estado</th>
-            <th>Organização</th>
-            <th>Pagador</th>
-            <th>Cirurgias</th>
-            <th>Função</th>
-            <th>Valor</th>
-            <th>Partilhar</th>
-            <th>Detalhes</th>
-            <th>Apagar</th>
-        </tr>
-
-        {foreach $PROCEDURES as $procedure}
-            <tr class="procedure{$procedure.paymentstatus}">
-                <td>{$procedure.date}</td>
-                <td>{$procedure.paymentstatus}</td>
-                <td>
-                    {if $procedure.idorganization}
-                        <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
-                            {$procedure.organizationName}
-                        </a>
-                    {/if}
-                </td>
-                <td><a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a></td>
-                <td>
-                    {foreach $procedure.subprocedures as $subprocedure}
-                        {$subprocedure.quantity}x {$subprocedure.name}
-                        <br>
-                    {/foreach}
-                </td>
-                <td>
-                    {if $procedure.role == 'General'}
-                        Cirurgião Principal
-                    {elseif $procedure.role == 'FirstAssistant'}
-                        Primeiro Assitente
-                    {elseif $procedure.role == 'SecondAssistant'}
-                        Segundo Assistente
-                    {elseif $procedure.role == 'Anesthetist'}
-                        Anestesista
-                    {elseif $procedure.role == 'Instrumentist'}
-                        Instrumentista
-                    {/if}
-                </td>
-                <td>
-                    Pessoal: {$procedure.personalremun}&euro;<br>
-                    Total: {$procedure.totalremun}&euro;
-                </td>
-                <td>
-                    {if !$procedure.readonly}
-                        <form action="{$BASE_URL}actions/procedures/shareprocedure.php" method="post">
-                            <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
-                            <button type="submit">Partilhar</button>
-                        </form>
-                    {/if}
-                </td>
-                <td>
-                    <form action="{$BASE_URL}pages/procedures/procedure.php" method="get">
-                        <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
-                        <button type="submit">Ver</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{$BASE_URL}actions/procedures/deleteprocedure.php" method="post">
-                        <input type="hidden" value="{$procedure.idprocedure}" name="idprocedure">
-                        <button type="submit">X</button>
-                    </form>
-                </td>
-            </tr>
-        {/foreach}
-
-    </table>
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <div class="container">
+            <!-- start: PAGE HEADER -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- start: PAGE TITLE & BREADCRUMB -->
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="clip-grid-6 active"></i>
+                            <a href="#"> Procedimentos </a>
+                        </li>
+                    </ol>
+                    <div class="page-header">
+                        <h1>Registo de procedimentos</h1>
+                    </div>
+                    <!-- end: PAGE TITLE & BREADCRUMB -->
+                </div>
+            </div>
+            <!-- end: PAGE HEADER -->
+            <!-- start: PAGE CONTENT -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- start: BASIC TABLE PANEL -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table class="table table-hover" id="sample-table-1">
+                                <thead>
+                                <tr>
+                                    <th class="center">Data</th>
+                                    <th class="center">Estado</th>
+                                    <th class="center hidden-xs">Organização</th>
+                                    <th class="center">Responsável</th>
+                                    <th class="center hidden-xs">Cirurgias</th>
+                                    <th class="center hidden-xs">Função</th>
+                                    <th class="center">Valor</th>
+                                    <th class="center"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $PROCEDURES as $procedure}
+                                    <tr>
+                                        <td>{$procedure.date}</td>
+                                        <td class="center">{$procedure.paymentstatus}</td>
+                                        <td class="center hidden-xs">
+                                            {if $procedure.idorganization}
+                                                <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
+                                                    {$procedure.organizationName}
+                                                </a>
+                                            {/if}
+                                        </td>
+                                        <td class="center">
+                                            <a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a>
+                                        </td>
+                                        <td class="center hidden-xs">
+                                            {foreach $procedure.subprocedures as $subprocedure}
+                                                {$subprocedure.quantity}x {$subprocedure.name};
+                                            {/foreach}
+                                        </td>
+                                        <td class="center hidden-xs">
+                                            {if $procedure.role == 'General'}
+                                                Cirurgião Principal
+                                            {elseif $procedure.role == 'FirstAssistant'}
+                                                Primeiro Assitente
+                                            {elseif $procedure.role == 'SecondAssistant'}
+                                                Segundo Assistente
+                                            {elseif $procedure.role == 'Anesthetist'}
+                                                Anestesista
+                                            {elseif $procedure.role == 'Instrumentist'}
+                                                Instrumentista
+                                            {/if}
+                                        </td>
+                                        <td class="center">Pessoal: {$procedure.personalremun}€; Total: {$procedure.totalremun}€</td>
+                                        <td class="center">
+                                            <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                                <a href="/med/actions/procedures/shareprocedure.php"
+                                                   class="btn btn-xs btn-blue tooltips" data-placement="top"
+                                                   data-original-title="Share"><i class="fa fa-share"></i></a>
+                                                <a href="/med/actions/procedures/editprocedure.php"
+                                                   class="btn btn-xs btn-blue tooltips" data-placement="top"
+                                                   data-original-title="Edit"><i class="fa fa-edit"></i></a>
+                                                <a href="/med/actions/procedures/deleteprocedure.php"
+                                                   class="btn btn-xs btn-bricky tooltips" data-placement="top"
+                                                   data-original-title="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                                            </div>
+                                            <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                                <div class="btn-group">
+                                                    <a class="btn btn-primary dropdown-toggle btn-sm"
+                                                       data-toggle="dropdown" href="#">
+                                                        <i class="fa fa-cog"></i> <span class="caret"></span>
+                                                    </a>
+                                                    <ul role="menu" class="dropdown-menu pull-right">
+                                                        <li role="presentation">
+                                                            <a role="menuitem" tabindex="-1"
+                                                               href="/med/actions/procedures/shareprocedure.php">
+                                                                <i class="fa fa-share"></i> Partilhar
+                                                            </a>
+                                                        </li>
+                                                        <li role="presentation">
+                                                            <a role="menuitem" tabindex="-1"
+                                                               href="/med/actions/procedures/editprocedure.php">
+                                                                <i class="fa fa-edit"></i> Editar
+                                                            </a>
+                                                        </li>
+                                                        <li role="presentation">
+                                                            <a role="menuitem" tabindex="-1"
+                                                               href="/med/actions/procedures/deleteprocedure.php">
+                                                                <i class="fa fa-times"></i> Eliminar
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- end: BASIC TABLE PANEL -->
+                </div>
+            </div>
+            <!-- end: PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- end: PAGE -->
+    <span style="display: none" id="activeTab">procedures</span>
 {else}
     <p>Tem que fazer login!</p>
 {/if}

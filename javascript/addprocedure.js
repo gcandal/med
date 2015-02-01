@@ -49,7 +49,8 @@ var enableField = function (field, disable) {
 $(document).ready(function () {
     updatePayerVisibility();
 
-    $('#addSubProcedure').click(function () {
+    $('#addSubProcedure').click(function (e) {
+        e.preventDefault();
         addSubProcedure();
     });
 
@@ -103,15 +104,13 @@ $(document).ready(function () {
     const subProcedures = $("#subProcedures");
     subProcedures.on('change', '.subProcedure', function () {
         updateRemunerations();
-        $($(this).siblings()[0]).val($(this).find(":selected").text());
-        $($(this).siblings()[1]).val(subProceduresList[$(this).val() - 1].k);
-        $($(this).siblings()[2]).val(subProceduresList[$(this).val() - 1].c);
-        $($(this).siblings()[3]).val(subProceduresList[$(this).val() - 1].code);
+
+        fillSubProcedure($(this));
     });
 
     subProcedures.on('click', '.removeSubProcedureButton', function (e) {
         e.preventDefault();
-        removeSubProcedure($(this).parent().attr("id").split("subProcedure")[1]);
+        removeSubProcedure($(this).parent().parent().parent().attr("id").split("subProcedure")[1]);
     });
 
     valuePerK.bind("paste drop input change cut", function () {
@@ -162,7 +161,7 @@ $(document).ready(function () {
 
         updateRemunerations();
     }
-
+/*
     $.ajax({
         url: baseUrl + "actions/professionals/getrecentprofessionals.php",
         dataType: "json",
@@ -195,6 +194,7 @@ $(document).ready(function () {
             console.log(c);
         }
     });
+    */
 });
 
 var previousRole = '';
@@ -220,6 +220,13 @@ var fillProfessionalRow = function (roleName) {
     previousRole = roleName;
 };
 
+var fillSubProcedure = function(selectField) {
+    selectField.siblings().eq(4).children().children().last().val(selectField.find(":selected").text());
+    selectField.siblings().eq(2).children().children().last().val(subProceduresList[selectField.val() - 1].k);
+    selectField.siblings().eq(3).children().children().last().val(subProceduresList[selectField.val() - 1].c);
+    selectField.siblings().eq(1).children().children().last().val(subProceduresList[selectField.val() - 1].code);
+};
+
 var disableAnesthetistRow = function(disable) {
     if(disable) {
         anesthetistName.val("");
@@ -240,6 +247,7 @@ var addSubProcedure = function () {
     nSubProcedures.val(++subProcedures);
     $(subProcedureTemplate({number: subProcedures, type: getSubProcedureTypes()}))
         .fadeIn('slow').appendTo('#subProcedures');
+    $(".subProcedure").hide();
 
     updateRemunerations();
 };
@@ -296,6 +304,9 @@ var disablePatientForm = function (disable) {
 
 var disablePatientValidations = function (disable) {
     if (disable) {
+        errorMessageNifPatient.parent().hide();
+        errorMessageNamePatient.parent().hide();
+        errorMessageCellphonePatient.parent().hide();
         errorMessageNifPatient.text("");
         errorMessageNamePatient.text("");
         errorMessageCellphonePatient.text("");
@@ -644,7 +655,9 @@ $(document).on("focus", ".subProcedureName:not(.ui-autocomplete-input)", functio
         source: subProceduresList,
         select: function (event, ui) {
             if (ui.item) {
-                $(this).siblings().first().val(ui.item.id);
+                var selectField = $(this).parent().parent().siblings().eq(1);
+                selectField.val(ui.item.id);
+                fillSubProcedure(selectField);
             }
         }
     });
@@ -657,7 +670,9 @@ $(document).on("focus", ".subProcedureName:not(.ui-autocomplete-input)", functio
         },
         select: function (event, ui) {
             if (ui.item) {
-                $(this).siblings().first().val(ui.item.id);
+                var selectField = $(this).parent().parent().siblings().eq(1);
+                selectField.val(ui.item.id);
+                fillSubProcedure(selectField);
             }
         }
     });

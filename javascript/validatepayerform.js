@@ -109,6 +109,7 @@ var checkValidDate = function () {
 var isInvalidPayer = function (field, errorText, errorField) {
     field.css('border', '1px solid red');
     errorField.text(errorText);
+    updateFormVisibility();
 
     checkSubmitButton();
 };
@@ -116,6 +117,8 @@ var isInvalidPayer = function (field, errorText, errorField) {
 var isValidPayer = function (field, errorField) {
     field.css('border', '1px solid green');
     errorField.text("");
+    errorField.parent().hide();
+
 
     checkSubmitButton();
 };

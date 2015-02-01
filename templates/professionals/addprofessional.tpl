@@ -1,51 +1,175 @@
 {include file='common/header.tpl'}
 
 {if $EMAIL}
-    {foreach $ERROR_MESSAGES as $error}
-        <p>{$error}</p>
-    {/foreach}
-    <span class="errorMessage" id="errorMessageNameProfessional"></span>
-    <span class="errorMessage" id="errorMessageNifProfessional"></span>
-    <span class="errorMessage" id="errorMessageLicenseIdProfessional"></span>
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <div class="container">
+            <!-- start: PAGE HEADER -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- start: PAGE TITLE & BREADCRUMB -->
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="clip-grid-6 active"></i>
+                            <a href="#"> Equipa </a>
+                        </li>
+                    </ol>
+                    <div class="page-header">
+                        <h1>Adicionar profissional</h1>
+                    </div>
+                    <!-- end: PAGE TITLE & BREADCRUMB -->
+                </div>
+            </div>
+            <!-- end: PAGE HEADER -->
+            <!-- start: PAGE CONTENT -->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- start: FORM VALIDATION 1 PANEL -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-file-text-o"></i>
+                            Formulário de profissionais
+                        </div>
+                        <div class="panel-body">
+                            <h2><i class="fa fa-pencil-square teal"></i> Registo de profissionais</h2>
+                            <hr>
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span id="errorMessageNameProfessional" class="errorMessage"></span>
+                            </div>
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span id="errorMessageNifProfessional" class="errorMessage"></span>
+                            </div>
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span id="errorMessageLicenseIdProfessional" class="errorMessage"></span>
+                            </div>
+                            <form action="{$BASE_URL}actions/professionals/addprofessional.php" role="form" id="form" novalidate="novalidate" method="post">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="errorHandler alert alert-danger no-display">
+                                            <i class="fa fa-times-sign"></i> Ocorreu um erro. Por favor verifique o formulário.
+                                        </div>
+                                        <div class="successHandler alert alert-success no-display">
+                                            <i class="fa fa-ok"></i> Profissional registado com sucesso
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Nome <span class="symbol required"></span>
+                                            </label>
+                                            <input type="text" placeholder="Nome" class="form-control professionalName" name="name" value required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Função
+                                            </label>
+                                            <select id="professionalType" class="form-control">
+                                                <option value="Assistant">Assistente</option>
+                                                <option value="Instrumentist">Instrumentista</option>
+                                                <option value="Anesthetist">Anestesista</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Cédula
+                                            </label>
+                                            <input type="text" placeholder="Cédula profissional" class="form-control professionalLicenseId" name="licenseId">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                NIF
+                                            </label>
+                                            <input type="text" placeholder="NIF" class="form-control professionalNif" name="nif">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Especialidade
+                                            </label>
+                                            <select name="speciality" id="specialityId" class="form-control">
+                                                <option value="3">Nenhuma</option>
+                                                <option value="1">Anestesiologia</option>
+                                                <option value="2">Enfermagem</option>
+                                                <option value="4">Anatomia Patológica</option>
+                                                <option value="5">Angiologia e Cirurgia Vascular</option>
+                                                <option value="6">Cardiologia</option>
+                                                <option value="7">Cardiologia Pediátrica</option>
+                                                <option value="8">Cirurgia Cardiotorácica</option>
+                                                <option value="9">Cirurgia Geral</option>
+                                                <option value="10">Cirurgia Maxilo-Facial</option>
+                                                <option value="11">Cirurgia Pediátrica</option>
+                                                <option value="12">Cirurgia Plástica Reconstrutiva e Estética</option>
+                                                <option value="13">Dermato-Venereologia</option>
+                                                <option value="14">Doenças Infecciosas</option>
+                                                <option value="15">Endocrinologia e Nutrição</option>
+                                                <option value="16">Estomatologia</option>
+                                                <option value="17">Gastrenterologia</option>
+                                                <option value="18">Genética Médica</option>
+                                                <option value="19">Ginecologia/Obstetrícia</option>
+                                                <option value="20">Imunoalergologia</option>
+                                                <option value="21">Imunohemoterapia</option>
+                                                <option value="22">Farmacologia Clínica</option>
+                                                <option value="23">Hematologia Clínica</option>
+                                                <option value="24">Medicina Desportiva</option>
+                                                <option value="25">Medicina do Trabalho</option>
+                                                <option value="26">Medicina Física e de Reabilitação</option>
+                                                <option value="27">Medicina Geral e Familiar</option>
+                                                <option value="28">Medicina Interna</option>
+                                                <option value="29">Medicina Legal</option>
+                                                <option value="30">Medicina Nuclear</option>
+                                                <option value="31">Medicina Tropical</option>
+                                                <option value="32">Nefrologia</option>
+                                                <option value="33">Neurocirurgia</option>
+                                                <option value="34">Neurologia</option>
+                                                <option value="35">Neurorradiologia</option>
+                                                <option value="36">Oftalmologia</option>
+                                                <option value="37">Oncologia Médica</option>
+                                                <option value="38">Ortopedia</option>
+                                                <option value="39">Otorrinolaringologia</option>
+                                                <option value="40">Patologia Clínica</option>
+                                                <option value="41">Pediatria</option>
+                                                <option value="42">Pneumologia</option>
+                                                <option value="43">Psiquiatria</option>
+                                                <option value="44">Psiquiatria da Infância e da Adolescência</option>
+                                                <option value="45">Radiologia</option>
+                                                <option value="46">Radioncologia</option>
+                                                <option value="47">Reumatologia</option>
+                                                <option value="48">Saúde Pública</option>
+                                                <option value="49">Urologia</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div>
+                                            <span class="symbol required"></span>Campos obrigatórios
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button class="btn btn-blue btn-block" type="submit" id="submitButton">
+                                            Registar <i class="fa fa-arrow-circle-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- end: FORM VALIDATION 1 PANEL -->
+                </div>
+            </div>
+            <!-- end: PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- end: PAGE -->
 
-    <form action="{$BASE_URL}actions/professionals/addprofessional.php" method="POST">
-        <label>
-            Nome:
-            <input type="text" name="name" class="professionalName" value="{$FORM_VALUES.name}"/>
-        </label>
 
-        <label>
-            Função:
-            <select id="professionalType">
-                <option value="Assistant">Assistente</option>
-                <option value="Instrumentist">Instrumentista</option>
-                <option value="Anesthetist">Anestesista</option>
-            </select>
-        </label>
-
-        <label>
-            Cédula:
-            <input type="text" name="licenseId" class="professionalLicenseId" value="{$FORM_VALUES.licenseId}"/>
-        </label>
-
-        <label>
-            NIF:
-            <input type="text" name="nif" class="professionalNif" value="{$FORM_VALUES.nif}"/>
-        </label>
-
-        <label id="specialityLabel">
-            Especialidade:
-            <select name="speciality" id="specialityId">
-                <option value="3">Nenhuma</option>
-                {foreach $SPECIALITIES as $speciality}
-                    <option value="{$speciality.idspeciality}">{$speciality.name}</option>
-                {/foreach}
-            </select>
-        </label>
-
-        <button type="submit" id="submitButton">Adicionar</button>
-    </form>
-
+    <span style="display: none" id="activeTab">addprofessional</span>
     {if $FORM_VALUES.type}
         <script>
             $("select#professionalType").val("{$FORM_VALUES.type}");

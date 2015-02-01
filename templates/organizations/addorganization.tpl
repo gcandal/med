@@ -1,25 +1,54 @@
 {include file='common/header.tpl'}
 
 {if $EMAIL}
-    {foreach $ERROR_MESSAGES as $error}
-        <p>{$error}</p>
-    {/foreach}
-    <span id="errorMessage"></span>
-    <form method="post" action="{$BASE_URL}actions/organizations/addorganization.php">
-        <label>
-            Nome:
-            <input type="text" id="name" name="name" placeholder="Nome" value="{$FORM_VALUES.name}" required
-                   maxlength="40" />
-            <span>{$FIELD_ERRORS.name}</span>
-        </label>
-        <button type="submit" id="submitButton">Adicionar</button>
-    </form>
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <div class="container">
+            <!-- start: PAGE HEADER -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- start: PAGE TITLE & BREADCRUMB -->
+                    <ol class="breadcrumb">
+                        <li>
+                            <i class="clip-grid-6 active"></i>
+                            <a href="#"> Organizações </a>
+                        </li>
+                    </ol>
+                    <div class="page-header">
+                        <h1>Nova Organização</h1>
+                    </div>
+                    <!-- end: PAGE TITLE & BREADCRUMB -->
+                </div>
+            </div>
+            <!-- end: PAGE HEADER -->
+            <!-- start: PAGE CONTENT -->
+            <div class="row">
+                <div class="col-sm-4 pull-left">
+                    <h3>Criar nova organização</h3>
+
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span id="errorMessage"></span>
+                    </div>
+                    <form action="{$BASE_URL}actions/organizations/addorganization.php" class="form-register"method="post">
+                        <input class="form-control" type="text" id="name" name="name" placeholder="Nome" value="" min="0" required="" >
+                        <button type="submit" class="btn btn-blue pull-right" id="submitButton" disabled="disabled">Adicionar</button>
+                    </form>
+                </div>
+            </div>
+            <!-- end: PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- end: PAGE -->
+
+    <span style="display: none" id="activeTab">addorganization</span>
+    <script type="text/javascript">
+        var baseUrl = {$BASE_URL};
+        var isEdit = false;
+    </script>
+    <script src="{$BASE_URL}javascript/validateorganizationform.js"></script>
 {else}
     <p>Tem que fazer login!</p>
 {/if}
-<script type="text/javascript">
-    var baseUrl = {$BASE_URL};
-    var isEdit = false;
-</script>
-<script src="{$BASE_URL}javascript/validateorganizationform.js"></script>
+
 {include file='common/footer.tpl'}

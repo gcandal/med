@@ -3,9 +3,6 @@
 {if $EMAIL}
     <p>Já está registado!</p>
 {else}
-    {foreach $ERROR_MESSAGES as $error}
-        <p>{$error}</p>
-    {/foreach}
     <span id="userNameError"></span>
     <span id="emailError"></span>
     <span id="licenseIdError"></span>

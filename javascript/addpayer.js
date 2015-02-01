@@ -24,36 +24,45 @@ var updateFormVisibility = function () {
         case 'NewPrivate':
             errorMessageName = errorMessageNamePrivate;
             errorMessageNif = errorMessageNifPrivate;
+            checkSubmitButton();
             formEntidade.hide();
-            errorMessageNifEntity.hide();
-            errorMessageNameEntity.hide();
-            errorMessageDate.hide();
-            errorMessageNifPrivate.show();
-            errorMessageNamePrivate.show();
+
+            errorMessageNifEntity.parent().hide();
+            errorMessageNameEntity.parent().hide();
+            errorMessageDate.parent().hide();
+            showIfHasText(errorMessageNifPrivate);
+            showIfHasText(errorMessageNamePrivate);
             formPrivado.show();
             break;
         case 'NewEntity':
             errorMessageName = errorMessageNameEntity;
             errorMessageNif = errorMessageNifEntity;
+            checkSubmitButton();
             formPrivado.hide();
             formEntidade.show();
-            errorMessageNifEntity.show();
-            errorMessageNameEntity.show();
-            errorMessageDate.show();
-            errorMessageNifPrivate.hide();
-            errorMessageNamePrivate.hide();
 
-            if($("#entityType option:selected").text() === 'Hospital')
+            errorMessageNamePrivate.parent().hide();
+            errorMessageNifPrivate.parent().hide();
+            showIfHasText(errorMessageNifEntity);
+            showIfHasText(errorMessageNameEntity);
+            showIfHasText(errorMessageDate);
+
+            if ($("#entityType option:selected").text() === 'Hospital')
                 entityTypeInput.val("Hospital");
             else
                 entityTypeInput.val("Insurance");
             break;
         default:
-            errorMessageNifEntity.hide();
-            errorMessageNameEntity.hide();
-            errorMessageDate.hide();
-            errorMessageNifPrivate.hide();
-            errorMessageNamePrivate.hide();
+            errorMessageNifEntity.parent().hide();
+            errorMessageNameEntity.parent().hide();
+            errorMessageDate.parent().hide();
+            errorMessageNifPrivate.parent().hide();
+            errorMessageNamePrivate.parent().hide();
             break;
     }
+};
+
+var showIfHasText = function (field) {
+    if (field.text() !== "")
+        field.parent().show();
 };

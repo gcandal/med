@@ -29,4 +29,3 @@ if ($_POST['idinvitingaccount'] && $_POST['idorganization'] && $_POST['orgauthor
 }
 
 header("Location: $BASE_URL" . 'pages/organizations/invites.php');
-?>

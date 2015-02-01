@@ -26,7 +26,7 @@ $(document).ready(function () {
     isValid(nifProfessional, errorMessageNifProfessional);
     isValid(licenseIdProfessional, errorMessageLicenseIdProfessional);
 
-    if (method !== "addProfessional" && method !== "editProfessional") {
+    if (method !== "addProfessional") {
         isValid(nameProfessional, errorMessageNameProfessional);
     }
     else {
@@ -72,6 +72,7 @@ var checkValidLicenseIdProfessional = function () {
 var isInvalid = function (field, errorText, errorField) {
     field.css('border', '1px solid red');
     errorField.text(errorText);
+    errorField.parent().show();
 
     checkSubmitButton();
 
@@ -81,6 +82,7 @@ var isInvalid = function (field, errorText, errorField) {
 var isValid = function (field, errorField) {
     field.css('border', '1px solid green');
     errorField.text("");
+    errorField.parent().hide();
 
     checkSubmitButton();
 

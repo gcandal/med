@@ -6605,7 +6605,9 @@ INSERT INTO Account VALUES (DEFAULT, 'b', 'b@b.pt',
                             '6b9f904771f21b6d9d017582d9a001c41eef2dd5128ff80fd1985d8f1f2e62fe5e23b4e77c16adea3e86eaf8353acc55e93f982419c9f87356e3a805ef7fae16',
                             'beb281b875e9c11fb6f8290fb7952e6da45dcd50f903299b374c6d8c816eca7dfa66c9d2b70bd3900a0b9c666eaf656505739c370ca2f2a788c33e1ff16a4736',
                             '987654321',
-                            DEFAULT);
+                            DEFAULT,
+                            CURRENT_DATE + INTERVAL '1 year',
+                            -1);
 
 INSERT INTO Account VALUES (DEFAULT, 'c', 'c@c.pt',
                             'b13188a1fb01f1b9c41e9229dacf2c030d6ea18bd14c0d462dc488e5bbe7fb28d7a33ac16a8bc5989ea7e1af2d4a0476cfeea2b3e4c82253cd70e42688e60988',

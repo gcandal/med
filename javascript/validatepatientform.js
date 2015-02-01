@@ -7,14 +7,13 @@ if (typeof namePatient === 'undefined')
     var namePatient = $('#namePatient');
 if (typeof cellphonePatient === 'undefined')
     var cellphonePatient = $('#cellphonePatient');
-if (typeof submitButton === 'undefined')
+if (typeof submitButton === 'undefined') {
     var submitButton = $("#submitButton");
-if (typeof submitButton === 'undefined')
     var errorMessageNifPatient = $("#errorMessageNifPatient");
-if (typeof submitButton === 'undefined')
     var errorMessageNamePatient = $("#errorMessageNamePatient");
-if (typeof submitButton === 'undefined')
     var errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
+}
+
 
 if (typeof checkSubmitButton === 'undefined') {
     var noErrorMessages = function () {
@@ -90,6 +89,7 @@ var checkValidCellphone = function (field) {
 var isInvalidPatient = function (field, errorText, errorField) {
     field.css('border', '1px solid red');
     errorField.text(errorText);
+    errorField.parent().show();
 
     checkSubmitButton();
 };
@@ -97,6 +97,7 @@ var isInvalidPatient = function (field, errorText, errorField) {
 var isValidPatient = function (field, errorField) {
     field.css('border', '1px solid green');
     errorField.text("");
+    errorField.parent().hide();
 
     checkSubmitButton();
 };

@@ -33,6 +33,7 @@ var isInvalid = function(errorText) {
     submitButton.attr("disabled", true);
     organizationName.css('border', '1px solid red');
     errorMessage.text(errorText);
+    errorMessage.parent().show();
 
     return false;
 };
@@ -41,6 +42,7 @@ var isValid = function() {
     submitButton.attr("disabled", false);
     organizationName.css('border', '1px solid green');
     errorMessage.text("");
+    errorMessage.parent().hide();
 
     return true;
 };

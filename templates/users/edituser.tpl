@@ -3,9 +3,6 @@
 {if !$EMAIL}
     <p>Tem que fazer login.</p>
 {else}
-    {foreach $ERROR_MESSAGES as $error}
-        <p>{$error}</p>
-    {/foreach}
     <span id="emailError"></span>
     <span id="licenseIdError"></span>
     <span id="passwordError"></span>

@@ -27,4 +27,3 @@ if ($_POST['licenseidinvited'] && $_POST['idorganization']) {
 $_SESSION['success_messages'][] = 'Convite apagado com sucesso';
 
 header("Location: $BASE_URL" . 'pages/organizations/invites.php');
-?>
