@@ -83,7 +83,7 @@ var checkValidLicenseId = function () {
 var isInvalid = function (field, errorText, errorField) {
     field.css('border', '1px solid red');
     errorField.text(errorText);
-
+    errorField.parent().show();
     submitButton.attr("disabled", true);
 
     return false;
@@ -92,7 +92,7 @@ var isInvalid = function (field, errorText, errorField) {
 var isValid = function (field, errorField) {
     field.css('border', '1px solid green');
     errorField.text("");
-
+    errorField.parent().hide();
     submitButton.attr("disabled", false);
 
     return true;

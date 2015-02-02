@@ -59,6 +59,20 @@
 
                             <div class="row">
                                 <div class="col-md-6">
+                                    {if $FIELD_ERRORS.name}
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign"
+                                                  aria-hidden="true"></span>
+                                            <span>{$FIELD_ERRORS.name}</span>
+                                        </div>
+                                    {/if}
+                                    {if $FIELD_ERRORS.nif}
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign"
+                                                  aria-hidden="true"></span>
+                                            <span>{$FIELD_ERRORS.nif}</span>
+                                        </div>
+                                    {/if}
                                     <form id="formentidade" method="post"
                                           action="{$BASE_URL}actions/payers/editentitypayer.php">
                                         <input type="hidden" name="type" id="entityType" value="NewEntity" required/>
@@ -69,7 +83,8 @@
                                                 Nome
                                             </label>
 
-                                            <input type="text" name="name" id="nameEntity"  placeholder="{$entitypayer.name}"
+                                            <input type="text" name="name" id="nameEntity"
+                                                   placeholder="{$entitypayer.name}"
                                                    value="{$FORM_VALUES.name}"
                                                    maxlength="40" class="form-control"/>
                                             <span>{$FIELD_ERRORS.name}</span>
@@ -100,7 +115,8 @@
                                                 NIF
                                             </label>
 
-                                            <input type="number" min="0" name="nif" id="nifEntity" placeholder="{$entitypayer.nif}"
+                                            <input type="number" min="0" name="nif" id="nifEntity"
+                                                   placeholder="{$entitypayer.nif}"
                                                    value="{$FORM_VALUES.nif}" class="form-control"/>
                                             <span id="niferrorEntity">{$FIELD_ERRORS.nif}</span>
                                         </div>
@@ -110,8 +126,9 @@
                                             </label>
 
                                             <input type="number" min="0" step="0.01" name="valueperk"
-                                                   placeholder="{$entitypayer.valueperk}" value="{$FORM_VALUES.valueperk}"
-                                                   class="form-control" />
+                                                   placeholder="{$entitypayer.valueperk}"
+                                                   value="{$FORM_VALUES.valueperk}"
+                                                   class="form-control"/>
                                             <span>{$FIELD_ERRORS.valueperk}</span>
                                         </div>
 

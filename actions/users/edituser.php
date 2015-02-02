@@ -29,7 +29,7 @@
             $_SESSION['error_messages'][] = $e->getMessage();
         }
 
-        $_SESSION['field_errors']['oldpassword'] = 'Password inválida.';
+        $_SESSION['field_errors']['oldpassword'] = 'Password inválida.'.$password;
 
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;

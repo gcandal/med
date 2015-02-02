@@ -221,10 +221,10 @@ var fillProfessionalRow = function (roleName) {
 };
 
 var fillSubProcedure = function(selectField) {
-    selectField.siblings().eq(4).children().children().last().val(selectField.find(":selected").text());
-    selectField.siblings().eq(2).children().children().last().val(subProceduresList[selectField.val() - 1].k);
-    selectField.siblings().eq(3).children().children().last().val(subProceduresList[selectField.val() - 1].c);
-    selectField.siblings().eq(1).children().children().last().val(subProceduresList[selectField.val() - 1].code);
+    selectField.parent().parent().siblings().eq(3).children().children().last().val(selectField.find(":selected").text());
+    selectField.parent().parent().siblings().eq(1).children().children().last().val(subProceduresList[selectField.val() - 1].k);
+    selectField.parent().parent().siblings().eq(2).children().children().last().val(subProceduresList[selectField.val() - 1].c);
+    selectField.parent().parent().siblings().eq(0).children().children().last().val(subProceduresList[selectField.val() - 1].code);
 };
 
 var disableAnesthetistRow = function(disable) {
@@ -247,7 +247,7 @@ var addSubProcedure = function () {
     nSubProcedures.val(++subProcedures);
     $(subProcedureTemplate({number: subProcedures, type: getSubProcedureTypes()}))
         .fadeIn('slow').appendTo('#subProcedures');
-    $(".subProcedure").hide();
+    //$(".subProcedure").hide();
 
     updateRemunerations();
 };
@@ -296,6 +296,8 @@ var updatePatientInfo = function () {
 
             break;
     }
+
+    checkSubmitButton();
 };
 
 var disablePatientForm = function (disable) {
@@ -655,7 +657,7 @@ $(document).on("focus", ".subProcedureName:not(.ui-autocomplete-input)", functio
         source: subProceduresList,
         select: function (event, ui) {
             if (ui.item) {
-                var selectField = $(this).parent().parent().siblings().eq(1);
+                var selectField = $(this).parent().parent().siblings().eq(0).children().children();
                 selectField.val(ui.item.id);
                 fillSubProcedure(selectField);
             }
@@ -670,7 +672,7 @@ $(document).on("focus", ".subProcedureName:not(.ui-autocomplete-input)", functio
         },
         select: function (event, ui) {
             if (ui.item) {
-                var selectField = $(this).parent().parent().siblings().eq(1);
+                var selectField = $(this).parent().parent().siblings().eq(0).children().children();
                 selectField.val(ui.item.id);
                 fillSubProcedure(selectField);
             }

@@ -45,6 +45,20 @@
 
                             <div class="row">
                                 <div class="col-md-6">
+                                    {if $FIELD_ERRORS.name}
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign"
+                                                  aria-hidden="true"></span>
+                                            <span>{$FIELD_ERRORS.name}</span>
+                                        </div>
+                                    {/if}
+                                    {if $FIELD_ERRORS.nif}
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign"
+                                                  aria-hidden="true"></span>
+                                            <span>{$FIELD_ERRORS.nif}</span>
+                                        </div>
+                                    {/if}
                                     <form id="formprivado" method="post"
                                           action="{$BASE_URL}actions/payers/editprivatepayer.php">
                                         <input type="hidden" name="type" id="entityType" value="NewPrivate" required/>
@@ -56,8 +70,9 @@
                                                 Nome
                                             </label>
 
-                                            <input type="text" name="name" id="namePrivate" placeholder="{$privatepayer.name}"
-                                                   value="{$FORM_VALUES.name}"  class="form-control"
+                                            <input type="text" name="name" id="namePrivate"
+                                                   placeholder="{$privatepayer.name}"
+                                                   value="{$FORM_VALUES.name}" class="form-control"
                                                    maxlength="40"/>
                                             <span>{$FIELD_ERRORS.name}</span>
                                         </div>
@@ -78,7 +93,8 @@
                                                 K cirúrgico
                                             </label>
 
-                                            <input type="number" min="0" name="valueperk" placeholder="{$privatepayer.valueperk}"
+                                            <input type="number" min="0" name="valueperk"
+                                                   placeholder="{$privatepayer.valueperk}"
                                                    value="{$FORM_VALUES.valueperk}" class="form-control"/>
                                             <span>{$FIELD_ERRORS.valueperk}</span>
                                         </div>

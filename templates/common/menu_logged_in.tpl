@@ -166,11 +166,17 @@
                     </ul>
                 </li>
                 {foreach $SUCCESS_MESSAGES as $success}
-                    <li>{$success}</li>
+                    <div class="alert alert-success" role="alert">
+                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                        <span>{$success}</span>
+                    </div>
                 {/foreach}
 
                 {foreach $ERROR_MESSAGES as $error}
-                    <li>{$error}</li>
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span>{$error}</span>
+                    </div>
                 {/foreach}
             </ul>
             <!-- end: MAIN NAVIGATION MENU -->

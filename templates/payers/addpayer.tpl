@@ -66,6 +66,20 @@
                                             <option value="NewPrivate">Privado</option>
                                         </select>
                                     </div>
+                                    {if $FIELD_ERRORS.name}
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign"
+                                                  aria-hidden="true"></span>
+                                            <span>{$FIELD_ERRORS.name}</span>
+                                        </div>
+                                    {/if}
+                                    {if $FIELD_ERRORS.nif}
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign"
+                                                  aria-hidden="true"></span>
+                                            <span>{$FIELD_ERRORS.nif}</span>
+                                        </div>
+                                    {/if}
                                     <form id="formentidade" method="post"
                                           action="{$BASE_URL}actions/payers/addpayer.php">
                                         <input type="hidden" name="type" id="entityTypeInput" value="Insurance"

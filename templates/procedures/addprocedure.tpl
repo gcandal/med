@@ -74,7 +74,37 @@
                             <span id="errorMessageCellphonePatient" class="errorMessage"></span>
                         </div>
 
-                        <form action="{$BASE_URL}actions/professionals/addprofessional.php" role="form" id="form"
+                        {if $FIELD_ERRORS.name}
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span>{$FIELD_ERRORS.name}</span>
+                            </div>
+                        {/if}
+                        {if $FIELD_ERRORS.namePrivate}
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span>{$FIELD_ERRORS.namePrivate}</span>
+                            </div>
+                        {/if}
+                        {if $FIELD_ERRORS.nameEntity}
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span>{$FIELD_ERRORS.nameEntity}</span>
+                            </div>
+                        {/if}
+                        {if $FIELD_ERRORS.nifPrivate}
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span>{$FIELD_ERRORS.nifPrivate}</span>
+                            </div>
+                        {/if}
+                        {if $FIELD_ERRORS.nifEntity}
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span>{$FIELD_ERRORS.nifEntity}</span>
+                            </div>
+                        {/if}
+                        <form action="{$BASE_URL}actions/procedures/addprocedure.php" role="form" id="form"
                               novalidate="novalidate" method="post">
                             <div class="row">
                                 <div class="col-md-12">
@@ -86,7 +116,7 @@
                                         <i class="fa fa-ok"></i> Profissional registado com sucesso
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Data
@@ -94,7 +124,7 @@
                                         <input type="date" placeholder="DD/MM/AAAA" name="date" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Função
@@ -108,15 +138,28 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">
                                             Estado do pagamento
                                         </label>
-                                        <select name="status" class="form-control">
+                                        <select name="status" id="paymentStatus" class="form-control">
                                             <option value="Pendente">Pendente</option>
                                             <option value="Recebi">Recebi</option>
                                             <option value="Paguei">Paguei</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Organização
+                                        </label>
+                                        <select name="organization" id="idOrganization" class="form-control">
+                                            <option value="-1">Nenhuma</option>
+                                            {foreach $ORGANIZATIONS as $organization}
+                                                <option value="{$organization.idorganization}">{$organization.name}</option>
+                                            {/foreach}
                                         </select>
                                     </div>
                                 </div>
@@ -275,8 +318,7 @@
                                     <hr>
                                 </div>
                                 <div class="col-md-12">
-                                    <table class="table table-hover" id="sample-table-1">
-                                        <thead>
+                                    <table class="teamTable table table-hover">
                                         <tr>
                                             <th class="center">Nome</th>
                                             <th class="center hidden-xs">Função</th>
@@ -284,44 +326,103 @@
                                             <th class="center hidden-xs">% de K</th>
                                             <th class="center">Remuneração</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>José Silva</td>
-                                            <td class="center hidden-xs">Cirurgião</td>
-                                            <td class="center hidden-xs">123123</td>
-                                            <td class="center">30%</td>
-                                            <td class="center">120€</td>
+                                        <tr id="GeneralRow">
+                                            <td>
+                                                <input type="text" name="generalName" class="professionalName"
+                                                       id="generalName"
+                                                       value="{$FORM_VALUES.GENERALNAME}"/></td>
+                                            <td class="center hidden-xs">Cirurgião Principal</td>
+                                            <td class="center hidden-xs">
+                                                <input type="text" name="generaltLicenseId"
+                                                       class="professionalLicenseId"
+                                                       value="{$FORM_VALUES.GENERALLICENSEID}"/>
+                                            </td>
+                                            <td class="center" id="generalK">100%</td>
+                                            <td class="center">
+                                                <input type="text" name="generalRemun" id="generalRemun"
+                                                       style="background-color: lightgrey" value="0" readonly></td>
                                         </tr>
-                                        <tr>
-                                            <td>João Silva</td>
+                                        <tr id="FirstAssistantRow">
+                                            <td><input type="text" name="firstAssistantName" class="professionalName"
+                                                       id="firstAssistantName"
+                                                       value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
                                             <td class="center hidden-xs">1º Ajudante</td>
-                                            <td class="center hidden-xs">156123</td>
+                                            <td class="center hidden-xs"><input type="text"
+                                                                                name="firstAssistantLicenseId"
+                                                                                class="professionalLicenseId"
+                                                                                value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/>
+                                            </td>
                                             <td class="center">20%</td>
-                                            <td class="center">80€</td>
+                                            <td class="center"><input type="text" name="firstAssistantRemun"
+                                                                      id="firstAssistantRemun"
+                                                                      style="background-color: lightgrey" value="0" readonly></td>
                                         </tr>
-                                        <tr>
-                                            <td>Ana Silva</td>
+                                        <tr id="SecondAssistantRow">
+                                            <td><input type="text" name="secondAssistantName" class="professionalName"
+                                                       id="secondAssistantName"
+                                                       value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                                             <td class="center hidden-xs">2º Ajudante</td>
-                                            <td class="center hidden-xs">156623</td>
+                                            <td class="center hidden-xs"><input type="text"
+                                                                                name="secondAssistantLicenseId"
+                                                                                class="professionalLicenseId"
+                                                                                value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/>
+                                            </td>
                                             <td class="center">10%</td>
-                                            <td class="center">40€</td>
+                                            <td class="center"><input type="text" name="secondAssistantRemun"
+                                                                      id="secondAssistantRemun"
+                                                                      style="background-color: lightgrey" value="0" readonly></td>
                                         </tr>
-                                        <tr>
-                                            <td>Carlos Silva</td>
+                                        <tr id="InstrumentistRow">
+                                            <td><input type="text" name="instrumentistName" class="professionalName"
+                                                       id="instrumentistName"
+                                                       value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                                             <td class="center hidden-xs">Instrumentista</td>
-                                            <td class="center hidden-xs">887333</td>
+                                            <td class="center hidden-xs"><input type="text"
+                                                                                name="instrumentistAssistantLicenseId"
+                                                                                class="professionalLicenseId"
+                                                                                value="{$FORM_VALUES.INSTRUMENTISTLICENSEID}"/>
+                                            </td>
                                             <td class="center">10%</td>
-                                            <td class="center">40€</td>
+                                            <td class="center"><input type="text" name="instrumentistRemun"
+                                                                      id="instrumentistRemun"
+                                                                      style="background-color: lightgrey" value="0" readonly></td>
+                                        </tr>
+
+                                        <tr id="AnesthetistRow">
+                                            <td><input type="text" name="anesthetistName" class="professionalName"
+                                                       id="anesthetistName"
+                                                       value="{$FORM_VALUES.ANESTHETISTNAME}/></td>
+                                            <td class="center hidden-xs">Anestesista</td>
+                                            <td class="center hidden-xs"><input type="text"
+                                                                                name="anesthetistAssistantLicenseId"
+                                                                                class="professionalLicenseId"
+                                                                                value="{$FORM_VALUES.ANESTHETISTLICENSEID}/>
+                                            </td>
+                                            <td class="center">
+                                                <select id="anesthetistK" name="anesthetistK">
+                                                    <option value="25">25%</option>
+                                                    <option value="30">30%</option>
+                                                    <option value="table">Tabela OM</option>
+                                                </select>
+                                            </td>
+                                            <td class="center"><input type="text" name="anesthetistRemun"
+                                                                      id="anesthetistRemun"
+                                                                      style="background-color: lightgrey" value="0" readonly>
+                                            </td>
                                         </tr>
                                         <tr>
-                                            <td>António Silva</td>
-                                            <td class="center hidden-xs">Anestesista</td>
-                                            <td class="center hidden-xs">1872223</td>
-                                            <td class="center">30%</td>
-                                            <td class="center">120€</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="center">Total
+                                                <select name="totalType" id="totalType">
+                                                    <option value="auto">Por K</option>
+                                                    <option value="manual">Manual</option>
+                                                </select></td>
+                                            <td class="center"><input type="text" name="totalRemun" id="totalRemun"
+                                                                      style="background-color: lightgrey"
+                                                                      readonly value="0"></td>
                                         </tr>
-                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -348,9 +449,15 @@
         <script id="subProcedure-template" type="text/x-handlebars-template">
             {literal}
                 <div id="subProcedure{{number}}">
-                    <select name="subProcedure{{number}}" class="subProcedure" style="display: none">
-                        {{{type}}}
-                    </select>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">
+                            </label>
+                            <select name="subProcedure{{number}}" class="subProcedure form-control">
+                                {{{type}}}
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="col-md-6">
                         <div class="form-group">

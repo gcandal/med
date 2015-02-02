@@ -46,7 +46,12 @@
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                                 <span id="errorMessageCellphonePatient" class="errorMessage"></span>
                             </div>
-
+                            {if $FIELD_ERRORS.name}
+                                <div class="alert alert-danger" role="alert">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span>{$FIELD_ERRORS.name}</span>
+                                </div>
+                            {/if}
                             <form method="post" action="{$BASE_URL}actions/patients/addpatient.php" role="form" id="form">
                                 <div class="row">
                                     <div class="col-md-12">

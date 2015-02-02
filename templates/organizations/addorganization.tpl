@@ -30,9 +30,19 @@
                         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                         <span id="errorMessage"></span>
                     </div>
-                    <form action="{$BASE_URL}actions/organizations/addorganization.php" class="form-register"method="post">
-                        <input class="form-control" type="text" id="name" name="name" placeholder="Nome" value="" min="0" required="" >
-                        <button type="submit" class="btn btn-blue pull-right" id="submitButton" disabled="disabled">Adicionar</button>
+                    {if $FIELD_ERRORS.name}
+                        <div class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span>{$FIELD_ERRORS.name}</span>
+                        </div>
+                    {/if}
+                    <form action="{$BASE_URL}actions/organizations/addorganization.php" class="form-register"
+                          method="post">
+                        <input class="form-control" type="text" id="name" name="name" placeholder="Nome" value=""
+                               min="0" required="">
+                        <button type="submit" class="btn btn-blue pull-right" id="submitButton" disabled="disabled">
+                            Adicionar
+                        </button>
                     </form>
                 </div>
             </div>
@@ -40,7 +50,6 @@
         </div>
     </div>
     <!-- end: PAGE -->
-
     <span style="display: none" id="activeTab">addorganization</span>
     <script type="text/javascript">
         var baseUrl = {$BASE_URL};
