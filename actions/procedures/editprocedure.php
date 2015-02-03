@@ -3,6 +3,8 @@ include_once('../../config/init.php');
 include_once($BASE_DIR . 'database/procedures.php');
 include_once($BASE_DIR . 'database/professionals.php');
 include_once($BASE_DIR . 'database/payers.php');
+include_once($BASE_DIR . 'database/patients.php');
+
 
 if (!$_SESSION['email']) {
     $_SESSION['error_messages'][] = 'Tem que fazer login';
@@ -132,7 +134,7 @@ if (isset($_POST['idPatient'])) {
             $_SESSION['error_messages'][] = 'Alguns campos em falta';
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            header("Location: $BASE_URL" . 'pages/procedures/procedure.php?idprocedure='.$idProcedure);
             exit;
         }
 
@@ -146,11 +148,13 @@ if (isset($_POST['idPatient'])) {
 
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+            header("Location: $BASE_URL" . 'pages/procedures/procedure.php?idprocedure='.$idProcedure);
             exit;
         }
     } else $idpatient = $_POST['idPatient'];
-} else $idpatient = false;
+} else $idpatient = -1;
+
+//var_dump($idpatient); exit;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,6 +240,7 @@ try {
 
     $conn->commit();
 } catch (PDOException $e) {
+    //var_dump($_POST); exit;
     $_SESSION['error_messages'][] = 'Erro a editar registo ' . $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 

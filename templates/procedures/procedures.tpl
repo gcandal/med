@@ -76,40 +76,65 @@
                                         <td class="center">Pessoal: {$procedure.personalremun}€; Total: {$procedure.totalremun}€</td>
                                         <td class="center">
                                             <div class="visible-md visible-lg hidden-sm hidden-xs">
-                                                <a href="/med/actions/procedures/shareprocedure.php"
-                                                   class="btn btn-xs btn-blue tooltips" data-placement="top"
-                                                   data-original-title="Share"><i class="fa fa-share"></i></a>
-                                                <a href="/med/actions/procedures/editprocedure.php"
-                                                   class="btn btn-xs btn-blue tooltips" data-placement="top"
-                                                   data-original-title="Edit"><i class="fa fa-edit"></i></a>
-                                                <a href="/med/actions/procedures/deleteprocedure.php"
-                                                   class="btn btn-xs btn-bricky tooltips" data-placement="top"
-                                                   data-original-title="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                                                <form class="inlineForm"
+                                                      action="{$BASE_URL}pages/procedures/procedure.php">
+                                                    <input type="hidden" name="idprocedure"
+                                                           value="{$procedure.idprocedure}"/>
+                                                    <button type="submit" class="btn btn-xs btn-blue tooltips"
+                                                            data-placement="top"
+                                                            data-original-title="Editar">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </form>
+
+                                                <form class="inlineForm"
+                                                      action="{$BASE_URL}actions/procedures/deleteprocedure.php"
+                                                      method="post">
+                                                    <input type="hidden" name="idprocedure"
+                                                           value="{$procedure.idprocedure}"/>
+                                                    <button type="submit" class="btn btn-xs btn-bricky tooltips"
+                                                            data-placement="top"
+                                                            data-original-title="Remover">
+                                                        <i class="fa fa-times fa fa-white"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                             <div class="visible-xs visible-sm hidden-md hidden-lg">
                                                 <div class="btn-group">
                                                     <a class="btn btn-primary dropdown-toggle btn-sm"
-                                                       data-toggle="dropdown" href="#">
+                                                       data-toggle="dropdown"
+                                                       href="#">
                                                         <i class="fa fa-cog"></i> <span class="caret"></span>
                                                     </a>
                                                     <ul role="menu" class="dropdown-menu pull-right">
                                                         <li role="presentation">
-                                                            <a role="menuitem" tabindex="-1"
-                                                               href="/med/actions/procedures/shareprocedure.php">
-                                                                <i class="fa fa-share"></i> Partilhar
-                                                            </a>
+                                                            <form role="menuitem" tabindex="-1"
+                                                                  class="inlineForm"
+                                                                  action="{$BASE_URL}pages/procedures/procedure.php">
+                                                                <input type="hidden" name="idprocedure"
+                                                                       value="{$procedure.idprocedure}"/>
+                                                                <button type="submit"
+                                                                        class="btn btn-xs btn-blue tooltips"
+                                                                        data-placement="top"
+                                                                        data-original-title="Editar">
+                                                                    <i class="fa fa-edit"></i> Editar
+                                                                </button>
+                                                            </form>
                                                         </li>
                                                         <li role="presentation">
-                                                            <a role="menuitem" tabindex="-1"
-                                                               href="/med/actions/procedures/editprocedure.php">
-                                                                <i class="fa fa-edit"></i> Editar
-                                                            </a>
-                                                        </li>
-                                                        <li role="presentation">
-                                                            <a role="menuitem" tabindex="-1"
-                                                               href="/med/actions/procedures/deleteprocedure.php">
-                                                                <i class="fa fa-times"></i> Eliminar
-                                                            </a>
+                                                            <form role="menuitem" tabindex="-1"
+                                                                  class="inlineForm"
+                                                                  action="{$BASE_URL}actions/procedures/deleteprocedure.php"
+                                                                  method="post">
+                                                                <input type="hidden" name="idprocedure"
+                                                                       value="{$procedure.idprocedure}"/>
+                                                                <button type="submit"
+                                                                        class="btn btn-xs btn-bricky tooltips"
+                                                                        data-placement="top"
+                                                                        data-original-title="Remover">
+                                                                    <i class="fa fa-times fa fa-white"></i> Remover
+                                                                </button>
+                                                            </form>
                                                         </li>
                                                     </ul>
                                                 </div>

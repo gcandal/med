@@ -391,12 +391,12 @@
                                         <tr id="AnesthetistRow">
                                             <td><input type="text" name="anesthetistName" class="professionalName"
                                                        id="anesthetistName"
-                                                       value="{$FORM_VALUES.ANESTHETISTNAME}/></td>
+                                                       value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                                             <td class="center hidden-xs">Anestesista</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="anesthetistAssistantLicenseId"
                                                                                 class="professionalLicenseId"
-                                                                                value="{$FORM_VALUES.ANESTHETISTLICENSEID}/>
+                                                                                value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/>
                                             </td>
                                             <td class="center">
                                                 <select id="anesthetistK" name="anesthetistK">

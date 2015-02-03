@@ -104,10 +104,14 @@
                                 <span>{$FIELD_ERRORS.nifEntity}</span>
                             </div>
                         {/if}
-                        <form action="{$BASE_URL}actions/procedures/edit.php" role="form" id="form"
+                        <form action="{$BASE_URL}actions/procedures/editprocedure.php" role="form" id="form"
                               novalidate="novalidate" method="post">
                             <input type="hidden" id="idProcedure" name="idprocedure" value="{$PROCEDURE.idprocedure}"/>
-                            <input type="hidden" id="readOnly" name="readonly" value="{$PROCEDURE.readonly}"/>
+                            {if $PROCEDURE.readonly}
+                                <input type="hidden" id="readOnly" name="readonly" value="1"/>
+                            {else}
+                                <input type="hidden" id="readOnly" name="readonly" value="0"/>
+                            {/if}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="errorHandler alert alert-danger no-display">
@@ -176,7 +180,7 @@
                                         <label class="control-label">
                                             Escolha o paciente
                                         </label>
-                                        <select id="idPatient" class="form-control">
+                                        <select id="idPatient" name="idPatient" class="form-control">
                                             <option value="-2">Novo doente</option>
                                             <option value="-1">Nenhum</option>
                                             {foreach $PATIENTS as $patient}
