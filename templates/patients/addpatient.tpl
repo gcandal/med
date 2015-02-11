@@ -100,7 +100,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <button class="btn btn-blue btn-block" type="submit" id="submitButton">
-                                            Registar <i class="fa fa-arrow-circle-right"></i>
+                                            Registar <i class="fa fa-plus-square"></i>
                                         </button>
                                     </div>
                                 </div>

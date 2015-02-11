@@ -204,7 +204,7 @@
                                                 <div class="col-md-3">
                                                     <button id="submitButtonPrivate" class="btn btn-blue btn-block"
                                                             type="submit">
-                                                        Registar <i class="fa fa-arrow-circle-right"></i>
+                                                        Registar <i class="fa fa-plus-square"></i>
                                                     </button>
                                                 </div>
                                             </div>

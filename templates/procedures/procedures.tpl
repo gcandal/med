@@ -73,9 +73,22 @@
                                                 Instrumentista
                                             {/if}
                                         </td>
-                                        <td class="center">Pessoal: {$procedure.personalremun}€; Total: {$procedure.totalremun}€</td>
+                                        <td class="center">Pessoal: {$procedure.personalremun}€;
+                                            Total: {$procedure.totalremun}€
+                                        </td>
                                         <td class="center">
-                                            <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                            <div class="hidden-md hidden-lg hidden-sm hidden-xs">
+                                                <form class="inlineForm"
+                                                      action="{$BASE_URL}actions/procedures/shareprocedure.php">
+                                                    <input type="hidden" name="idprocedure"
+                                                           value="{$procedure.idprocedure}"/>
+                                                    <button type="submit" class="btn btn-xs btn-blue tooltips"
+                                                            data-placement="top"
+                                                            data-original-title="Partilhar">
+                                                        <i class="fa fa-share"></i>
+                                                    </button>
+                                                </form>
+
                                                 <form class="inlineForm"
                                                       action="{$BASE_URL}pages/procedures/procedure.php">
                                                     <input type="hidden" name="idprocedure"
@@ -99,7 +112,7 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                            <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                            <div class="visible-xs visible-sm visible-md visible-lg">
                                                 <div class="btn-group">
                                                     <a class="btn btn-primary dropdown-toggle btn-sm"
                                                        data-toggle="dropdown"
@@ -107,6 +120,20 @@
                                                         <i class="fa fa-cog"></i> <span class="caret"></span>
                                                     </a>
                                                     <ul role="menu" class="dropdown-menu pull-right">
+                                                        <li role="presentation">
+                                                            <form role="menuitem" tabindex="-1"
+                                                                  class="inlineForm"
+                                                                  action="{$BASE_URL}actions/procedures/shareprocedure.php">
+                                                                <input type="hidden" name="idprocedure"
+                                                                       value="{$procedure.idprocedure}"/>
+                                                                <button type="submit"
+                                                                        class="btn btn-xs btn-blue tooltips"
+                                                                        data-placement="top"
+                                                                        data-original-title="Editar">
+                                                                    <i class="fa fa-share"></i> Partilhar
+                                                                </button>
+                                                            </form>
+                                                        </li>
                                                         <li role="presentation">
                                                             <form role="menuitem" tabindex="-1"
                                                                   class="inlineForm"
