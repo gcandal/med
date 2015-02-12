@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<!--[if IE 8]><html class="ie8 no-js" lang="pt"><![endif]-->
-<!--[if IE 9]><html class="ie9 no-js" lang="pt"><![endif]-->
+<!--[if IE 8]>
+<html class="ie8 no-js" lang="pt"><![endif]-->
+<!--[if IE 9]>
+<html class="ie9 no-js" lang="pt"><![endif]-->
 <!--[if !IE]><!-->
 <html lang="pt" class="no-js">
 <!--<![endif]-->
@@ -9,7 +11,8 @@
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
 
     <meta charset="utf-8"/>
-    <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1"/><![endif]-->
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,9 +35,11 @@
 
     <style>
         form.inlineForm {
-          float: left;
-          padding: 3px;
-        };
+            float: left;
+            padding: 3px;
+        }
+
+        ;
     </style>
 
     <!--[if lt IE 9]>
@@ -46,9 +51,10 @@
     <script src="{$BASE_URL}assets/plugins/jquery-lib/2.0.3/jquery.min.js"></script>
     <!--<![endif]-->
 </head>
-<body>
 {if $EMAIL}
-    {include file='common/menu_logged_in.tpl'}
+<body>
+{include file='common/menu_logged_in.tpl'}
 {else}
-    {include file='common/menu_logged_out.tpl'}
+<body class="login">
+{include file='common/menu_logged_out.tpl'}
 {/if}

@@ -82,11 +82,11 @@ var Login = function () {
         form.validate({
             rules: {
                 username: {
-                    minlength: 2,
+                    minlength: 1,
                     required: true
                 },
                 password: {
-                    minlength: 6,
+                    minlength: 1,
                     required: true
                 }
             },
@@ -141,12 +141,12 @@ var Login = function () {
                     required: true
                 },
                 password: {
-                    minlength: 6,
+                    minlength: 1,
                     required: true
                 },
                 password_again: {
                     required: true,
-                    minlength: 5,
+                    minlength: 1,
                     equalTo: "#password"
                 },
                 agree: {

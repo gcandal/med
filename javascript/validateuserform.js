@@ -11,73 +11,79 @@ const errorMessagePassword = $('#passwordError');
 const errorMessageLicenseId = $('#licenseIdError');
 
 $(document).ready(function () {
+    userName.bind("paste drop input change cut", function () {
+        checkValidName($(this));
+    });
+    checkValidName(userName);
+    passwords.bind("paste drop input change cut", function () {
+        checkEqualPasswords();
+    });
     checkEqualPasswords();
-    checkValidName();
-    checkValidEmail();
-    checkValidLicenseId();
+    email.bind("paste drop input change cut", function () {
+        checkValidEmail($(this));
+    });
+    checkValidEmail(email);
+    licenseId.bind("paste drop input change cut", function () {
+        checkValidLicenseId($(this));
+    });
+    checkValidLicenseId(licenseId);
 
-    if (isEdit) {
-        isValid(passwords, errorMessagePassword);
-        isValid(userName, errorMessageUserName);
-        isValid(email, errorMessageEmail);
-        isValid(licenseId, errorMessageLicenseId);
-    }
-    else {
-        isInvalid(passwords, "Passwords são obrigatórias", errorMessagePassword);
-        isInvalid(userName, "Username é obrigatório", errorMessageUserName);
-        isInvalid(email, "Email é obrigatório", errorMessageEmail);
-        isInvalid(licenseId, "Cédula é obrigatório", errorMessageLicenseId);
-    }
+    /*
+     if (isEdit) {
+     isValid(passwords, errorMessagePassword);
+     isValid(userName, errorMessageUserName);
+     isValid(email, errorMessageEmail);
+     isValid(licenseId, errorMessageLicenseId);
+     }
+     else {
+     isInvalid(passwords, "Passwords são obrigatórias", errorMessagePassword);
+     isInvalid(userName, "Username é obrigatório", errorMessageUserName);
+     isInvalid(email, "Email é obrigatório", errorMessageEmail);
+     isInvalid(licenseId, "Cédula é obrigatório", errorMessageLicenseId);
+     }
+     */
 });
 
 var checkEqualPasswords = function () {
-    passwords.bind("paste drop input change cut", function () {
-        var textpassword1 = password1.val();
-        var textpassword2 = password2.val();
+    var textpassword1 = password1.val();
+    var textpassword2 = password2.val();
 
-        if (textpassword1 !== textpassword2)
-            return isInvalid(passwords, "Passwords não coincidem", errorMessagePassword);
+    if (textpassword1 !== textpassword2)
+        return isInvalid(passwords, "Passwords não coincidem", errorMessagePassword);
 
-        if (!isEdit && textpassword1.length == 0 && textpassword2.length == 0)
-            return isInvalid(passwords, "Passwords são obrigatórias", errorMessagePassword);
+    if (!isEdit && textpassword1.length == 0 && textpassword2.length == 0)
+        return isInvalid(passwords, "Passwords são obrigatórias", errorMessagePassword);
 
-        return isValid(passwords, errorMessagePassword);
-    });
+    return isValid(passwords, errorMessagePassword);
 };
 
-var checkValidName = function () {
-    userName.bind("paste drop input change cut", function () {
-        var textUserName = userName.val();
+var checkValidName = function (field) {
+    var textUserName = userName.val();
 
-        if (!isEdit && textUserName.length == 0)
-            return isInvalid($(this), "Username é obrigatório", errorMessageUserName);
+    if (!isEdit && textUserName.length == 0)
+        return isInvalid(field, "Username é obrigatório", errorMessageUserName);
 
-        return isValid($(this), errorMessageUserName);
-    });
+    return isValid(field, errorMessageUserName);
 };
 
-var checkValidEmail = function () {
-    email.bind("paste drop input change cut", function () {
-        var textEmail = email.val();
+var checkValidEmail = function (field) {
+    var textEmail = email.val();
 
-        if (!isEdit && textEmail.length == 0)
-            return isInvalid($(this), "Email é obrigatório", errorMessageEmail);
+    if (!isEdit && textEmail.length == 0)
+        return isInvalid(field, "Email é obrigatório", errorMessageEmail);
 
-        return isValid($(this), errorMessageEmail);
-    });
+    return isValid(field, errorMessageEmail);
 };
 
-var checkValidLicenseId = function () {
-    licenseId.bind("paste drop input change cut", function () {
-        var textLicenseId = licenseId.val();
+var checkValidLicenseId = function (field) {
+    var textLicenseId = licenseId.val();
 
-        if (!isEdit && textLicenseId.length == 0)
-            return isInvalid($(this), "Cédula é obrigatório", errorMessageLicenseId);
-        else if (isNaN(textLicenseId))
-            return isInvalid($(this), "Cédula inválida", errorMessageLicenseId);
+    if (!isEdit && textLicenseId.length == 0)
+        return isInvalid(field, "Cédula é obrigatório", errorMessageLicenseId);
+    else if (isNaN(textLicenseId))
+        return isInvalid(field, "Cédula inválida", errorMessageLicenseId);
 
-        isValid($(this), errorMessageLicenseId);
-    });
+    isValid(field, errorMessageLicenseId);
 };
 
 var isInvalid = function (field, errorText, errorField) {

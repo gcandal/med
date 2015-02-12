@@ -1,4 +1,3 @@
-
 {if $EMAIL}
     </div>
 <!-- end: MAIN CONTAINER -->
@@ -34,18 +33,29 @@
     <script type="text/javascript" src="{$BASE_URL}assets/plugins/bootbox/bootbox.min.js"></script>
     <script type="text/javascript" src="{$BASE_URL}assets/plugins/jquery-mockjax/jquery.mockjax.js"></script>
     <script type="text/javascript" src="{$BASE_URL}assets/plugins/select2/select2.min.js"></script>
-    <script type="text/javascript" src="{$BASE_URL}assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript"
+            src="{$BASE_URL}assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="{$BASE_URL}assets/plugins/datatables/media/js/DT_bootstrap.js"></script>
     <script src="{$BASE_URL}assets/js/table-data.js"></script>
     <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
     <script>
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             Main.init();
             TableData.init();
 
-            const activeTab = $("#"+$("#activeTab").text());
+            const activeTab = $("#" + $("#activeTab").text());
             activeTab.addClass("active open");
             activeTab.parent().parent().addClass("active open");
+        });
+    </script>
+{else}
+    <script src="{$BASE_URL}assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="{$BASE_URL}assets/js/login.js"></script>
+    <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+    <script>
+        jQuery(document).ready(function() {
+            Main.init();
+            Login.init();
         });
     </script>
 {/if}

@@ -66,7 +66,7 @@
                         <h2>Exportação de dados</h2>
                     </div>
                     <div class="content">
-                        Partilhe os seus relatórios por email ou exporte-os para outro formato. 
+                        Partilhe os seus relatórios por email ou exporte-os para outro formato.
                     </div>
                 </div>
             </div>
