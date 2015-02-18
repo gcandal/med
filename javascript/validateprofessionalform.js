@@ -10,63 +10,57 @@ const errorMessageLicenseIdProfessional = $('#errorMessageLicenseIdProfessional'
 
 
 if (typeof checkSubmitButton === 'undefined') {
-    var noErrorMessages = function() {
+    var noErrorMessages = function () {
         return $(".errorMessage").text().length == 0;
     };
 
-    var checkSubmitButton = function() {
+    var checkSubmitButton = function () {
         submitButton.attr('disabled', !noErrorMessages());
     };
 }
 
 $(document).ready(function () {
-    checkValidNameProfessional();
-    checkValidNIFProfessional();
-    checkValidLicenseIdProfessional();
-    isValid(nifProfessional, errorMessageNifProfessional);
-    isValid(licenseIdProfessional, errorMessageLicenseIdProfessional);
-
-    if (method !== "addProfessional") {
-        isValid(nameProfessional, errorMessageNameProfessional);
-    }
-    else {
-        isInvalid(nameProfessional, "Nome é obrigatório", errorMessageNameProfessional);
-    }
+    nameProfessional.bind("paste drop input change cut", function () {
+        checkValidNameProfessional($(this));
+    });
+    checkValidNameProfessional(nameProfessional);
+    nifProfessional.bind("paste drop input change cut", function () {
+        checkValidNIFProfessional($(this));
+    });
+    checkValidNIFProfessional(nifProfessional);
+    licenseIdProfessional.bind("paste drop input change cut", function () {
+        checkValidLicenseIdProfessional($(this));
+    });
+    checkValidLicenseIdProfessional(licenseIdProfessional);
 });
 
-var checkValidNameProfessional = function () {
-    nameProfessional.bind("paste drop input change cut", function () {
-        var textName = $(this).val();
+var checkValidNameProfessional = function (field) {
+    var textName = field.val();
 
-        if ( (method === "addProfessional" || method === "editProfessional" ) && textName.length == 0)
-            return isInvalid($(this), "Nome é obrigatório", errorMessageNameProfessional);
+    if ((method === "addProfessional" || method === "editProfessional" ) && textName.length == 0)
+        return isInvalid(field, "Nome é obrigatório", errorMessageNameProfessional);
 
-        return isValid($(this), errorMessageNameProfessional);
-    });
+    return isValid(field, errorMessageNameProfessional);
 };
 
-var checkValidNIFProfessional = function () {
-    nifProfessional.bind("paste drop input change cut", function () {
-        var text = $(this).val();
+var checkValidNIFProfessional = function (field) {
+    var text = field.val();
 
-        if (text.length > 0 && (isNaN(text) || !professionalNifRegex.test(text))) {
-            return isInvalid($(this), "NIF inválido", errorMessageNifProfessional);
-        }
-        else {
-            return isValid($(this), errorMessageNifProfessional);
-        }
-    });
+    if (text.length > 0 && (isNaN(text) || !professionalNifRegex.test(text))) {
+        return isInvalid(field, "NIF inválido", errorMessageNifProfessional);
+    }
+    else {
+        return isValid(field, errorMessageNifProfessional);
+    }
 };
 
-var checkValidLicenseIdProfessional = function () {
-    licenseIdProfessional.bind("paste drop input change cut", function () {
-        var textLicenseId = $(this).val();
+var checkValidLicenseIdProfessional = function (field) {
+    var textLicenseId = field.val();
 
-        if (isNaN(textLicenseId))
-            return isInvalid($(this), "Cédula inválida", errorMessageLicenseIdProfessional);
+    if (isNaN(textLicenseId))
+        return isInvalid(field, "Cédula inválida", errorMessageLicenseIdProfessional);
 
-        isValid($(this), errorMessageLicenseIdProfessional);
-    });
+    isValid(field, errorMessageLicenseIdProfessional);
 };
 
 var isInvalid = function (field, errorText, errorField) {

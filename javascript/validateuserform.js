@@ -27,21 +27,6 @@ $(document).ready(function () {
         checkValidLicenseId($(this));
     });
     checkValidLicenseId(licenseId);
-
-    /*
-     if (isEdit) {
-     isValid(passwords, errorMessagePassword);
-     isValid(userName, errorMessageUserName);
-     isValid(email, errorMessageEmail);
-     isValid(licenseId, errorMessageLicenseId);
-     }
-     else {
-     isInvalid(passwords, "Passwords são obrigatórias", errorMessagePassword);
-     isInvalid(userName, "Username é obrigatório", errorMessageUserName);
-     isInvalid(email, "Email é obrigatório", errorMessageEmail);
-     isInvalid(licenseId, "Cédula é obrigatório", errorMessageLicenseId);
-     }
-     */
 });
 
 var checkEqualPasswords = function () {

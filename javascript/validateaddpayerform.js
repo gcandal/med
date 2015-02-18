@@ -5,37 +5,36 @@ const errorMessageNif = $("#errorMessageNif");
 const errorMessageDate = $("#errorMessageDate");
 
 $(document).ready(function () {
+    nif.bind("paste drop input change cut", function () {
+        checkValidNIF($(this));
+    });
     checkValidNIF();
+    contracts.change(function () {
+        checkValidDate();
+    });
     checkValidDate();
-
-    isInvalid(nif, "NIF inválido", errorMessageNif);
-    isValid(contracts, errorMessageDate);
 });
 
-var checkValidNIF = function () {
+var checkValidNIF = function (field) {
     var nifRegex = new RegExp('^\\d{9}$');
 
-    nif.bind("paste drop input change cut", function () {
-        var text = $(this).val();
+    var text = field.val();
 
-        if (text.length != 9 || isNaN(text) || !nifRegex.test(text)) {
-            return isInvalid($(this), "NIF inválido", errorMessageNif);
-        } else {
-            return isValid($(this), errorMessageNif);
-        }
-    });
+    if (text.length != 9 || isNaN(text) || !nifRegex.test(text)) {
+        return isInvalid(field, "NIF inválido", errorMessageNif);
+    } else {
+        return isValid(field, errorMessageNif);
+    }
 };
 
 var checkValidDate = function () {
-    contracts.change(function () {
-        var contractstart = $("#contractstart").val();
-        var contractend = $("#contractend").val();
+    var contractstart = $("#contractstart").val();
+    var contractend = $("#contractend").val();
 
-        if (contractstart.length == 0 || contractend.length == 0 || contractend >= contractstart)
-            isValid(contracts, errorMessageDate);
-        else
-            isInvalid(contracts, "Datas incoerentes", errorMessageDate);
-    });
+    if (contractstart.length == 0 || contractend.length == 0 || contractend >= contractstart)
+        isValid(contracts, errorMessageDate);
+    else
+        isInvalid(contracts, "Datas incoerentes", errorMessageDate);
 };
 
 var isInvalid = function (field, errorText, errorFieldText) {

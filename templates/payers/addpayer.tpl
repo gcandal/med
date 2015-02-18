@@ -127,12 +127,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
-                                                K cirúrgico<span class="symbol required"></span>
+                                                K cirúrgico
                                             </label>
 
                                             <input type="number" min="0" step="0.01" name="valueperk"
                                                    placeholder="Valor por K" value="{$FORM_VALUES.valueperk}"
-                                                   class="form-control" required/>
+                                                   class="form-control"/>
                                             <span>{$FIELD_ERRORS.valueperk}</span>
                                         </div>
 
@@ -183,7 +183,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
-                                                K cirúrgico<span class="symbol required"></span>
+                                                K cirúrgico
                                             </label>
 
                                             <input type="number" min="0" name="valueperk" placeholder="Valor por K"

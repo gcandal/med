@@ -4,29 +4,28 @@ const submitButton = $('#submitButton');
 const licenseid = $('#licenseid');
 
 $(document).ready(function () {
+    licenseid.bind("paste drop input change cut", function () {
+        checkIfInviteUnsent();
+    });
     checkIfInviteUnsent();
-
-    isInvalid("Cédula obrigatória");
 });
 
 var checkIfInviteUnsent = function () {
-    licenseid.bind("paste drop input change cut", function () {
-        var text = licenseid.val();
+    var text = licenseid.val();
 
-        if (isNaN(text))
-            return isInvalid("Cédula inválida");
-        else if (text.length == 0)
-            return isInvalid("Cédula obrigatória");
+    if (isNaN(text))
+        return isInvalid("Cédula inválida");
+    else if (text.length == 0)
+        return isInvalid("Cédula obrigatória");
+    else
+        isValid();
+
+
+    $.get(baseUrl + 'actions/organizations/checkinvitationsent.php?licenseid=' + text + '&idorganization=' + idorganization, function (data) {
+        if (data['exists'])
+            isInvalid('Já enviou um convite para essa cédula');
         else
             isValid();
-
-
-        $.get(baseUrl + 'actions/organizations/checkinvitationsent.php?licenseid=' + text + '&idorganization=' + idorganization, function (data) {
-            if (data['exists'])
-                isInvalid('Já enviou um convite para essa cédula');
-            else
-                isValid();
-        });
     });
 };
 
