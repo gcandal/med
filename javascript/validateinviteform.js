@@ -1,7 +1,7 @@
-const idorganization = $("#idorganization").val();
-const errorMessage = $('#licenseIdError');
-const submitButton = $('#submitButton');
-const licenseid = $('#licenseid');
+var idorganization = $("#idorganization").val();
+var errorMessage = $('#licenseIdError');
+var submitButton = $('#submitButton');
+var licenseid = $('#licenseid');
 
 $(document).ready(function () {
     licenseid.bind("paste drop input change cut", function () {

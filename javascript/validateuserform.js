@@ -1,14 +1,14 @@
-const password1 = $('#password');
-const password2 = $('#passwordconfirm');
-const passwords = $('#password, #passwordconfirm');
-const userName = $('#userName');
-const email = $('#email');
-const licenseId = $('#licenseId');
-const submitButton = $("#submitButton");
-const errorMessageUserName = $('#userNameError');
-const errorMessageEmail = $('#emailError');
-const errorMessagePassword = $('#passwordError');
-const errorMessageLicenseId = $('#licenseIdError');
+var password1 = $('#password');
+var password2 = $('#passwordconfirm');
+var passwords = $('#password, #passwordconfirm');
+var userName = $('#userName');
+var email = $('#email');
+var licenseId = $('#licenseId');
+var submitButton = $("#submitButton");
+var errorMessageUserName = $('#userNameError');
+var errorMessageEmail = $('#emailError');
+var errorMessagePassword = $('#passwordError');
+var errorMessageLicenseId = $('#licenseIdError');
 
 $(document).ready(function () {
     userName.bind("paste drop input change cut", function () {

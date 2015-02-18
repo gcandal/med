@@ -1,42 +1,42 @@
 var subProcedures = 0;
-const valuePerK = $('#valuePerK');
-const anesthetistRemun = $('#anesthetistRemun');
-const totalRemun = $('#totalRemun');
-const totalType = $('#totalType');
-const payerType = $("#payerType");
-const privatePayer = $("#privatePayer");
-const entityPayer = $("#entityPayer");
-const newEntityPayer = $("#newEntityPayer");
-const newPrivatePayer = $("#newPrivatePayer");
-const namePrivate = $("#namePrivate");
-const nifPrivate = $("#nifPrivate");
-const nameEntity = $("#nameEntity");
-const nifEntity = $("#nifEntity");
-const generalRemun = $("#generalRemun");
-const firstAssistantRemun = $('#firstAssistantRemun');
-const firstAssistantName = $('#firstAssistantName');
-const secondAssistantRemun = $('#secondAssistantRemun');
-const secondAssistantName = $('#secondAssistantName');
-const instrumentistRemun = $('#instrumentistRemun');
-const instrumentistName = $('#instrumentistName');
-const anesthetistName = $('#anesthetistName');
-const anesthetistK = $('#anesthetistK');
-const generalK = $('#generalK');
-const nSubProcedures = $('#nSubProcedures');
-const submitButton = $("#submitButton");
-const role = $('#role');
-const idPatient = $("#idPatient");
-const localAnesthesia = $("#localanesthesia");
-const anesthetistRow = $("#AnesthetistRow");
-const patientForm = $("#patientForm");
-const namePatient = $("#namePatient");
-const nifPatient = $("#nifPatient");
-const cellphonePatient = $("#cellphonePatient");
-const beneficiaryNrPatient = $("#beneficiaryNrPatient");
-const errorMessageNifPatient = $("#errorMessageNifPatient");
-const errorMessageNamePatient = $("#errorMessageNamePatient");
-const errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
-const subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
+var valuePerK = $('#valuePerK');
+var anesthetistRemun = $('#anesthetistRemun');
+var totalRemun = $('#totalRemun');
+var totalType = $('#totalType');
+var payerType = $("#payerType");
+var privatePayer = $("#privatePayer");
+var entityPayer = $("#entityPayer");
+var newEntityPayer = $("#newEntityPayer");
+var newPrivatePayer = $("#newPrivatePayer");
+var namePrivate = $("#namePrivate");
+var nifPrivate = $("#nifPrivate");
+var nameEntity = $("#nameEntity");
+var nifEntity = $("#nifEntity");
+var generalRemun = $("#generalRemun");
+var firstAssistantRemun = $('#firstAssistantRemun');
+var firstAssistantName = $('#firstAssistantName');
+var secondAssistantRemun = $('#secondAssistantRemun');
+var secondAssistantName = $('#secondAssistantName');
+var instrumentistRemun = $('#instrumentistRemun');
+var instrumentistName = $('#instrumentistName');
+var anesthetistName = $('#anesthetistName');
+var anesthetistK = $('#anesthetistK');
+var generalK = $('#generalK');
+var nSubProcedures = $('#nSubProcedures');
+var submitButton = $("#submitButton");
+var role = $('#role');
+var idPatient = $("#idPatient");
+var localAnesthesia = $("#localanesthesia");
+var anesthetistRow = $("#AnesthetistRow");
+var patientForm = $("#patientForm");
+var namePatient = $("#namePatient");
+var nifPatient = $("#nifPatient");
+var cellphonePatient = $("#cellphonePatient");
+var beneficiaryNrPatient = $("#beneficiaryNrPatient");
+var errorMessageNifPatient = $("#errorMessageNifPatient");
+var errorMessageNamePatient = $("#errorMessageNamePatient");
+var errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
+var subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
 
 var enableField = function (field, disable) {
     field.prop('readonly', disable);
@@ -101,7 +101,7 @@ $(document).ready(function () {
         updateRemunerations();
     });
 
-    const subProcedures = $("#subProcedures");
+    var subProcedures = $("#subProcedures");
     subProcedures.on('change', '.subProcedure', function () {
         updateRemunerations();
 
@@ -680,7 +680,7 @@ $(document).on("focus", ".subProcedureName:not(.ui-autocomplete-input)", functio
     });
 });
 
-const subProceduresList2 = [{"id": 1, "label": "01.00.00.01"}, {"id": 2, "label": "01.00.00.02"}, {
+var subProceduresList2 = [{"id": 1, "label": "01.00.00.01"}, {"id": 2, "label": "01.00.00.02"}, {
     "id": 3,
     "label": "01.00.00.03"
 }, {"id": 4, "label": "01.00.00.04"}, {"id": 5, "label": "01.00.00.05"}, {"id": 6, "label": "01.00.00.06"}, {
@@ -5209,7 +5209,7 @@ const subProceduresList2 = [{"id": 1, "label": "01.00.00.01"}, {"id": 2, "label"
     "label": "90.10.00.06"
 }, {"id": 4530, "label": "90.10.00.07"}, {"id": 4531, "label": "90.10.00.08"}];
 
-const subProceduresList = [
+var subProceduresList = [
     {
         "id": 1,
         "label": "Consultas no Consultório - Não Especialista-1a. Consulta",

@@ -1,9 +1,9 @@
-const nif = $('#nifEntity, #nifPrivate');
-const nifRegex = new RegExp('^\\d{9}$');
-const namePayer = $('#nameEntity, #namePrivate');
-const contracts = $("#contractstart, #contractend");
-const submitButtonPrivate = $("#submitButtonPrivate, #submitButton");
-const submitButtonEntity = $("#submitButtonEntity, #submitButton");
+var nif = $('#nifEntity, #nifPrivate');
+var nifRegex = new RegExp('^\\d{9}$');
+var namePayer = $('#nameEntity, #namePrivate');
+var contracts = $("#contractstart, #contractend");
+var submitButtonPrivate = $("#submitButtonPrivate, #submitButton");
+var submitButtonEntity = $("#submitButtonEntity, #submitButton");
 
 if (typeof errorMessageNifPrivate === 'undefined') {
     var errorMessageNifPrivate = $('#errorMessageNifPrivate');

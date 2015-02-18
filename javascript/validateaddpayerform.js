@@ -1,8 +1,8 @@
-const nif = $('#nifEntity, #nifPrivate');
-const contracts = $("#contractstart, #contractend");
-const submitButton = $("#submitButtonPrivate, #submitButtonEntity");
-const errorMessageNif = $("#errorMessageNif");
-const errorMessageDate = $("#errorMessageDate");
+var nif = $('#nifEntity, #nifPrivate');
+var contracts = $("#contractstart, #contractend");
+var submitButton = $("#submitButtonPrivate, #submitButtonEntity");
+var errorMessageNif = $("#errorMessageNif");
+var errorMessageDate = $("#errorMessageDate");
 
 $(document).ready(function () {
     nif.bind("paste drop input change cut", function () {

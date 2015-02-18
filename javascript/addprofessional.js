@@ -1,5 +1,5 @@
-const specialityLabel = $("#specialityLabel");
-const specialityId = $('#specialityId');
+var specialityLabel = $("#specialityLabel");
+var specialityId = $('#specialityId');
 
 $(document).ready(function() {
    $("#professionalType").change(function() {

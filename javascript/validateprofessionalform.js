@@ -1,12 +1,12 @@
-const nameProfessional = $('.professionalName');
-const nifProfessional = $('.professionalNif');
-const licenseIdProfessional = $('.professionalLicenseId');
+var nameProfessional = $('.professionalName');
+var nifProfessional = $('.professionalNif');
+var licenseIdProfessional = $('.professionalLicenseId');
 if (typeof submitButton === 'undefined')
     var submitButton = $("#submitButton");
 var professionalNifRegex = new RegExp('^\\d{9}$');
-const errorMessageNameProfessional = $('#errorMessageNameProfessional');
-const errorMessageNifProfessional = $('#errorMessageNifProfessional');
-const errorMessageLicenseIdProfessional = $('#errorMessageLicenseIdProfessional');
+var errorMessageNameProfessional = $('#errorMessageNameProfessional');
+var errorMessageNifProfessional = $('#errorMessageNifProfessional');
+var errorMessageLicenseIdProfessional = $('#errorMessageLicenseIdProfessional');
 
 
 if (typeof checkSubmitButton === 'undefined') {
@@ -23,11 +23,15 @@ $(document).ready(function () {
     nameProfessional.bind("paste drop input change cut", function () {
         checkValidNameProfessional($(this));
     });
-    checkValidNameProfessional(nameProfessional);
+    nameProfessional.each(function() {
+        checkValidNameProfessional($(this));
+    });
     nifProfessional.bind("paste drop input change cut", function () {
         checkValidNIFProfessional($(this));
     });
-    checkValidNIFProfessional(nifProfessional);
+    nifProfessional.each(function() {
+        checkValidNIFProfessional($(this));
+    });
     licenseIdProfessional.bind("paste drop input change cut", function () {
         checkValidLicenseIdProfessional($(this));
     });
@@ -44,6 +48,7 @@ var checkValidNameProfessional = function (field) {
 };
 
 var checkValidNIFProfessional = function (field) {
+    console.log(field);
     var text = field.val();
 
     if (text.length > 0 && (isNaN(text) || !professionalNifRegex.test(text))) {

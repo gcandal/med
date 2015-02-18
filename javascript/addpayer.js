@@ -1,13 +1,13 @@
-const formEntidade = $("#formentidade");
-const formPrivado = $("#formprivado");
-const entityTypeInput = $("#entityTypeInput");
-const entityType = $('#entityType');
-const isEdit = false;
-const errorMessageNifPrivate = $('#errorMessageNifPrivate');
-const errorMessageNamePrivate = $('#errorMessageNamePrivate');
-const errorMessageNifEntity = $('#errorMessageNifEntity');
-const errorMessageNameEntity = $('#errorMessageNameEntity');
-const errorMessageDate = $('#errorMessageDate');
+var formEntidade = $("#formentidade");
+var formPrivado = $("#formprivado");
+var entityTypeInput = $("#entityTypeInput");
+var entityType = $('#entityType');
+var isEdit = false;
+var errorMessageNifPrivate = $('#errorMessageNifPrivate');
+var errorMessageNamePrivate = $('#errorMessageNamePrivate');
+var errorMessageNifEntity = $('#errorMessageNifEntity');
+var errorMessageNameEntity = $('#errorMessageNameEntity');
+var errorMessageDate = $('#errorMessageDate');
 var errorMessageName;
 var errorMessageNif;
 

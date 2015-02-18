@@ -1,4 +1,4 @@
-const cellphoneRegex = new RegExp('^((\\+|00)\\d{1,3})?\\d{9}$');
+var cellphoneRegex = new RegExp('^((\\+|00)\\d{1,3})?\\d{9}$');
 if (typeof nifRegex === 'undefined')
     var nifRegex = new RegExp('^\\d{9}$');
 if (typeof nifPatient === 'undefined')

@@ -1,6 +1,6 @@
-const submitButton = $("#submitButton");
-const errorMessage = $("#errorMessage");
-const organizationName = $('#name');
+var submitButton = $("#submitButton");
+var errorMessage = $("#errorMessage");
+var organizationName = $('#name');
 
 $(document).ready(function () {
     organizationName.bind("paste drop input change cut", function () {
