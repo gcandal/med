@@ -41,7 +41,7 @@ $(document).ready(function () {
 var checkValidNameProfessional = function (field) {
     var textName = field.val();
 
-    if ((method === "addProfessional" || method === "editProfessional" ) && textName.length == 0)
+    if (method === "addProfessional" && textName.length == 0)
         return isInvalid(field, "Nome é obrigatório", errorMessageNameProfessional);
 
     return isValid(field, errorMessageNameProfessional);

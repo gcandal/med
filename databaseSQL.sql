@@ -65,9 +65,9 @@ CREATE TABLE Account (
   salt          CHAR(128)   NOT NULL,
   licenseId     LicenseId   NOT NULL UNIQUE,
   speciality    INTEGER     NOT NULL REFERENCES Speciality (idSpeciality) ON DELETE SET DEFAULT DEFAULT 3,
-  validUntil    DATE        NOT NULL                                                            DEFAULT CURRENT_DATE -
-                                                                                                        INTERVAL '1 day',
-  freeRegisters INTEGER     NOT NULL                                                            DEFAULT 1,
+  validUntil    DATE        NOT NULL                                                            DEFAULT CURRENT_DATE +
+                                                                                                        INTERVAL '1 year',
+  freeRegisters INTEGER     NOT NULL                                                            DEFAULT -1,
   CHECK (freeRegisters >= -1)
 );
 

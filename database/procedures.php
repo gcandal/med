@@ -69,7 +69,7 @@ function getProcedure($idAccount, $idProcedure)
     global $conn;
 
     $stmt = $conn->prepare("SELECT idProcedure, paymentstatus, idprivatepayer, identitypayer, date,
-        totalRemun, role, hasManualK, anesthetistK, readonly, localanesthesia
+        totalRemun, role, hasManualK, anesthetistK, readonly, localanesthesia, valueperk
          FROM PROCEDURE NATURAL JOIN PROCEDUREACCOUNT WHERE idAccount = ? AND idProcedure = ?
          ORDER BY date DESC");
 

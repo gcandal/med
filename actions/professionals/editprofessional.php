@@ -12,7 +12,7 @@ if (!$_SESSION['email']) {
 $idprofessional = $_POST['idprofessional'];
 $name = $_POST['name'];
 $nif = $_POST['nif'];
-$licenseid = $_POST['licenseid'];
+$licenseid = $_POST['licenseId'];
 $speciality = $_POST['speciality'];
 $accountId = $_SESSION['idaccount'];
 

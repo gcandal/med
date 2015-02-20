@@ -16,7 +16,7 @@
                     </li>
                 </ol>
                 <div class="page-header">
-                    <h1>Criar registo</h1>
+                    <h1>Editar registo</h1>
                 </div>
                 <!-- end: PAGE TITLE & BREADCRUMB -->
             </div>
@@ -450,7 +450,7 @@
         </div>
         <!-- end: PAGE CONTENT-->
 
-        <span style="display: none" id="activeTab">addprocedure</span>
+        <span style="display: none" id="activeTab">procedure</span>
         <script src="{$BASE_URL}lib/handlebars-v1.3.0.js" type="text/javascript"></script>
         <script id="subProcedure-template" type="text/x-handlebars-template">
             {literal}
@@ -536,8 +536,9 @@
         $("#paymentStatus").val("{$PROCEDURE.paymentstatus}");
         $("#idOrganization").val("{$PROCEDURE.idorganization}");
         $("#idPatient").val("{$PROCEDURE.idpatient}");
-        $("#role").val("{$PROCEDURE.role}");
+        $("#role").val("{$PROCEDURE.role}")
 
+        var editValuePerK = {$PROCEDURE.valueperk};
         var editProcedurePayer = {literal}{{/literal}id: {$PROCEDURE.idpayer}{literal}}{/literal};
         var editSubProcedures = {$PROCEDURE.subprocedures|json_encode};
         var editAnesthetistK = "{$PROCEDURE.anesthetistk}";

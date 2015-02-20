@@ -90,7 +90,6 @@ $(document).ready(function () {
         fillProfessionalRow($(this).val());
     });
 
-
     $("#entityName").change(function () {
         updatePayerVisibility();
         updateRemunerations();
@@ -103,8 +102,6 @@ $(document).ready(function () {
 
     var subProcedures = $("#subProcedures");
     subProcedures.on('change', '.subProcedure', function () {
-        updateRemunerations();
-
         fillSubProcedure($(this));
     });
 
@@ -144,7 +141,7 @@ $(document).ready(function () {
     if (method === "editProcedure") {
         var editProcedurePayerType = editProcedurePayer['payerType'];
         entityType.val(editProcedurePayerType);
-        $("#" + editProcedurePayerType.toLowerCase() + "name").val(editProcedurePayer['idpayer']);
+        $("#" + editProcedurePayerType.toLowerCase() + "Name").val(editProcedurePayer['id']);
         updatePayerVisibility();
 
         $.each(editSubProcedures, function (i, v) {
@@ -160,8 +157,10 @@ $(document).ready(function () {
         }
 
         updateRemunerations();
+    } else {
+        editValuePerK = 0;
     }
-/*
+
     $.ajax({
         url: baseUrl + "actions/professionals/getrecentprofessionals.php",
         dataType: "json",
@@ -171,10 +170,7 @@ $(document).ready(function () {
             var recentProfessionals = $.map(data, function (item) {
                 return {
                     label: item.name,
-                    nif: item['nif'],
-                    licenseid: item['licenseid'],
-                    idspeciality: item['idspeciality'],
-                    id: item['idprofessional']
+                    licenseid: item['licenseid']
                 };
             });
 
@@ -194,7 +190,6 @@ $(document).ready(function () {
             console.log(c);
         }
     });
-    */
 });
 
 var previousRole = '';
@@ -225,6 +220,8 @@ var fillSubProcedure = function(selectField) {
     selectField.parent().parent().siblings().eq(1).children().children().last().val(subProceduresList[selectField.val() - 1].k);
     selectField.parent().parent().siblings().eq(2).children().children().last().val(subProceduresList[selectField.val() - 1].c);
     selectField.parent().parent().siblings().eq(0).children().children().last().val(subProceduresList[selectField.val() - 1].code);
+
+    updateRemunerations();
 };
 
 var disableAnesthetistRow = function(disable) {
@@ -260,12 +257,12 @@ var addNSubProcedureById = function (id, n) {
 
     nSubProcedures.val(++subProcedures);
     var newSubP = $(subProcedureTemplate({number: subProcedures, type: getSubProcedureTypes()}));
-
     newSubP.appendTo('#subProcedures');
-    var newSubPInfo = subProceduresList[id - 1];
-    $(newSubP.children().first()).val(id);
-    $(newSubP.children().first().next()).val(newSubPInfo['k']);
-    $(newSubP.children().first().next().next()).val(newSubPInfo['label']);
+
+    var selectField = newSubP.children().first().children().children().last();
+    console.log(selectField);
+    selectField.val(id);
+    fillSubProcedure(selectField);
 
     addNSubProcedureById(id, n - 1);
 };
@@ -354,7 +351,7 @@ var fillValuePerK = function (type) {
             break;
     }
 
-    valuePerK.val(curreantPayerValuePerK);
+    valuePerK.val(editValuePerK);
 
     if (curreantPayerValuePerK === 0)
         enableField(valuePerK, false);

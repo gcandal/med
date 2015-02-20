@@ -174,7 +174,7 @@
                                         <label class="control-label">
                                             Escolha o paciente
                                         </label>
-                                        <select id="idPatient" class="form-control">
+                                        <select id="idPatient" name="idPatient" class="form-control">
                                             <option value="-2">Novo doente</option>
                                             <option value="-1">Nenhum</option>
                                             {foreach $PATIENTS as $patient}
@@ -526,6 +526,7 @@
             var patients = {$PATIENTS|json_encode};
             var baseUrl = {$BASE_URL};
             var method = "addProcedure";
+            var editValuePerK = 0;
             $("#entityType").val("{$ENTITYTYPE}");
         </script>
         <script src="{$BASE_URL}javascript/addpayer.js"></script>
