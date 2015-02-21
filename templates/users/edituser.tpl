@@ -50,11 +50,24 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Especialidade</td>
-                                                    <td>Especialidade</td>
+                                                    <td>{$SPECIALITY}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Cédula</td>
                                                     <td>{$LICENSEID}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Licença válida até:</td>
+                                                    <td>{$VALIDUNTIL}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Registos por usar:</td>
+                                                    <td>{if $FREEREGISTERS == -1}
+                                                            ilimitado
+                                                        {else}
+                                                            {$FREEREGISTERS}
+                                                        {/if}
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -120,12 +133,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-8">
-                                                    <p>
-                                                        Ao clicar em "Actualizar" está a concordar com os Termos de Uso.
-                                                    </p>
-                                                </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 push-left">
                                                     <button class="btn btn-blue btn-block" type="submit"
                                                             id="submitButton">
                                                         Actualizar <i class="fa fa-arrow-circle-right"></i>

@@ -49,6 +49,7 @@
         session_regenerate_id(true);
         $_SESSION['email'] = $current_user['email'];
         $_SESSION['name'] = $current_user['name'];
+        $_SESSION['speciality'] = $current_user['speciality'];
         $_SESSION['validuntil'] = $current_user['validuntil'];
         $_SESSION['freeregisters'] = $current_user['freeregisters'];
         $_SESSION['idaccount'] = $current_user['idaccount'];

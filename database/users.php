@@ -34,9 +34,10 @@ function getUserById($id)
 function getUserByEmail($email)
 {
     global $conn;
-    $stmt = $conn->prepare("SELECT *
-                                FROM Account
-                                WHERE email = ?");
+    $stmt = $conn->prepare("SELECT Account.name as name, email, password, salt, licenseid, validuntil, freeregisters,
+                                Speciality.name as speciality
+                                FROM Account, Speciality
+                                WHERE email = ? AND Speciality.idspeciality = speciality");
     $stmt->execute(array($email));
 
     return $stmt->fetch();

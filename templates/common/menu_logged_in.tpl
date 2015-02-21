@@ -125,6 +125,24 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="javascript:void(0)"><i class="fa fa-money"></i>
+                        <span class="title"> Pagadores </span><i class="icon-arrow"></i>
+                        <span class="selected"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li id="payers">
+                            <a href="{$BASE_URL}pages/payers/payers.php">
+                                <span class="title">Consultar a lista</span>
+                            </a>
+                        </li>
+                        <li id="addpayer">
+                            <a href="{$BASE_URL}pages/payers/addpayer.php">
+                                <span class="title">Adicionar novo</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a href="javascript:void(0)"><i class="fa fa-building"></i>
                         <span class="title"> Organizações </span><i class="icon-arrow"></i>
                         <span class="selected"></span>
@@ -143,24 +161,6 @@
                         <li id="orginvites">
                             <a href="{$BASE_URL}pages/organizations/invites.php">
                                 <span class="title">Pedidos pendentes</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0)"><i class="fa fa-money"></i>
-                        <span class="title"> Pagadores </span><i class="icon-arrow"></i>
-                        <span class="selected"></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li id="payers">
-                            <a href="{$BASE_URL}pages/payers/payers.php">
-                                <span class="title">Consultar a lista</span>
-                            </a>
-                        </li>
-                        <li id="addpayer">
-                            <a href="{$BASE_URL}pages/payers/addpayer.php">
-                                <span class="title">Adicionar novo</span>
                             </a>
                         </li>
                     </ul>
