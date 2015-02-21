@@ -22,21 +22,13 @@ if (!$_SESSION['freeregisters']) {
 }
 
 $type = $_POST['payerType'];
-$_SESSION['entityType'] = $type;
 
 $idprivatepayer = NULL;
 if ($type === 'Private' || $type === 'NewPrivate')
     $idprivatepayer = $_POST['privateName'];
 
-$identitypayer = NULL;
-if ($type === 'Entity' || $type === 'NewEntity')
-    $identitypayer = $_POST['entityName'];
-
-if ($type === 'NewPrivate' || $type === 'NewEntity') {
-    if ($type === 'NewPrivate')
-        $suffix = 'Private';
-    else
-        $suffix = 'Entity';
+if ($type === 'NewPrivate') {
+    $suffix = 'Private';
 
     $name = $_POST['name' . $suffix];
     $nif = $_POST['nif' . $suffix];
@@ -65,48 +57,18 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
         exit;
     }
 
-    if ($type === 'NewPrivate') {
-        try {
-            $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
-        } catch (PDOException $e) {
-            if (strpos($e->getMessage(), 'validnif') !== false) {
-                $_SESSION['error_messages'][] = 'NIF inválido';
-                $_SESSION['field_errors']['nif' . $suffix] = 'NIF inválido';
-            } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+    try {
+        $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
+    } catch (PDOException $e) {
+        if (strpos($e->getMessage(), 'validnif') !== false) {
+            $_SESSION['error_messages'][] = 'NIF inválido';
+            $_SESSION['field_errors']['nif' . $suffix] = 'NIF inválido';
+        } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
 
-            $_SESSION['form_values'] = $_POST;
+        $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
-            exit;
-        }
-    } else {
-        $contractstart = $_POST['contractstart'];
-        if (!$contractstart) $contractstart = null;
-        $contractend = $_POST['contractend'];
-        if (!$contractend) $contractend = null;
-
-        if ($contractstart > $contractend && $contractend) {
-            $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
-            $_SESSION['form_values'] = $_POST;
-
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
-            exit;
-        }
-
-        try {
-            $identitypayer = createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $accountId);
-        } catch (PDOException $e) {
-
-            if (strpos($e->getMessage(), 'validnif') !== false) {
-                $_SESSION['error_messages'][] = 'NIF inválido';
-                $_SESSION['field_errors']['nif' . $suffix] = 'NIF inválido';
-            } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
-
-            $_SESSION['form_values'] = $_POST;
-
-            header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
-            exit;
-        }
+        header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
+        exit;
     }
 }
 
@@ -160,7 +122,7 @@ $role = $_POST['role'];
 $hasManualK = $_POST['totalType'] === 'manual';
 $localAnesthesia = $_POST['localanesthesia'] === 'on';
 
-if($localAnesthesia)
+if ($localAnesthesia)
     $localAnesthesia = 'true';
 else
     $localAnesthesia = 'false';
@@ -194,7 +156,7 @@ try {
     $conn->beginTransaction();
 
     $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
-        $idprivatepayer, $identitypayer, $role, $_POST['anesthetistK'], $hasManualK, $localAnesthesia, $personalRemun,
+        $idprivatepayer, $role, $_POST['anesthetistK'], $hasManualK, $localAnesthesia, $personalRemun,
         $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
         $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
 

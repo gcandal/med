@@ -39,18 +39,6 @@
                         </div>
                         <div class="alert alert-danger" role="alert" style="display: none">
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            <span id="errorMessageNifPrivate" class="errorMessagePrivate"></span>
-                        </div>
-                        <div class="alert alert-danger" role="alert" style="display: none">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            <span id="errorMessageNameEntity" class="errorMessageEntity"></span>
-                        </div>
-                        <div class="alert alert-danger" role="alert" style="display: none">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            <span id="errorMessageNifEntity" class="errorMessageEntity"></span>
-                        </div>
-                        <div class="alert alert-danger" role="alert" style="display: none">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                             <span id="errorMessageNameProfessional" class="errorMessage"></span>
                         </div>
                         <div class="alert alert-danger" role="alert" style="display: none">
@@ -84,24 +72,6 @@
                             <div class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                                 <span>{$FIELD_ERRORS.namePrivate}</span>
-                            </div>
-                        {/if}
-                        {if $FIELD_ERRORS.nameEntity}
-                            <div class="alert alert-danger" role="alert">
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span>{$FIELD_ERRORS.nameEntity}</span>
-                            </div>
-                        {/if}
-                        {if $FIELD_ERRORS.nifPrivate}
-                            <div class="alert alert-danger" role="alert">
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span>{$FIELD_ERRORS.nifPrivate}</span>
-                            </div>
-                        {/if}
-                        {if $FIELD_ERRORS.nifEntity}
-                            <div class="alert alert-danger" role="alert">
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span>{$FIELD_ERRORS.nifEntity}</span>
                             </div>
                         {/if}
                         <form action="{$BASE_URL}actions/procedures/editprocedure.php" role="form" id="form"
@@ -228,9 +198,7 @@
                                         </label>
                                         <select id="entityType" class="form-control">
                                             <option value="Private">Privado</option>
-                                            <option value="Entity">Seguradora/Hospital</option>
                                             <option value="NewPrivate">Novo privado</option>
-                                            <option value="NewEntity">Nova Seguradora</option>
                                         </select>
                                     </div>
 
@@ -245,15 +213,6 @@
                                             </select>
                                         </div>
                                     </span>
-                                    <span id="entityPayer">
-                                        <div class="form-group">
-                                            <select name="entityName" id="entityName" class="form-control">
-                                                {foreach $ENTITIES['Entidade'] as $entity}
-                                                    <option value="{$entity.identitypayer}">{$entity.name}</option>
-                                                {/foreach}
-                                            </select>
-                                        </div>
-                                    </span>
                                     <span id="newPrivatePayer">
                                         <div class="form-group">
                                             <label class="control-label">
@@ -263,33 +222,6 @@
                                                    placeholder="Nome"
                                                    value="{$FORM_VALUES.namePrivate}"
                                                    maxlength="40"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                NIF <span class="symbol required"></span>
-                                            </label>
-                                            <input type="number" name="nifPrivate" id="nifPrivate"
-                                                   placeholder="NIF"
-                                                   value="{$FORM_VALUES.nifPrivate}"/>
-                                        </div>
-                                    </span>
-                                    <span id="newEntityPayer">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Nome <span class="symbol required"></span>
-                                            </label>
-                                            <input type="text" name="nameEntity" id="nameEntity"
-                                                   placeholder="Nome"
-                                                   value="{$FORM_VALUES.nameEntity}"
-                                                   maxlength="40"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                NIF <span class="symbol required"></span>
-                                            </label>
-                                            <input type="number" name="nifEntity" id="nifEntity"
-                                                   placeholder="NIF"
-                                                   value="{$FORM_VALUES.nifEntity}"/>
                                         </div>
                                     </span>
 
@@ -524,11 +456,11 @@
             {/literal}
         </script>
     <script type="text/javascript">
+        var isEdit = false;
         var myName = "{$NAME}";
         var myLicenseId = "{$LICENSEID}";
         var subProcedureTypes = {$PROCEDURETYPES|json_encode};
         var privatePayers = {$ENTITIES['Privado']|json_encode};
-        var entityPayers = {$ENTITIES['Entidade']|json_encode};
         var patients = {$PATIENTS|json_encode};
         var baseUrl = {$BASE_URL};
         var method = "editProcedure";
@@ -555,8 +487,6 @@
 
         {if $PROCEDURE.idprivatepayer > 0}
         editProcedurePayer['payerType'] = "Private";
-        {else}
-        editProcedurePayer['payerType'] = "Entity";
         {/if}
 
         {if $PROCEDURE.readonly}
@@ -564,7 +494,6 @@
         $("#idOrganization, #readOnly, #idProcedure").attr("disabled", false);
         {/if}
     </script>
-    <script src="{$BASE_URL}javascript/addpayer.js"></script>
     <script src="{$BASE_URL}javascript/addprocedure.js"></script>
     {if !$PROCEDURE.readonly}
         <script src="{$BASE_URL}javascript/validatepayerform.js"></script>

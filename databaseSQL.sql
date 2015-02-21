@@ -93,22 +93,8 @@ CREATE TABLE PrivatePayer (
   idPrivatePayer SERIAL PRIMARY KEY,
   idAccount      INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   name           VARCHAR(40) NOT NULL,
-  nif            NIF,
   valuePerK      REAL,
   createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE EntityPayer (
-  idEntityPayer SERIAL PRIMARY KEY,
-  idAccount     INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
-  name          VARCHAR(40) NOT NULL,
-  contractStart DATE,
-  contractEnd   DATE,
-  type          EntityType,
-  nif           NIF,
-  valuePerK     REAL,
-  createdOn     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CHECK (contractStart < contractEnd)
 );
 
 CREATE TABLE Professional (
@@ -143,8 +129,7 @@ CREATE TABLE ProcedureType (
 CREATE TABLE Procedure (
   idProcedure          SERIAL PRIMARY KEY,
   paymentStatus        ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
-  idPrivatePayer       INTEGER REFERENCES PrivatePayer (idPrivatePayer), -- Ou um, ou outro
-  idEntityPayer        INTEGER REFERENCES EntityPayer (idEntityPayer),
+  idPrivatePayer       INTEGER REFERENCES PrivatePayer (idPrivatePayer),
   idPatient            INTEGER REFERENCES Patient (idPatient),
   idGeneral            INTEGER REFERENCES Professional (idProfessional),
   idFirstAssistant     INTEGER REFERENCES Professional (idProfessional),
@@ -281,27 +266,13 @@ BEGIN
       idProfessional = idinstrumentist OR idProfessional = idanesthetist) AND Professional.idAccount != NEW.idAccount
           AND Professional.licenseid != Account.licenseid;
 
-  INSERT INTO PrivatePayer (idaccount, name, nif, valuePerK)
+  INSERT INTO PrivatePayer (idaccount, name, valuePerK)
     SELECT
       NEW.idaccount,
       name,
-      nif,
       PrivatePayer.valueperk
     FROM PrivatePayer, Procedure
     WHERE idProcedure = NEW.idProcedure AND PrivatePayer.idPrivatePayer = Procedure.idPrivatePayer AND
-          idAccount != NEW.idAccount;
-
-  INSERT INTO EntityPayer (idaccount, name, contractStart, contractEnd, type, nif, valuePerK)
-    SELECT
-      NEW.idaccount,
-      name,
-      contractStart,
-      contractEnd,
-      type,
-      nif,
-      EntityPayer.valuePerK
-    FROM EntityPayer, Procedure
-    WHERE idProcedure = NEW.idProcedure AND EntityPayer.idEntityPayer = Procedure.idPrivatePayer AND
           idAccount != NEW.idAccount;
 
   RETURN NEW;
@@ -6615,9 +6586,7 @@ INSERT INTO Account VALUES (DEFAULT, 'c', 'c@c.pt',
                             '012345678',
                             DEFAULT);
 
-INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', '135792468', 5);
-INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Seguro', NULL, NULL, 'Insurance', '123456789', NULL);
-INSERT INTO EntityPayer VALUES (DEFAULT, 1, 'Hospital', '2014-07-01', '2014-07-02', 'Hospital', '123456789', 10);
+INSERT INTO PrivatePayer VALUES (DEFAULT, 1, 'Aquele Mano', 5);
 INSERT INTO OrgAuthorization VALUES (1, 1, 'AdminVisible');
 INSERT INTO OrgInvitation VALUES (1, 1, '111111111', FALSE);
 INSERT INTO OrgInvitation VALUES (1, 1, '012345678', FALSE, FALSE, '2014-06-02 20:36:43.206615');

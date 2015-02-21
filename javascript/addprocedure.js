@@ -5,13 +5,9 @@ var totalRemun = $('#totalRemun');
 var totalType = $('#totalType');
 var payerType = $("#payerType");
 var privatePayer = $("#privatePayer");
-var entityPayer = $("#entityPayer");
-var newEntityPayer = $("#newEntityPayer");
 var newPrivatePayer = $("#newPrivatePayer");
 var namePrivate = $("#namePrivate");
-var nifPrivate = $("#nifPrivate");
-var nameEntity = $("#nameEntity");
-var nifEntity = $("#nifEntity");
+var entityType = $('#entityType');
 var generalRemun = $("#generalRemun");
 var firstAssistantRemun = $('#firstAssistantRemun');
 var firstAssistantName = $('#firstAssistantName');
@@ -36,6 +32,7 @@ var beneficiaryNrPatient = $("#beneficiaryNrPatient");
 var errorMessageNifPatient = $("#errorMessageNifPatient");
 var errorMessageNamePatient = $("#errorMessageNamePatient");
 var errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
+var errorMessageNamePrivate = $('#errorMessageNamePrivate');
 var subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
 
 var enableField = function (field, disable) {
@@ -78,7 +75,7 @@ $(document).ready(function () {
     });
     updatePatientInfo();
 
-    localAnesthesia.change(function() {
+    localAnesthesia.change(function () {
         disableAnesthetistRow(localAnesthesia.prop("checked"));
         fillInstrumentistRemuneration();
         fillGeneralRemuneration();
@@ -88,11 +85,6 @@ $(document).ready(function () {
     fillProfessionalRow(role.val());
     role.change(function () {
         fillProfessionalRow($(this).val());
-    });
-
-    $("#entityName").change(function () {
-        updatePayerVisibility();
-        updateRemunerations();
     });
 
     $("#privateName").change(function () {
@@ -215,7 +207,7 @@ var fillProfessionalRow = function (roleName) {
     previousRole = roleName;
 };
 
-var fillSubProcedure = function(selectField) {
+var fillSubProcedure = function (selectField) {
     selectField.parent().parent().siblings().eq(3).children().children().last().val(selectField.find(":selected").text());
     selectField.parent().parent().siblings().eq(1).children().children().last().val(subProceduresList[selectField.val() - 1].k);
     selectField.parent().parent().siblings().eq(2).children().children().last().val(subProceduresList[selectField.val() - 1].c);
@@ -224,8 +216,8 @@ var fillSubProcedure = function(selectField) {
     updateRemunerations();
 };
 
-var disableAnesthetistRow = function(disable) {
-    if(disable) {
+var disableAnesthetistRow = function (disable) {
+    if (disable) {
         anesthetistName.val("");
         anesthetistRow.hide();
     } else anesthetistRow.show();
@@ -270,9 +262,11 @@ var addNSubProcedureById = function (id, n) {
 var updatePatientInfo = function () {
     var id = idPatient.val();
 
+    console.log(id);
     switch (id) {
         //Novo
         case "-2":
+            console.log(-2);
             disablePatientForm(false);
             erasePatientForm();
             disablePatientValidations(false);
@@ -280,6 +274,7 @@ var updatePatientInfo = function () {
             break;
         //Nenhum
         case "-1":
+            console.log(-1);
             disablePatientForm(true);
             erasePatientForm();
             disablePatientValidations(true);
@@ -287,6 +282,7 @@ var updatePatientInfo = function () {
             break;
         //Já existente
         default:
+            console.log(0);
             fillPatientForm(id);
             disablePatientForm(true);
             disablePatientValidations(true);
@@ -310,16 +306,15 @@ var disablePatientValidations = function (disable) {
         errorMessageNamePatient.text("");
         errorMessageCellphonePatient.text("");
         patientForm.find("input").css("border", "");
+        console.log("hey0");
     } else {
-        if (!isEdit) {
-            isInvalidPatient(namePatient, "Nome obrigatório", errorMessageNamePatient);
-        } else {
-            isValidPatient(namePatient, errorMessageNamePatient);
-        }
-
+        console.log("hey");
+        isInvalidPatient(namePatient, "Nome obrigatório", errorMessageNamePatient);
         isValidPatient(nifPatient, errorMessageNifPatient);
         isValidPatient(cellphonePatient, errorMessageCellphonePatient);
     }
+
+    console.log(errorMessageNamePatient.is(":visible"))
 };
 
 var fillPatientForm = function (id) {
@@ -341,9 +336,6 @@ var fillValuePerK = function (type) {
         case 'private':
             curreantPayerValuePerK = getPrivateValuePerK();
             break;
-        case 'entity':
-            curreantPayerValuePerK = getEntityValuePerK();
-            break;
         case 'none':
             curreantPayerValuePerK = 0;
             break;
@@ -351,10 +343,15 @@ var fillValuePerK = function (type) {
             break;
     }
 
-    valuePerK.val(editValuePerK);
+    valuePerK.val(curreantPayerValuePerK);
 
-    if (curreantPayerValuePerK === 0)
-        enableField(valuePerK, false);
+    if (curreantPayerValuePerK === 0) {
+        if(editValuePerK > 0)
+            valuePerK.val(editValuePerK);
+        else
+            enableField(valuePerK, false);
+    }
+
 };
 
 var getPrivateValuePerK = function () {
@@ -362,18 +359,6 @@ var getPrivateValuePerK = function () {
         if (privatePayers[i].idprivatepayer == $('#privateName').val()) {
             if (isNumeric(privatePayers[i].valueperk)) {
                 return privatePayers[i].valueperk;
-            } else return 0;
-        }
-    }
-
-    return 0;
-};
-
-var getEntityValuePerK = function () {
-    for (var i = 0; i < entityPayers.length; i++) {
-        if (entityPayers[i].identitypayer == $('#entityName').val()) {
-            if (isNumeric(entityPayers[i].valueperk)) {
-                return entityPayers[i].valueperk;
             } else return 0;
         }
     }
@@ -570,9 +555,8 @@ var updatePayerVisibility = function () {
     switch (entityType.val()) {
         case 'Private':
             privatePayer.show();
-            entityPayer.hide();
-            newEntityPayer.hide();
             newPrivatePayer.hide();
+            errorMessageNamePrivate.parent().hide();
 
             enableField(valuePerK, true);
             fillValuePerK('private');
@@ -580,39 +564,14 @@ var updatePayerVisibility = function () {
 
             checkSubmitButton();
             break;
-        case 'Entity':
-            privatePayer.hide();
-            entityPayer.show();
-            newEntityPayer.hide();
-            newPrivatePayer.hide();
-
-            enableField(valuePerK, true);
-            fillValuePerK('entity');
-            payerType.val("Entity");
-
-            checkSubmitButton();
-            break;
         case 'NewPrivate':
             privatePayer.hide();
-            entityPayer.hide();
-            newEntityPayer.hide();
             newPrivatePayer.show();
+            errorMessageNamePrivate.parent().show();
 
             enableField(valuePerK, false);
             fillValuePerK('none');
             payerType.val("NewPrivate");
-
-            checkSubmitButton();
-            break;
-        case 'NewEntity':
-            privatePayer.hide();
-            entityPayer.hide();
-            newEntityPayer.show();
-            newPrivatePayer.hide();
-
-            enableField(valuePerK, false);
-            fillValuePerK('none');
-            payerType.val("NewEntity");
 
             checkSubmitButton();
             break;

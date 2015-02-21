@@ -35,7 +35,7 @@ function getUserByEmail($email)
 {
     global $conn;
     $stmt = $conn->prepare("SELECT Account.name as name, email, password, salt, licenseid, validuntil, freeregisters,
-                                Speciality.name as speciality
+                                Speciality.name as speciality, idaccount
                                 FROM Account, Speciality
                                 WHERE email = ? AND Speciality.idspeciality = speciality");
     $stmt->execute(array($email));

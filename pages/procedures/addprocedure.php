@@ -27,7 +27,6 @@ $idaccount = $_SESSION['idaccount'];
 $username = getUserById($idaccount);
 $organizations = getOrganizations($idaccount);
 $patients = getOrganizations($idaccount);
-$entities['Entidade'] = getEntityPayers($idaccount);
 $entities['Privado'] = getPrivatePayers($idaccount);
 $patients = getPatients($idaccount);
 $procedureTypes = getProcedureTypes();

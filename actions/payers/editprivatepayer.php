@@ -11,7 +11,6 @@ if (!$_SESSION['email']) {
 
 $idprivatepayer = $_POST['idprivatepayer'];
 $name = $_POST['name'];
-$nif = $_POST['nif'];
 $valueperk = $_POST['valueperk'];
 $accountId = $_SESSION['idaccount'];
 
@@ -40,24 +39,6 @@ if ($name) {
     }
 }
 
-if ($nif) {
-    try {
-        editPrivatePayerNIF($accountId, $idprivatepayer, $nif);
-    } catch (PDOException $e) {
-        if (strpos($e->getMessage(), 'validnif') !== false) {
-            $_SESSION['error_messages'][] = 'NIF inválido';
-            $_SESSION['field_errors']['nif'] = 'NIF inválido';
-        } else $_SESSION['error_messages'][] = $e->getMessage();
-
-        $_SESSION['form_values'] = $_POST;
-
-        $_SESSION['idprivatepayer'] = $idprivatepayer;
-
-        header("Location: $BASE_URL" . 'pages/payers/editprivatepayer.php');
-        exit;
-    }
-}
-
 if ($valueperk) {
     try {
         editPrivatePayerValuePerK($accountId, $idprivatepayer, $valueperk);
@@ -75,4 +56,3 @@ if ($valueperk) {
 $_SESSION['success_messages'][] = 'Entidade editada com sucesso';
 
 header("Location: $BASE_URL" . "pages/payers/payers.php");
-?>

@@ -26,7 +26,6 @@ if (!$procedure) {
 
 $procedure["subprocedures"] = getSubProceduresIds($procedure['idprocedure']);
 $procedure["professionals"] = getProcedureProfessionals($idAccount, $idProcedure);
-$entities['Entidade'] = getEntityPayers($idAccount);
 $entities['Privado'] = getPrivatePayers($idAccount);
 $patients = getPatients($idAccount);
 $organizations = getOrganizations($idAccount);

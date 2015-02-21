@@ -10,9 +10,7 @@
     }
 
     $idaccount = $_SESSION['idaccount'];
-    $entities['Entidade'] = getEntityPayers($idaccount);
     $entities['Privado'] = getPrivatePayers($idaccount);
 
     $smarty->assign('ENTITIES', $entities);
     $smarty->display('payers/payers.tpl');
-?>

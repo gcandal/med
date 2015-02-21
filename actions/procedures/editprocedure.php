@@ -13,7 +13,7 @@ if (!$_SESSION['email']) {
     exit;
 }
 
-if($_POST['readonly'] == 1) {
+if ($_POST['readonly'] == 1) {
     editProcedureFromOrganization($_POST['idprocedure'], $_POST['organization'], $_SESSION['idaccount']);
     $_SESSION['success_messages'][] = 'Registo editado com sucesso';
 
@@ -29,21 +29,13 @@ if (isReadOnly($_POST['idprocedure'], $_SESSION['idaccount'])) {
 }
 
 $type = $_POST['payerType'];
-$_SESSION['entityType'] = $type;
 
 $idprivatepayer = NULL;
 if ($type === 'Private' || $type === 'NewPrivate')
     $idprivatepayer = $_POST['privateName'];
 
-$identitypayer = NULL;
-if ($type === 'Entity' || $type === 'NewEntity')
-    $identitypayer = $_POST['entityName'];
-
-if ($type === 'NewPrivate' || $type === 'NewEntity') {
-    if ($type === 'NewPrivate')
-        $suffix = 'Private';
-    else
-        $suffix = 'Entity';
+if ($type === 'NewPrivate') {
+    $suffix = 'Private';
 
     $name = $_POST['name' . $suffix];
     $nif = $_POST['nif' . $suffix];
@@ -72,49 +64,20 @@ if ($type === 'NewPrivate' || $type === 'NewEntity') {
         exit;
     }
 
-    if ($type === 'NewPrivate') {
-        try {
-            $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
-        } catch (PDOException $e) {
-            if (strpos($e->getMessage(), 'validnif') !== false) {
-                $_SESSION['error_messages'][] = 'NIF inválido';
-                $_SESSION['field_errors']['nif' . $suffix] = 'NIF inválido';
-            } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+    try {
+        $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
+    } catch (PDOException $e) {
+        if (strpos($e->getMessage(), 'validnif') !== false) {
+            $_SESSION['error_messages'][] = 'NIF inválido';
+            $_SESSION['field_errors']['nif' . $suffix] = 'NIF inválido';
+        } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
 
-            $_SESSION['form_values'] = $_POST;
+        $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
-            exit;
-        }
-    } else {
-        $contractstart = $_POST['contractstart'];
-        if (!$contractstart) $contractstart = null;
-        $contractend = $_POST['contractend'];
-        if (!$contractend) $contractend = null;
-
-        if ($contractstart > $contractend && $contractend) {
-            $_SESSION['error_messages'][] = 'Data do contrato não é coerente';
-            $_SESSION['form_values'] = $_POST;
-
-            header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
-            exit;
-        }
-
-        try {
-            $identitypayer = createEntityPayer($name, $contractstart, $contractend, $type, $nif, $valueperk, $accountId);
-        } catch (PDOException $e) {
-
-            if (strpos($e->getMessage(), 'validnif') !== false) {
-                $_SESSION['error_messages'][] = 'NIF inválido';
-                $_SESSION['field_errors']['nif' . $suffix] = 'NIF inválido';
-            } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
-
-            $_SESSION['form_values'] = $_POST;
-
-            header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
-            exit;
-        }
+        header("Location: $BASE_URL" . 'pages/procedures/procedure.php' . "?idprocedure=" . $idProcedure);
+        exit;
     }
+
 }
 
 if (isset($_POST['idPatient'])) {
@@ -134,7 +97,7 @@ if (isset($_POST['idPatient'])) {
             $_SESSION['error_messages'][] = 'Alguns campos em falta';
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/procedure.php?idprocedure='.$idProcedure);
+            header("Location: $BASE_URL" . 'pages/procedures/procedure.php?idprocedure=' . $idProcedure);
             exit;
         }
 
@@ -148,7 +111,7 @@ if (isset($_POST['idPatient'])) {
 
             $_SESSION['form_values'] = $_POST;
 
-            header("Location: $BASE_URL" . 'pages/procedures/procedure.php?idprocedure='.$idProcedure);
+            header("Location: $BASE_URL" . 'pages/procedures/procedure.php?idprocedure=' . $idProcedure);
             exit;
         }
     } else $idpatient = $_POST['idPatient'];
@@ -201,7 +164,7 @@ try {
 
     $hasManualK = $_POST['totalType'] === 'manual';
     editProcedure($idAccount, $idProcedure, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
-        $idprivatepayer, $identitypayer, $role, $_POST['anesthetistK'], $hasManualK, $personalRemun,
+        $idprivatepayer, $role, $_POST['anesthetistK'], $hasManualK, $personalRemun,
         $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
         $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
 

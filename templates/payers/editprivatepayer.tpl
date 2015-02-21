@@ -38,10 +38,6 @@
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                                 <span id="errorMessageNamePrivate" class="errorMessagePrivate"></span>
                             </div>
-                            <div class="alert alert-danger" role="alert" style="display: none;">
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span id="errorMessageNifPrivate" class="errorMessagePrivate"></span>
-                            </div>
 
                             <div class="row">
                                 <div class="col-md-6">
@@ -52,16 +48,8 @@
                                             <span>{$FIELD_ERRORS.name}</span>
                                         </div>
                                     {/if}
-                                    {if $FIELD_ERRORS.nif}
-                                        <div class="alert alert-danger" role="alert">
-                                            <span class="glyphicon glyphicon-exclamation-sign"
-                                                  aria-hidden="true"></span>
-                                            <span>{$FIELD_ERRORS.nif}</span>
-                                        </div>
-                                    {/if}
                                     <form id="formprivado" method="post"
                                           action="{$BASE_URL}actions/payers/editprivatepayer.php">
-                                        <input type="hidden" name="type" id="entityType" value="NewPrivate" required/>
                                         <input type="hidden" name="idprivatepayer"
                                                value="{$privatepayer.idprivatepayer}"/>
 
@@ -76,18 +64,6 @@
                                                    maxlength="40"/>
                                             <span>{$FIELD_ERRORS.name}</span>
                                         </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                NIF
-                                            </label>
-
-                                            <input type="number" id="nifPrivate" min="0" name="nif"
-                                                   placeholder="{$privatepayer.nif}"
-                                                   class="form-control"
-                                                   value="{$FORM_VALUES.nif}"/>
-                                            <span id="niferrorPrivate">{$FIELD_ERRORS.nif}</span>
-                                        </div>
                                         <div class="form-group">
                                             <label class="control-label">
                                                 K cirúrgico
@@ -101,7 +77,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    <button id="submitButtonPrivate" class="btn btn-blue btn-block"
+                                                    <button id="submitButton" class="btn btn-blue btn-block"
                                                             type="submit">
                                                         Editar <i class="fa fa-arrow-circle-right"></i>
                                                     </button>
