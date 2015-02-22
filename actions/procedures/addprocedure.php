@@ -21,24 +21,18 @@ if (!$_SESSION['freeregisters']) {
     exit;
 }
 
-$type = $_POST['payerType'];
+$idprivatepayer = $_POST['idPrivatePayer'];
 
-$idprivatepayer = NULL;
-if ($type === 'Private' || $type === 'NewPrivate')
-    $idprivatepayer = $_POST['privateName'];
-
-if ($type === 'NewPrivate') {
-    $suffix = 'Private';
-
-    $name = $_POST['name' . $suffix];
-    $nif = $_POST['nif' . $suffix];
+if ($idprivatepayer === 'NewPrivate') {
+    $name = $_POST['namePrivate'];
+    $nif = $_POST['nifPrivate'];
     if (!$nif)
         $nif = null;
     $valueperk = $_POST['valuePerK'];
     if (!$valueperk) $valueperk = null;
     $accountId = $_SESSION['idaccount'];
 
-    if (!$_POST['name' . $suffix]) $_SESSION['field_errors']['name' . $suffix] = 'Nome é obrigatório';
+    if (!$_POST['namePrivate']) $_SESSION['field_errors']['namePrivate'] = 'Nome é obrigatório';
 
     if ($_SESSION['field_erors'][0]) {
         $_SESSION['error_messages'][] = 'Alguns campos em falta';
@@ -50,7 +44,7 @@ if ($type === 'NewPrivate') {
 
     if (checkDuplicateEntityName($accountId, $name)) {
         $_SESSION['error_messages'][] = 'Entidade com este nome duplicada';
-        $_SESSION['field_errors']['name' . $suffix] = 'Nome já existe';
+        $_SESSION['field_errors']['namePrivate'] = 'Nome já existe';
         $_SESSION['form_values'] = $_POST;
 
         header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
@@ -60,11 +54,7 @@ if ($type === 'NewPrivate') {
     try {
         $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
     } catch (PDOException $e) {
-        if (strpos($e->getMessage(), 'validnif') !== false) {
-            $_SESSION['error_messages'][] = 'NIF inválido';
-            $_SESSION['field_errors']['nif' . $suffix] = 'NIF inválido';
-        } else $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
-
+        $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');

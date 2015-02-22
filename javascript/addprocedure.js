@@ -4,10 +4,8 @@ var anesthetistRemun = $('#anesthetistRemun');
 var totalRemun = $('#totalRemun');
 var totalType = $('#totalType');
 var payerType = $("#payerType");
-var privatePayer = $("#privatePayer");
 var newPrivatePayer = $("#newPrivatePayer");
-var namePrivate = $("#namePrivate");
-var entityType = $('#entityType');
+var idPayer = $('#idPayer');
 var generalRemun = $("#generalRemun");
 var firstAssistantRemun = $('#firstAssistantRemun');
 var firstAssistantName = $('#firstAssistantName');
@@ -27,6 +25,7 @@ var anesthetistRow = $("#AnesthetistRow");
 var patientForm = $("#patientForm");
 var namePatient = $("#namePatient");
 var nifPatient = $("#nifPatient");
+var namePrivate = $("#namePrivate");
 var cellphonePatient = $("#cellphonePatient");
 var beneficiaryNrPatient = $("#beneficiaryNrPatient");
 var errorMessageNifPatient = $("#errorMessageNifPatient");
@@ -65,7 +64,7 @@ $(document).ready(function () {
         updateRemunerations();
     });
 
-    entityType.change(function () {
+    idPayer.change(function () {
         updatePayerVisibility();
         updateRemunerations();
     });
@@ -85,11 +84,6 @@ $(document).ready(function () {
     fillProfessionalRow(role.val());
     role.change(function () {
         fillProfessionalRow($(this).val());
-    });
-
-    $("#privateName").change(function () {
-        updatePayerVisibility();
-        updateRemunerations();
     });
 
     var subProcedures = $("#subProcedures");
@@ -131,9 +125,7 @@ $(document).ready(function () {
     });
 
     if (method === "editProcedure") {
-        var editProcedurePayerType = editProcedurePayer['payerType'];
-        entityType.val(editProcedurePayerType);
-        $("#" + editProcedurePayerType.toLowerCase() + "Name").val(editProcedurePayer['id']);
+        idPayer.val(editProcedurePayerId);
         updatePayerVisibility();
 
         $.each(editSubProcedures, function (i, v) {
@@ -252,7 +244,6 @@ var addNSubProcedureById = function (id, n) {
     newSubP.appendTo('#subProcedures');
 
     var selectField = newSubP.children().first().children().children().last();
-    console.log(selectField);
     selectField.val(id);
     fillSubProcedure(selectField);
 
@@ -262,30 +253,23 @@ var addNSubProcedureById = function (id, n) {
 var updatePatientInfo = function () {
     var id = idPatient.val();
 
-    console.log(id);
     switch (id) {
         //Novo
         case "-2":
-            console.log(-2);
             disablePatientForm(false);
             erasePatientForm();
-            disablePatientValidations(false);
 
             break;
         //Nenhum
         case "-1":
-            console.log(-1);
             disablePatientForm(true);
             erasePatientForm();
-            disablePatientValidations(true);
 
             break;
         //Já existente
         default:
-            console.log(0);
             fillPatientForm(id);
             disablePatientForm(true);
-            disablePatientValidations(true);
 
             break;
     }
@@ -295,6 +279,8 @@ var updatePatientInfo = function () {
 
 var disablePatientForm = function (disable) {
     patientForm.find("input").attr("disabled", disable);
+
+    disablePatientValidations(disable);
 };
 
 var disablePatientValidations = function (disable) {
@@ -306,15 +292,21 @@ var disablePatientValidations = function (disable) {
         errorMessageNamePatient.text("");
         errorMessageCellphonePatient.text("");
         patientForm.find("input").css("border", "");
-        console.log("hey0");
     } else {
-        console.log("hey");
         isInvalidPatient(namePatient, "Nome obrigatório", errorMessageNamePatient);
         isValidPatient(nifPatient, errorMessageNifPatient);
         isValidPatient(cellphonePatient, errorMessageCellphonePatient);
     }
+};
 
-    console.log(errorMessageNamePatient.is(":visible"))
+var disablePayerValidations = function(disable) {
+    if (disable) {
+        errorMessageNamePrivate.parent().hide();
+        errorMessageNamePrivate.text("");
+        newPrivatePayer.find("input").css("border", "");
+    } else {
+        isInvalidPayer(namePrivate, "Nome obrigatório", errorMessageNamePrivate);
+    }
 };
 
 var fillPatientForm = function (id) {
@@ -356,7 +348,7 @@ var fillValuePerK = function (type) {
 
 var getPrivateValuePerK = function () {
     for (var i = 0; i < privatePayers.length; i++) {
-        if (privatePayers[i].idprivatepayer == $('#privateName').val()) {
+        if (privatePayers[i].idprivatepayer == idPayer.val()) {
             if (isNumeric(privatePayers[i].valueperk)) {
                 return privatePayers[i].valueperk;
             } else return 0;
@@ -552,22 +544,10 @@ function getTotalK() {
 }
 
 var updatePayerVisibility = function () {
-    switch (entityType.val()) {
-        case 'Private':
-            privatePayer.show();
-            newPrivatePayer.hide();
-            errorMessageNamePrivate.parent().hide();
-
-            enableField(valuePerK, true);
-            fillValuePerK('private');
-            payerType.val("Private");
-
-            checkSubmitButton();
-            break;
+    switch (idPayer.val()) {
         case 'NewPrivate':
-            privatePayer.hide();
+            disablePayerValidations(false);
             newPrivatePayer.show();
-            errorMessageNamePrivate.parent().show();
 
             enableField(valuePerK, false);
             fillValuePerK('none');
@@ -576,6 +556,14 @@ var updatePayerVisibility = function () {
             checkSubmitButton();
             break;
         default:
+            disablePayerValidations(true);
+            newPrivatePayer.hide();
+
+            enableField(valuePerK, true);
+            fillValuePerK('private');
+            payerType.val("Private");
+
+            checkSubmitButton();
             break;
     }
 };
@@ -601,7 +589,7 @@ var isNumeric = function (n) {
 };
 
 var noErrorMessages = function () {
-    return $('.errorMessage, .errorMessage' + payerType.val().slice(3)).text() === '';
+    return $('.errorMessage').text() === '';
 };
 
 var checkSubmitButton = function () {

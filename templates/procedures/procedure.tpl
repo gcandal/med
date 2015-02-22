@@ -35,7 +35,7 @@
                     <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="display: none">
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            <span id="errorMessageNamePrivate" class="errorMessagePrivate"></span>
+                            <span id="errorMessageNamePrivate" class="errorMessage"></span>
                         </div>
                         <div class="alert alert-danger" role="alert" style="display: none">
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -196,23 +196,14 @@
                                         <label class="control-label">
                                             Escolha o responsável
                                         </label>
-                                        <select id="entityType" class="form-control">
-                                            <option value="Private">Privado</option>
+                                        <select id="idPayer" name="idPrivatePayer" class="form-control">
                                             <option value="NewPrivate">Novo privado</option>
+                                            {foreach $ENTITIES['Privado'] as $entity}
+                                                196	                                                <option value="{$entity.idprivatepayer}">{$entity.name}</option>
+                                                197	                                            {/foreach}
                                         </select>
                                     </div>
 
-                                    <input type="hidden" id="payerType" name="payerType" value="None"/>
-
-                                    <span id="privatePayer">
-                                        <div class="form-group">
-                                            <select name="privateName" id="privateName" class="form-control">
-                                                {foreach $ENTITIES['Privado'] as $entity}
-                                                    <option value="{$entity.idprivatepayer}">{$entity.name}</option>
-                                                {/foreach}
-                                            </select>
-                                        </div>
-                                    </span>
                                     <span id="newPrivatePayer">
                                         <div class="form-group">
                                             <label class="control-label">
@@ -468,10 +459,10 @@
         $("#paymentStatus").val("{$PROCEDURE.paymentstatus}");
         $("#idOrganization").val("{$PROCEDURE.idorganization}");
         $("#idPatient").val("{$PROCEDURE.idpatient}");
-        $("#role").val("{$PROCEDURE.role}")
+        $("#role").val("{$PROCEDURE.role}");
 
         var editValuePerK = {$PROCEDURE.valueperk};
-        var editProcedurePayer = {literal}{{/literal}id: {$PROCEDURE.idpayer}{literal}}{/literal};
+        var editProcedurePayerId = {$PROCEDURE.idpayer};
         var editSubProcedures = {$PROCEDURE.subprocedures|json_encode};
         var editAnesthetistK = "{$PROCEDURE.anesthetistk}";
 
@@ -483,10 +474,6 @@
 
         {if $PROCEDURE.localanesthesia}
         $("#localanesthesia").prop("checked", "true");
-        {/if}
-
-        {if $PROCEDURE.idprivatepayer > 0}
-        editProcedurePayer['payerType'] = "Private";
         {/if}
 
         {if $PROCEDURE.readonly}
