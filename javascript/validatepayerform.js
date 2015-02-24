@@ -20,7 +20,10 @@ $(document).ready(function () {
     namePayer.bind("paste drop input change cut", function () {
         checkValidPayerName($(this));
     });
-    checkValidPayerName(namePayer);
+
+    if (typeof method === "undefined") {
+        checkValidPayerName(namePayer);
+    }
 });
 
 var checkValidPayerName = function (field) {

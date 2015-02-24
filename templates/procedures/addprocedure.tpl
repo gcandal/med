@@ -103,7 +103,7 @@
                                             <option value="General">Cirurgião Principal</option>
                                             <option value="FirstAssistant">Primeiro Asistente</option>
                                             <option value="SecondAssistant">Segundo Assistente</option>
-                                            <option value="Instrumentist">Insturmentista</option>
+                                            <option value="Instrumentist">Instrumentista</option>
                                             <option value="Anesthetist">Anestesista</option>
                                         </select>
                                     </div>
@@ -145,8 +145,8 @@
                                             Escolha o paciente
                                         </label>
                                         <select id="idPatient" name="idPatient" class="form-control">
-                                            <option value="-2">Novo doente</option>
                                             <option value="-1">Nenhum</option>
+                                            <option value="-2">Novo doente</option>
                                             {foreach $PATIENTS as $patient}
                                                 <option value="{$patient.idpatient}">{$patient.name}</option>
                                             {/foreach}
@@ -191,10 +191,10 @@
                                             Escolha o responsável
                                         </label>
                                         <select id="idPayer" class="form-control" name="idPrivatePayer">
-                                            <option value="NewPrivate">Novo privado</option>
                                             {foreach $ENTITIES['Privado'] as $entity}
                                                 <option value="{$entity.idprivatepayer}">{$entity.name}</option>
                                             {/foreach}
+                                            <option value="NewPrivate">Novo privado</option>
                                         </select>
                                     </div>
 
@@ -241,14 +241,17 @@
                                     <hr>
                                 </div>
                                 <div class="col-md-12">
-                                    <table class="teamTable table table-hover">
+                                    <table class="teamTable table table-hover" id="sample-table-1">
+                                        <thead>
                                         <tr>
                                             <th class="center">Nome</th>
                                             <th class="center hidden-xs">Função</th>
                                             <th class="center hidden-xs">Cédula</th>
-                                            <th class="center hidden-xs">% de K</th>
+                                            <th class="center">% de K</th>
                                             <th class="center">Remuneração</th>
                                         </tr>
+                                        </thead>
+                                        <tbody>
                                         <tr id="GeneralRow">
                                             <td>
                                                 <input type="text" name="generalName" class="professionalName"
@@ -278,7 +281,8 @@
                                             <td class="center">20%</td>
                                             <td class="center"><input type="text" name="firstAssistantRemun"
                                                                       id="firstAssistantRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly></td>
+                                                                      style="background-color: lightgrey" value="0"
+                                                                      readonly></td>
                                         </tr>
                                         <tr id="SecondAssistantRow">
                                             <td><input type="text" name="secondAssistantName" class="professionalName"
@@ -293,7 +297,8 @@
                                             <td class="center">10%</td>
                                             <td class="center"><input type="text" name="secondAssistantRemun"
                                                                       id="secondAssistantRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly></td>
+                                                                      style="background-color: lightgrey" value="0"
+                                                                      readonly></td>
                                         </tr>
                                         <tr id="InstrumentistRow">
                                             <td><input type="text" name="instrumentistName" class="professionalName"
@@ -308,9 +313,9 @@
                                             <td class="center">10%</td>
                                             <td class="center"><input type="text" name="instrumentistRemun"
                                                                       id="instrumentistRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly></td>
+                                                                      style="background-color: lightgrey" value="0"
+                                                                      readonly></td>
                                         </tr>
-
                                         <tr id="AnesthetistRow">
                                             <td><input type="text" name="anesthetistName" class="professionalName"
                                                        id="anesthetistName"
@@ -330,7 +335,8 @@
                                             </td>
                                             <td class="center"><input type="text" name="anesthetistRemun"
                                                                       id="anesthetistRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly>
+                                                                      style="background-color: lightgrey" value="0"
+                                                                      readonly>
                                             </td>
                                         </tr>
                                         <tr>
@@ -346,6 +352,7 @@
                                                                       style="background-color: lightgrey"
                                                                       readonly value="0"></td>
                                         </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -456,6 +463,8 @@
         <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
         <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
         <script src="{$BASE_URL}javascript/validatepatientform.js"></script>
+        <script src="{$BASE_URL}javascript/subprocedureslist.js"></script>
+        <script src="{$BASE_URL}javascript/subprocedureslist2.js"></script>
         {else}
         <p>Tem que fazer login!</p>
         {/if}

@@ -93,8 +93,7 @@ CREATE TABLE PrivatePayer (
   idPrivatePayer SERIAL PRIMARY KEY,
   idAccount      INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   name           VARCHAR(40) NOT NULL,
-  valuePerK      REAL,
-  createdOn      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  valuePerK      REAL
 );
 
 CREATE TABLE Professional (
@@ -114,8 +113,7 @@ CREATE TABLE Patient (
   name          VARCHAR(40),
   nif           NIF,
   cellphone     CELLPHONE,
-  beneficiaryNr VARCHAR(40),
-  createdOn     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  beneficiaryNr VARCHAR(40)
 );
 
 CREATE TABLE ProcedureType (
@@ -272,7 +270,7 @@ BEGIN
       name,
       PrivatePayer.valueperk
     FROM PrivatePayer, Procedure
-    WHERE idProcedure = NEW.idProcedure AND PrivatePayer.idPrivatePayer = Procedure.idPrivatePayer AND
+    WHERE idProcedure = NEW.idProcedure AND Procedure.idPrivatePayer > 6 AND PrivatePayer.idPrivatePayer = Procedure.idPrivatePayer AND
           idAccount != NEW.idAccount;
 
   RETURN NEW;
@@ -368,6 +366,21 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION insert_account_trigger()
+  RETURNS TRIGGER AS $$
+DECLARE
+BEGIN
+  INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'Médis', 3);
+  INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'Multicare', 3.75);
+  INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'Advancecare', 3.5);
+  INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'Allianz', 3.75);
+  INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'SSCGD', 2.8);
+  INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'SAMS Quadros', 4);
+
+  RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
 DROP TRIGGER IF EXISTS delete_procedureaccount_trigger ON ProcedureAccount;
 CREATE TRIGGER delete_procedureaccount_trigger
 AFTER DELETE ON ProcedureAccount
@@ -387,6 +400,11 @@ DROP TRIGGER IF EXISTS insert_professional_trigger ON Professional;
 CREATE TRIGGER insert_professional_trigger
 BEFORE INSERT ON Professional
 FOR EACH ROW EXECUTE PROCEDURE insert_professional_trigger();
+
+DROP TRIGGER IF EXISTS insert_account_trigger ON Account;
+CREATE TRIGGER insert_account_trigger
+AFTER INSERT ON Account
+FOR EACH ROW EXECUTE PROCEDURE insert_account_trigger();
 
 INSERT INTO Speciality VALUES (DEFAULT, 'Anestesiologia');
 INSERT INTO Speciality VALUES (DEFAULT, 'Enfermagem');

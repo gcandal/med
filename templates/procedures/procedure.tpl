@@ -97,7 +97,8 @@
                                         <label class="control-label">
                                             Data
                                         </label>
-                                        <input value="{$PROCEDURE.date}" type="date" placeholder="DD/MM/AAAA" name="date" class="form-control">
+                                        <input value="{$PROCEDURE.date}" type="date" placeholder="DD/MM/AAAA"
+                                               name="date" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -199,8 +200,9 @@
                                         <select id="idPayer" name="idPrivatePayer" class="form-control">
                                             <option value="NewPrivate">Novo privado</option>
                                             {foreach $ENTITIES['Privado'] as $entity}
-                                                196	                                                <option value="{$entity.idprivatepayer}">{$entity.name}</option>
-                                                197	                                            {/foreach}
+                                                196
+                                                <option value="{$entity.idprivatepayer}">{$entity.name}</option>
+                                                197                                                {/foreach}
                                         </select>
                                     </div>
 
@@ -248,110 +250,118 @@
                                 </div>
                                 <div class="col-md-12">
                                     <table class="teamTable table table-hover">
-                                        <tr>
-                                            <th class="center">Nome</th>
-                                            <th class="center hidden-xs">Função</th>
-                                            <th class="center hidden-xs">Cédula</th>
-                                            <th class="center hidden-xs">% de K</th>
-                                            <th class="center">Remuneração</th>
-                                        </tr>
-                                        <tr id="GeneralRow">
-                                            <td>
-                                                <input type="text" name="generalName" class="professionalName"
-                                                       id="generalName"
-                                                       value="{$PROCEDURE.professionals.general.name}"/></td>
-                                            <td class="center hidden-xs">Cirurgião Principal</td>
-                                            <td class="center hidden-xs">
-                                                <input type="text" name="generaltLicenseId"
-                                                       class="professionalLicenseId"
-                                                       value="{$PROCEDURE.professionals.general.licenseid}"/>
-                                            </td>
-                                            <td class="center" id="generalK">100%</td>
-                                            <td class="center">
-                                                <input type="text" name="generalRemun" id="generalRemun"
-                                                       style="background-color: lightgrey" value="0" readonly></td>
-                                        </tr>
-                                        <tr id="FirstAssistantRow">
-                                            <td><input type="text" name="firstAssistantName" class="professionalName"
-                                                       id="firstAssistantName"
-                                                       value="{$PROCEDURE.professionals.firstassistant.name}"/></td>
-                                            <td class="center hidden-xs">1º Ajudante</td>
-                                            <td class="center hidden-xs"><input type="text"
-                                                                                name="firstAssistantLicenseId"
-                                                                                class="professionalLicenseId"
-                                                                                value="{$PROCEDURE.professionals.firstassistant.licenseid}"/>
-                                            </td>
-                                            <td class="center">20%</td>
-                                            <td class="center"><input type="text" name="firstAssistantRemun"
-                                                                      id="firstAssistantRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly></td>
-                                        </tr>
-                                        <tr id="SecondAssistantRow">
-                                            <td><input type="text" name="secondAssistantName" class="professionalName"
-                                                       id="secondAssistantName"
-                                                       value="{$PROCEDURE.professionals.secondassistant.name}"/></td>
-                                            <td class="center hidden-xs">2º Ajudante</td>
-                                            <td class="center hidden-xs"><input type="text"
-                                                                                name="secondAssistantLicenseId"
-                                                                                class="professionalLicenseId"
-                                                                                value="{$PROCEDURE.professionals.secondassistant.licenseid}"/>
-                                            </td>
-                                            <td class="center">10%</td>
-                                            <td class="center"><input type="text" name="secondAssistantRemun"
-                                                                      id="secondAssistantRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly></td>
-                                        </tr>
-                                        <tr id="InstrumentistRow">
-                                            <td><input type="text" name="instrumentistName" class="professionalName"
-                                                       id="instrumentistName"
-                                                       value="{$PROCEDURE.professionals.instrumentist.name}"/></td>
-                                            <td class="center hidden-xs">Instrumentista</td>
-                                            <td class="center hidden-xs"><input type="text"
-                                                                                name="instrumentistAssistantLicenseId"
-                                                                                class="professionalLicenseId"
-                                                                                value="{$PROCEDURE.professionals.instrumentist.licenseid}"/>
-                                            </td>
-                                            <td class="center">10%</td>
-                                            <td class="center"><input type="text" name="instrumentistRemun"
-                                                                      id="instrumentistRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly></td>
-                                        </tr>
+                                        <thead>
+                                            <tr>
+                                                <th class="center">Nome</th>
+                                                <th class="center hidden-xs">Função</th>
+                                                <th class="center hidden-xs">Cédula</th>
+                                                <th class="center hidden-xs">% de K</th>
+                                                <th class="center">Remuneração</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="GeneralRow">
+                                                <td>
+                                                    <input type="text" name="generalName" class="professionalName"
+                                                           id="generalName"
+                                                           value="{$PROCEDURE.professionals.general.name}"/></td>
+                                                <td class="center hidden-xs">Cirurgião Principal</td>
+                                                <td class="center hidden-xs">
+                                                    <input type="text" name="generaltLicenseId"
+                                                           class="professionalLicenseId"
+                                                           value="{$PROCEDURE.professionals.general.licenseid}"/>
+                                                </td>
+                                                <td class="center" id="generalK">100%</td>
+                                                <td class="center">
+                                                    <input type="text" name="generalRemun" id="generalRemun"
+                                                           style="background-color: lightgrey" value="0" readonly></td>
+                                            </tr>
+                                            <tr id="FirstAssistantRow">
+                                                <td><input type="text" name="firstAssistantName" class="professionalName"
+                                                           id="firstAssistantName"
+                                                           value="{$PROCEDURE.professionals.firstassistant.name}"/></td>
+                                                <td class="center hidden-xs">1º Ajudante</td>
+                                                <td class="center hidden-xs"><input type="text"
+                                                                                    name="firstAssistantLicenseId"
+                                                                                    class="professionalLicenseId"
+                                                                                    value="{$PROCEDURE.professionals.firstassistant.licenseid}"/>
+                                                </td>
+                                                <td class="center">20%</td>
+                                                <td class="center"><input type="text" name="firstAssistantRemun"
+                                                                          id="firstAssistantRemun"
+                                                                          style="background-color: lightgrey" value="0"
+                                                                          readonly></td>
+                                            </tr>
+                                            <tr id="SecondAssistantRow">
+                                                <td><input type="text" name="secondAssistantName" class="professionalName"
+                                                           id="secondAssistantName"
+                                                           value="{$PROCEDURE.professionals.secondassistant.name}"/></td>
+                                                <td class="center hidden-xs">2º Ajudante</td>
+                                                <td class="center hidden-xs"><input type="text"
+                                                                                    name="secondAssistantLicenseId"
+                                                                                    class="professionalLicenseId"
+                                                                                    value="{$PROCEDURE.professionals.secondassistant.licenseid}"/>
+                                                </td>
+                                                <td class="center">10%</td>
+                                                <td class="center"><input type="text" name="secondAssistantRemun"
+                                                                          id="secondAssistantRemun"
+                                                                          style="background-color: lightgrey" value="0"
+                                                                          readonly></td>
+                                            </tr>
+                                            <tr id="InstrumentistRow">
+                                                <td><input type="text" name="instrumentistName" class="professionalName"
+                                                           id="instrumentistName"
+                                                           value="{$PROCEDURE.professionals.instrumentist.name}"/></td>
+                                                <td class="center hidden-xs">Instrumentista</td>
+                                                <td class="center hidden-xs"><input type="text"
+                                                                                    name="instrumentistAssistantLicenseId"
+                                                                                    class="professionalLicenseId"
+                                                                                    value="{$PROCEDURE.professionals.instrumentist.licenseid}"/>
+                                                </td>
+                                                <td class="center">10%</td>
+                                                <td class="center"><input type="text" name="instrumentistRemun"
+                                                                          id="instrumentistRemun"
+                                                                          style="background-color: lightgrey" value="0"
+                                                                          readonly></td>
+                                            </tr>
 
-                                        <tr id="AnesthetistRow">
-                                            <td><input type="text" name="anesthetistName" class="professionalName"
-                                                       id="anesthetistName"
-                                                       value="{$PROCEDURE.professionals.anesthetist.name}"/></td>
-                                            <td class="center hidden-xs">Anestesista</td>
-                                            <td class="center hidden-xs"><input type="text"
-                                                                                name="anesthetistAssistantLicenseId"
-                                                                                class="professionalLicenseId"
-                                                                                value="{$PROCEDURE.professionals.anesthetist.licenseid}"/>
-                                            </td>
-                                            <td class="center">
-                                                <select id="anesthetistK" name="anesthetistK">
-                                                    <option value="25">25%</option>
-                                                    <option value="30">30%</option>
-                                                    <option value="table">Tabela OM</option>
-                                                </select>
-                                            </td>
-                                            <td class="center"><input type="text" name="anesthetistRemun"
-                                                                      id="anesthetistRemun"
-                                                                      style="background-color: lightgrey" value="0" readonly>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="center">Total
-                                                <select name="totalType" id="totalType">
-                                                    <option value="auto">Por K</option>
-                                                    <option value="manual">Manual</option>
-                                                </select></td>
-                                            <td class="center"><input type="text" name="totalRemun" id="totalRemun"
-                                                                      style="background-color: lightgrey" value="0"
-                                                                      readonly value="{$PROCEDURE.totalremun}"></td>
-                                        </tr>
+                                            <tr id="AnesthetistRow">
+                                                <td><input type="text" name="anesthetistName" class="professionalName"
+                                                           id="anesthetistName"
+                                                           value="{$PROCEDURE.professionals.anesthetist.name}"/></td>
+                                                <td class="center hidden-xs">Anestesista</td>
+                                                <td class="center hidden-xs"><input type="text"
+                                                                                    name="anesthetistAssistantLicenseId"
+                                                                                    class="professionalLicenseId"
+                                                                                    value="{$PROCEDURE.professionals.anesthetist.licenseid}"/>
+                                                </td>
+                                                <td class="center">
+                                                    <select id="anesthetistK" name="anesthetistK">
+                                                        <option value="25">25%</option>
+                                                        <option value="30">30%</option>
+                                                        <option value="table">Tabela OM</option>
+                                                    </select>
+                                                </td>
+                                                <td class="center"><input type="text" name="anesthetistRemun"
+                                                                          id="anesthetistRemun"
+                                                                          style="background-color: lightgrey" value="0"
+                                                                          readonly>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="center">Total
+                                                    <select name="totalType" id="totalType">
+                                                        <option value="auto">Por K</option>
+                                                        <option value="manual">Manual</option>
+                                                    </select></td>
+                                                <td class="center"><input type="text" name="totalRemun" id="totalRemun"
+                                                                          style="background-color: lightgrey" value="0"
+                                                                          readonly value="{$PROCEDURE.totalremun}"></td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -446,49 +456,51 @@
                 </div>
             {/literal}
         </script>
-    <script type="text/javascript">
-        var isEdit = false;
-        var myName = "{$NAME}";
-        var myLicenseId = "{$LICENSEID}";
-        var subProcedureTypes = {$PROCEDURETYPES|json_encode};
-        var privatePayers = {$ENTITIES['Privado']|json_encode};
-        var patients = {$PATIENTS|json_encode};
-        var baseUrl = {$BASE_URL};
-        var method = "editProcedure";
+        <script type="text/javascript">
+            var isEdit = false;
+            var myName = "{$NAME}";
+            var myLicenseId = "{$LICENSEID}";
+            var subProcedureTypes = {$PROCEDURETYPES|json_encode};
+            var privatePayers = {$ENTITIES['Privado']|json_encode};
+            var patients = {$PATIENTS|json_encode};
+            var baseUrl = {$BASE_URL};
+            var method = "editProcedure";
 
-        $("#paymentStatus").val("{$PROCEDURE.paymentstatus}");
-        $("#idOrganization").val("{$PROCEDURE.idorganization}");
-        $("#idPatient").val("{$PROCEDURE.idpatient}");
-        $("#role").val("{$PROCEDURE.role}");
+            $("#paymentStatus").val("{$PROCEDURE.paymentstatus}");
+            $("#idOrganization").val("{$PROCEDURE.idorganization}");
+            $("#idPatient").val("{$PROCEDURE.idpatient}");
+            $("#role").val("{$PROCEDURE.role}");
 
-        var editValuePerK = {$PROCEDURE.valueperk};
-        var editProcedurePayerId = {$PROCEDURE.idpayer};
-        var editSubProcedures = {$PROCEDURE.subprocedures|json_encode};
-        var editAnesthetistK = "{$PROCEDURE.anesthetistk}";
+            var editValuePerK = {$PROCEDURE.valueperk};
+            var editProcedurePayerId = {$PROCEDURE.idpayer};
+            var editSubProcedures = {$PROCEDURE.subprocedures|json_encode};
+            var editAnesthetistK = "{$PROCEDURE.anesthetistk}";
 
-        {if $PROCEDURE.hasmanualk}
-        var editHasManualK = true;
+            {if $PROCEDURE.hasmanualk}
+            var editHasManualK = true;
+            {else}
+            var editHasManualK = false;
+            {/if}
+
+            {if $PROCEDURE.localanesthesia}
+            $("#localanesthesia").prop("checked", "true");
+            {/if}
+
+            {if $PROCEDURE.readonly}
+            $("input, select, #addSubProcedure").attr("disabled", true);
+            $("#idOrganization, #readOnly, #idProcedure").attr("disabled", false);
+            {/if}
+        </script>
+        <script src="{$BASE_URL}javascript/addprocedure.js"></script>
+        <script src="{$BASE_URL}javascript/subprocedureslist.js"></script>
+        <script src="{$BASE_URL}javascript/subprocedureslist2.js"></script>
+        {if !$PROCEDURE.readonly}
+            <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
+            <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
+            <script src="{$BASE_URL}javascript/validatepatientform.js"></script>
+        {/if}
         {else}
-        var editHasManualK = false;
+        <p>Tem que fazer login!</p>
         {/if}
-
-        {if $PROCEDURE.localanesthesia}
-        $("#localanesthesia").prop("checked", "true");
-        {/if}
-
-        {if $PROCEDURE.readonly}
-        $("input, select, #addSubProcedure").attr("disabled", true);
-        $("#idOrganization, #readOnly, #idProcedure").attr("disabled", false);
-        {/if}
-    </script>
-    <script src="{$BASE_URL}javascript/addprocedure.js"></script>
-    {if !$PROCEDURE.readonly}
-        <script src="{$BASE_URL}javascript/validatepayerform.js"></script>
-        <script src="{$BASE_URL}javascript/validateprofessionalform.js"></script>
-        <script src="{$BASE_URL}javascript/validatepatientform.js"></script>
-    {/if}
-{else}
-    <p>Tem que fazer login!</p>
-{/if}
 
 {include file='common/footer.tpl'}
