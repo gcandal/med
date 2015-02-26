@@ -79,7 +79,8 @@
                                         <td class="center">
                                             <div class="hidden-md hidden-lg hidden-sm hidden-xs">
                                                 <form class="inlineForm"
-                                                      action="{$BASE_URL}actions/procedures/shareprocedure.php">
+                                                      action="{$BASE_URL}actions/procedures/shareprocedure.php"
+                                                      method="post">
                                                     <input type="hidden" name="idprocedure"
                                                            value="{$procedure.idprocedure}"/>
                                                     <button type="submit" class="btn btn-xs btn-blue tooltips"
@@ -123,13 +124,18 @@
                                                         <li role="presentation">
                                                             <form role="menuitem" tabindex="-1"
                                                                   class="inlineForm"
-                                                                  action="{$BASE_URL}actions/procedures/shareprocedure.php">
+                                                                  action="{$BASE_URL}actions/procedures/shareprocedure.php"
+                                                                  method="post">
                                                                 <input type="hidden" name="idprocedure"
                                                                        value="{$procedure.idprocedure}"/>
                                                                 <button type="submit"
                                                                         class="btn btn-xs btn-blue tooltips"
                                                                         data-placement="top"
-                                                                        data-original-title="Editar">
+                                                                        {if $procedure.readonly}
+                                                                            data-original-title="Ver"
+                                                                        {else}
+                                                                            data-original-title="Editar"
+                                                                        {/if}>
                                                                     <i class="fa fa-share"></i> Partilhar
                                                                 </button>
                                                             </form>
@@ -143,8 +149,17 @@
                                                                 <button type="submit"
                                                                         class="btn btn-xs btn-blue tooltips"
                                                                         data-placement="top"
-                                                                        data-original-title="Editar">
-                                                                    <i class="fa fa-edit"></i> Editar
+                                                                        {if $procedure.readonly}
+                                                                            data-original-title="Ver"
+                                                                        {else}
+                                                                            data-original-title="Editar"
+                                                                        {/if}>
+                                                                    <i class="fa fa-edit"></i>
+                                                                    {if $procedure.readonly}
+                                                                        Ver
+                                                                    {else}
+                                                                        Editar
+                                                                    {/if}
                                                                 </button>
                                                             </form>
                                                         </li>

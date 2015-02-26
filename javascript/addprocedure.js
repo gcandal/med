@@ -47,6 +47,30 @@ var enableField = function (field, disable) {
 };
 
 $(document).ready(function () {
+    if (method === "editProcedure") {
+        idPayer.val(editProcedurePayerId);
+        updatePayerVisibility();
+
+        $.each(editSubProcedures, function (i, v) {
+            addNSubProcedureById(v['idproceduretype'], v['quantity']);
+        });
+
+        if (anesthetistName.val() !== "")
+            anesthetistK.val(editAnesthetistK);
+
+        if (editHasManualK) {
+            totalType.val("manual");
+            enableField(totalRemun, false);
+        }
+
+        updateRemunerations();
+    } else {
+        editValuePerK = 0;
+    }
+
+    if(isReadOnly)
+        return;
+
     $('#addSubProcedure').click(function (e) {
         e.preventDefault();
         addSubProcedure();
@@ -127,27 +151,6 @@ $(document).ready(function () {
         updateRemunerations();
     });
 
-    if (method === "editProcedure") {
-        idPayer.val(editProcedurePayerId);
-        updatePayerVisibility();
-
-        $.each(editSubProcedures, function (i, v) {
-            addNSubProcedureById(v['idproceduretype'], v['quantity']);
-        });
-
-        if (anesthetistName.val() !== "")
-            anesthetistK.val(editAnesthetistK);
-
-        if (editHasManualK) {
-            totalType.val("manual");
-            enableField(totalRemun, false);
-        }
-
-        updateRemunerations();
-    } else {
-        editValuePerK = 0;
-    }
-
     $.ajax({
         url: baseUrl + "actions/professionals/getrecentprofessionals.php",
         dataType: "json",
@@ -219,11 +222,17 @@ var disableAnesthetistRow = function (disable) {
 
 };
 
+var subProcedureTypes = [];
 var getSubProcedureTypes = function () {
+    if(subProcedureTypes.length > 0 )
+        return subProcedureTypes;
+
     var result = "";
-    for (var i = 0; i < subProcedureTypes.length; i++) {
-        result += '<option value = "' + subProcedureTypes[i].idproceduretype + '">' + subProcedureTypes[i].name + '</option>';
+    for (var i = 0; i < subProceduresList.length; i++) {
+        result += '<option value = "' + subProceduresList[i].id + '">' + subProceduresList[i].label + '</option>';
     }
+
+    subProcedureTypes = result;
     return result;
 };
 
@@ -515,9 +524,9 @@ var fillTotalRemuneration = function () {
 
         if (isNumeric(valuePerK.val())) {
             $('.subProcedure').each(function () {
-                for (var i = 0; i < subProcedureTypes.length; i++) {
-                    if ($(this).val() == subProcedureTypes[i].idproceduretype) {
-                        total = total + parseInt(subProcedureTypes[i].k);
+                for (var i = 0; i < subProceduresList.length; i++) {
+                    if ($(this).val() == subProceduresList[i].id) {
+                        total = total + parseInt(subProceduresList[i].k);
                     }
                 }
             });
@@ -533,9 +542,9 @@ function getTotalK() {
 
     if (isNumeric($('input[name=valuePerK]').val())) {
         $('.subProcedure').each(function () {
-            for (var i = 0; i < subProcedureTypes.length; i++) {
-                if ($(this).val() == subProcedureTypes[i].idproceduretype) {
-                    total += parseInt(subProcedureTypes[i].k);
+            for (var i = 0; i < subProceduresList.length; i++) {
+                if ($(this).val() == subProceduresList[i].id) {
+                    total += parseInt(subProceduresList[i].k);
                 }
             }
         });
@@ -549,7 +558,6 @@ function getTotalK() {
 var updatePayerVisibility = function () {
     switch (idPayer.val()) {
         case 'NewPrivate':
-            console.log("novo")
             disablePayerValidations(false);
             newPrivatePayer.show();
 
@@ -560,7 +568,6 @@ var updatePayerVisibility = function () {
             checkSubmitButton();
             break;
         default:
-            console.log("velho")
             disablePayerValidations(true);
             newPrivatePayer.hide();
 

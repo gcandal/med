@@ -89,7 +89,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" target="_blank"><i class="clip-users"></i>
+                    <a href="javascript:void(0)"><i class="clip-users"></i>
                         <span class="title"> Equipa cirúrgica </span><i class="icon-arrow"></i>
                         <span class="selected"></span>
                     </a>

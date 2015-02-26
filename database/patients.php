@@ -22,6 +22,19 @@ function getPatients($idAccount)
     return $stmt->fetchAll();
 }
 
+function getPatientsForProcedure($idAccount, $idProcedure)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT * FROM patient, procedure
+                            WHERE patient.idaccount = :idAccount OR
+                            (idprocedure = :idProcedure AND patient.idpatient = procedure.idpatient)
+                            ORDER BY name");
+    $stmt->execute(array("idAccount" => $idAccount, "idProcedure" => $idProcedure));
+
+    return $stmt->fetchAll();
+}
+
 function createPatient($name, $accountId, $nif, $cellphone, $beneficiarynr)
 {
     global $conn;

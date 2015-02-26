@@ -63,18 +63,18 @@
                                     <form style="display: inline"
                                           action="{$BASE_URL}pages/organizations/organization.php"
                                           method="get">
-                                        <input type="hidden" name="idorganization" value="1">
+                                        <input type="hidden" name="idorganization" value="{$organization.idorganization}">
                                         <button type="submit" class="btn btn-blue">Ver detalhes</button>
                                     </form>
                                     <form style="display: inline"
                                           action="{$BASE_URL}pages/organizations/editorganization.php">
-                                        <input type="hidden" name="idorganization" value="1">
+                                        <input type="hidden" name="idorganization" value="{$organization.idorganization}">
                                         <button type="submit" class="btn-clear"><i class="fa fa-edit"></i></button>
                                     </form>
                                     <form style="display: inline"
                                           action="{$BASE_URL}actions/organizations/deleteorganization.php"
                                           method="post">
-                                        <input type="hidden" name="idorganization" value="1">
+                                        <input type="hidden" name="idorganization" value="{$organization.idorganization}">
                                         <button type="submit" class="btn-clear"><i class="fa fa-trash-o"></i></button>
                                     </form>
                                 </li>

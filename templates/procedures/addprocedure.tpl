@@ -423,6 +423,7 @@
                                    type="text">
                         </div>
                     </div>
+                    <!--
                     <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label">
@@ -434,6 +435,7 @@
                             </div>
                         </div>
                     </div>
+                    -->
                     <div class="col-md-1">
                         <div class="form-group">
                             <label class="control-label">
@@ -449,9 +451,9 @@
         </script>
         <script type="text/javascript">
             var isEdit = false;
+            var isReadOnly = false;
             var myName = "{$NAME}";
             var myLicenseId = "{$LICENSEID}";
-            var subProcedureTypes = {$PROCEDURETYPES|json_encode};
             var privatePayers = {$ENTITIES['Privado']|json_encode};
             var patients = {$PATIENTS|json_encode};
             var baseUrl = {$BASE_URL};

@@ -484,9 +484,8 @@ function getProcedureProfessionals($idAccount, $idProcedure)
     $ids = $stmt->fetch();
     $professionals = array();
 
-    $stmt = $conn->prepare("SELECT Speciality.name AS speciality, Professional.name, idProfessional, nif, email, licenseid, email FROM SPECIALITY, PROFESSIONAL
-                WHERE Professional.idProfessional = :idProfessional
-                AND (Professional.idSpeciality IS NULL OR Speciality.idSpeciality = Professional.idSpeciality)");
+    $stmt = $conn->prepare("SELECT Professional.name, idProfessional FROM PROFESSIONAL
+                WHERE Professional.idProfessional = :idProfessional");
 
     $functions = array('idgeneral', 'idfirstassistant', 'idsecondassistant', 'idanesthetist', 'idinstrumentist');
     $functionNames = array('Cirurgião Principal', 'Primeiro Assistente', 'Segundo Assistente', 'Anestesista', 'Instrumentista');
@@ -504,6 +503,7 @@ function getProcedureProfessionals($idAccount, $idProcedure)
         $i++;
     }
 
+    var_dump($professionals); exit;
     return $professionals;
 }
 

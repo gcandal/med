@@ -27,12 +27,10 @@ if (!$procedure) {
 $procedure["subprocedures"] = getSubProceduresIds($procedure['idprocedure']);
 $procedure["professionals"] = getProcedureProfessionals($idAccount, $idProcedure);
 $entities['Privado'] = getPrivatePayers($idAccount);
-$patients = getPatients($idAccount);
+$patients = getPatientsForProcedure($idAccount, $idProcedure);
 $organizations = getOrganizations($idAccount);
-$procedureTypes = getProcedureTypes();
 $smarty->assign('ENTITIES', $entities);
 $smarty->assign('ORGANIZATIONS', $organizations);
-$smarty->assign('PROCEDURETYPES', $procedureTypes);
 $smarty->assign('PROCEDURE', $procedure);
 $smarty->assign('PATIENTS', $patients);
 

@@ -29,12 +29,10 @@ $organizations = getOrganizations($idaccount);
 $patients = getOrganizations($idaccount);
 $entities['Privado'] = getPrivatePayers($idaccount);
 $patients = getPatients($idaccount);
-$procedureTypes = getProcedureTypes();
 $smarty->assign('USERNAME', $username);
 $smarty->assign('ENTITIES', $entities);
 $smarty->assign('PATIENTS', $patients);
 $smarty->assign('ORGANIZATIONS', $organizations);
-$smarty->assign('PROCEDURETYPES', $procedureTypes);
 $_SESSION['entityType'] = "Private";
 $smarty->assign('ENTITYTYPE', $_SESSION['entityType']);
 
