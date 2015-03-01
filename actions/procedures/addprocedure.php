@@ -154,27 +154,27 @@ try {
         addSubProcedures($idProcedure, $subProcedures);
     }
 
-    if ($_POST['generalName'] !== "" && $role !== 'General') {
+    if ($_POST['generalName'] !== "") {
         $idProf = addProfessional($_POST['generalName'], $_POST['generalNIF'], $idAccount, $_POST['generalLicenseId'], "", NULL);
         addProfessionalToProcedure($idProf, $idProcedure, "general");
     }
 
-    if ($_POST['firstAssistantName'] !== "" && $role !== 'FirstAssistant') {
+    if ($_POST['firstAssistantName'] !== "") {
         $idProf = addProfessional($_POST['firstAssistantName'], $_POST['firstAssistantNIF'], $idAccount, $_POST['firstAssistantLicenseId'], "", NULL);
         addProfessionalToProcedure($idProf, $idProcedure, "firstassistant");
     }
 
-    if ($_POST['secondAssistantName'] !== "" && $role !== 'SecondAssistant') {
+    if ($_POST['secondAssistantName'] !== "") {
         $idProf = addProfessional($_POST['secondAssistantName'], $_POST['secondAssistantNIF'], $idAccount, $_POST['secondAssistantLicenseId'], "", NULL);
         addProfessionalToProcedure($idProf, $idProcedure, "secondassistant");
     }
 
-    if ($_POST['instrumentistName'] !== "" && $role !== 'Instrumentist') {
+    if ($_POST['instrumentistName'] !== "") {
         $idProf = addProfessional($_POST['instrumentistName'], $_POST['instrumentistNIF'], $idAccount, $_POST['instrumentistLicenseId'], "", 2);
         addProfessionalToProcedure($idProf, $idProcedure, "instrumentist");
     }
 
-    if ($_POST['anesthetistName'] !== "" && $role !== 'Anesthetist') {
+    if ($_POST['anesthetistName'] !== "") {
         $idProf = addProfessional($_POST['anesthetistName'], $_POST['anesthetistNIF'], $idAccount, $_POST['anesthetistLicenseId'], "", 1);
         addProfessionalToProcedure($idProf, $idProcedure, "anesthetist");
     }

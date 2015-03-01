@@ -30,20 +30,20 @@
                             <table class="table table-hover" id="sample-table-1">
                                 <thead>
                                 <tr>
-                                    <th class="center">Data</th>
+                                    <th class="center hidden-xs">Data</th>
                                     <th class="center">Estado</th>
                                     <th class="center hidden-xs">Organização</th>
                                     <th class="center">Responsável</th>
-                                    <th class="center hidden-xs">Cirurgias</th>
+                                    <th class="center">Cirurgias</th>
                                     <th class="center hidden-xs">Função</th>
-                                    <th class="center">Valor</th>
+                                    <th class="center hidden-xs">Valor</th>
                                     <th class="center"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {foreach $PROCEDURES as $procedure}
                                     <tr>
-                                        <td>{$procedure.date}</td>
+                                        <td class="center hidden-xs">{$procedure.date}</td>
                                         <td class="center">{$procedure.paymentstatus}</td>
                                         <td class="center hidden-xs">
                                             {if $procedure.idorganization}
@@ -55,7 +55,7 @@
                                         <td class="center">
                                             <a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a>
                                         </td>
-                                        <td class="center hidden-xs">
+                                        <td class="center">
                                             {foreach $procedure.subprocedures as $subprocedure}
                                                 {$subprocedure.quantity}x {$subprocedure.name};
                                             {/foreach}
@@ -73,7 +73,7 @@
                                                 Instrumentista
                                             {/if}
                                         </td>
-                                        <td class="center">Pessoal: {$procedure.personalremun}€;
+                                        <td class="center hidden-xs">Pessoal: {$procedure.personalremun}€;
                                             Total: {$procedure.totalremun}€
                                         </td>
                                         <td class="center">

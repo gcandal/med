@@ -94,19 +94,7 @@
                                             <label class="control-label">
                                                 Especialidade
                                             </label>
-                                            {if $professional.idspeciality > 2}
-                                                <select name="speciality" id="specialityId">
-                                                    {foreach $SPECIALITIES as $speciality}
-                                                        {if $speciality.idspeciality > 2}
-                                                            <option value="{$speciality.idspeciality}">{$speciality.name}</option>
-                                                        {/if}
-                                                    {/foreach}
-                                                </select>
-                                            {elseif $professional.idspeciality == 1}
-                                                Anestesiologia
-                                            {else}
-                                                Enfermagem
-                                            {/if}
+
                                             <select name="speciality" id="specialityId" class="form-control">
                                                 {if $professional.idspeciality > 2}
                                                     <option value="3">Nenhuma</option>

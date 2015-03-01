@@ -72,6 +72,8 @@ BEGIN
       idProfessional = idinstrumentist OR idProfessional = idanesthetist) AND Professional.idAccount != NEW.idAccount
           AND Professional.licenseid != Account.licenseid;
 
+
+  --Copia pagadores
   /*
   INSERT INTO PrivatePayer (idaccount, name, valuePerK)
     SELECT
@@ -81,7 +83,7 @@ BEGIN
     FROM PrivatePayer, Procedure
     WHERE idProcedure = NEW.idProcedure AND PrivatePayer.idPrivatePayer = Procedure.idPrivatePayer AND
           idAccount != NEW.idAccount;
-          */
+  */
 
   RETURN NEW;
 END
@@ -91,6 +93,9 @@ CREATE OR REPLACE FUNCTION insert_professional_trigger()
   RETURNS TRIGGER AS $$
 DECLARE
 BEGIN
+
+  --Se já existe profissional com aquele nome, atualiza licença e especialidade
+  /*
   IF EXISTS(SELECT 1
             FROM Professional
             WHERE Professional.idAccount = NEW.idAccount
@@ -101,6 +106,16 @@ BEGIN
     WHERE Professional.idAccount = NEW.idAccount
           AND Professional.name = NEW.name;
 
+    RETURN NULL;
+  END IF;
+  */
+
+  --Não há profissionais com licenças duplicadas
+  IF EXISTS(SELECT 1
+            FROM Professional
+            WHERE Professional.idAccount = NEW.idAccount
+                  AND Professional.licenseid = NEW.licenseid)
+  THEN
     RETURN NULL;
   END IF;
 
@@ -186,6 +201,8 @@ BEGIN
   INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'Allianz', 3.75);
   INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'SSCGD', 2.8);
   INSERT INTO PrivatePayer VALUES (DEFAULT, NEW.idAccount, 'SAMS Quadros', 4);
+
+  INSERT INTO Professional VALUES (DEFAULT, NEW.speciality, NEW.idAccount, NEW.name, NEW.email, NULL, NEW.licenseid, DEFAULT);
 
   RETURN NEW;
 END

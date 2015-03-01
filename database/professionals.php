@@ -63,8 +63,9 @@ function getRecentProfessionals($idaccount, $speciality, $name)
     }
     */
     $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, idspeciality, Professional . idProfessional
-                            FROM Professional
-                            WHERE Professional . idAccount = :idAccount
+                            FROM Account, Professional
+                            WHERE Account.idAccount = :idAccount AND Professional . idAccount = :idAccount
+                            AND Account.licenseid != Professional.licenseid
                             ORDER BY Professional . createdOn DESC");
 
     $stmt->execute(array("idAccount" => $idaccount));
@@ -78,8 +79,11 @@ function getProfessionals($idaccount)
     global $conn;
 
     $stmt = $conn->prepare("SELECT Professional . name, Professional . nif, Professional . licenseid, Speciality . name AS speciality, Professional . idProfessional
-                            FROM Professional, Speciality
-                            WHERE Professional . idAccount = :idAccount AND Professional . idspeciality = Speciality . idspeciality");
+                            FROM Account, Professional, Speciality
+                            WHERE Account.idAccount = :idAccount
+                             AND Professional . idAccount = :idAccount
+                             AND Speciality . idspeciality = Professional . idspeciality
+                             AND Account.licenseid != Professional.licenseid");
 
     $stmt->execute(array("idAccount" => $idaccount));
 

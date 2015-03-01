@@ -218,6 +218,8 @@ function addProcedure($idAccount, $paymentStatus, $date, $totalRemun, $valuePerK
 
     $id = $conn->lastInsertId('procedure_idprocedure_seq');
 
+    //Adicionar profissional "eu" ao procedimento no sítio "role"
+
     decrementFreeRegisters($idAccount);
     addProcedureToAccount($id, $idAccount, $role, 'false', $personalRemun);
 
@@ -484,7 +486,7 @@ function getProcedureProfessionals($idAccount, $idProcedure)
     $ids = $stmt->fetch();
     $professionals = array();
 
-    $stmt = $conn->prepare("SELECT Professional.name, idProfessional FROM PROFESSIONAL
+    $stmt = $conn->prepare("SELECT name, idProfessional, licenseid FROM PROFESSIONAL
                 WHERE Professional.idProfessional = :idProfessional");
 
     $functions = array('idgeneral', 'idfirstassistant', 'idsecondassistant', 'idanesthetist', 'idinstrumentist');
@@ -503,7 +505,6 @@ function getProcedureProfessionals($idAccount, $idProcedure)
         $i++;
     }
 
-    var_dump($professionals); exit;
     return $professionals;
 }
 

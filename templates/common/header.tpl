@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="{$BASE_URL}assets/plugins/perfect-scrollbar/src/perfect-scrollbar.css">
     <link rel="stylesheet" href="{$BASE_URL}assets/css/theme_light.css" type="text/css" id="skin_color">
     <link rel="stylesheet" href="{$BASE_URL}assets/css/print.css" type="text/css" media="print"/>
+    <link rel="stylesheet" type="text/css" href="{$BASE_URL}assets/plugins/select2/select2.css" />
+    <link rel="stylesheet" href="{$BASE_URL}assets/plugins/DataTables/media/css/DT_bootstrap.css" />
     <!--[if IE 7]>
     <link rel="stylesheet" href="{$BASE_URL}assets/plugins/font-awesome/css/font-awesome.min.css">
     <![endif]-->
