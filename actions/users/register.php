@@ -58,7 +58,7 @@ try {
         $_SESSION['error_messages'][] = 'Email inválido';
     } elseif (strpos($e->getMessage(), 'account_licenseid_key') !== false) {
         $_SESSION['error_messages'][] = 'Número de cédula já em uso';
-    } else $_SESSION['error_messages'][] = 'Erro a criar conta ' . $e->getMessage();
+    } else $_SESSION['error_messages'][] = 'Erro a criar conta ';// . $e->getMessage();
 
     $_SESSION['form_values'] = $_POST;
     header("Location: $BASE_URL" . 'pages/main.php?box=register');

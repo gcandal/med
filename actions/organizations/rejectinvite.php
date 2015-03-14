@@ -17,7 +17,7 @@ if ($_POST['idinvitingaccount'] && $_POST['idorganization']) {
     try {
         rejectInvite($idOrganization, $idInvitingAccount, $licenseIdInvited);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a rejeitar convite ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a rejeitar convite ';// . $e->getMessage();
 
         header("Location: $BASE_URL" . 'pages/organizations/invites.php');
         exit;

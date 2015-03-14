@@ -28,7 +28,7 @@ try {
     if (strpos($e->getMessage(), 'organization_name_key') !== false) {
         $_SESSION['error_messages'][] = 'Já existe uma Organização com este nome';
         $_SESSION['field_errors']['name'] = 'Já existe uma Organização com este nome';
-    } else $_SESSION['error_messages'][] = 'Erro a criar organização ' . $e->getMessage();
+    } else $_SESSION['error_messages'][] = 'Erro a criar organização ';// . $e->getMessage();
 
     $_SESSION['form_values'] = $_POST;
 

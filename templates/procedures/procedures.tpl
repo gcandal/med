@@ -23,6 +23,37 @@
             <!-- end: PAGE HEADER -->
             <!-- start: PAGE CONTENT -->
             <div class="row">
+                <div class="col-md-12 space20">
+                    <div class="btn-group pull-right">
+                        <button data-toggle="dropdown" class="btn btn-green dropdown-toggle">
+                            Exportar <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-light pull-right">
+                            <li>
+                                <a href="#" class="export-pdf" data-table="#sample-table-1">
+                                    Como PDF
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="export-txt" data-table="#sample-table-1">
+                                    Como TXT
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="export-excel" data-table="#sample-table-1">
+                                    Para Excel
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="export-doc" data-table="#sample-table-1">
+                                    Para Word
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
                     <!-- start: BASIC TABLE PANEL -->
                     <div class="panel panel-default">
@@ -30,28 +61,22 @@
                             <table class="table table-hover" id="sample-table-1">
                                 <thead>
                                 <tr>
-                                    <th class="center hidden-xs">Data</th>
-                                    <th class="center">Estado</th>
-                                    <th class="center hidden-xs">Organização</th>
+                                    <th class="center">Data</th>
+                                    <th>Doente</th>
+                                    <th class="center">Nº beneficiário</th>
                                     <th class="center">Responsável</th>
-                                    <th class="center">Cirurgias</th>
-                                    <th class="center hidden-xs">Função</th>
+                                    <th class="center">Intervenção</th>
                                     <th class="center hidden-xs">Valor</th>
-                                    <th class="center"></th>
+                                    <th class="center">Estado</th>
+                                    <th class="center">Opções</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {foreach $PROCEDURES as $procedure}
                                     <tr>
-                                        <td class="center hidden-xs">{$procedure.date}</td>
-                                        <td class="center">{$procedure.paymentstatus}</td>
-                                        <td class="center hidden-xs">
-                                            {if $procedure.idorganization}
-                                                <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
-                                                    {$procedure.organizationName}
-                                                </a>
-                                            {/if}
-                                        </td>
+                                        <td class="center">{$procedure.date}</td>
+                                        <td>{$procedure.patientName}</td>
+                                        <td>{$procedure.patientBeneficiaryNr}</td>
                                         <td class="center">
                                             <a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a>
                                         </td>
@@ -60,59 +85,11 @@
                                                 {$subprocedure.quantity}x {$subprocedure.name};
                                             {/foreach}
                                         </td>
-                                        <td class="center hidden-xs">
-                                            {if $procedure.role == 'General'}
-                                                Cirurgião Principal
-                                            {elseif $procedure.role == 'FirstAssistant'}
-                                                Primeiro Assitente
-                                            {elseif $procedure.role == 'SecondAssistant'}
-                                                Segundo Assistente
-                                            {elseif $procedure.role == 'Anesthetist'}
-                                                Anestesista
-                                            {elseif $procedure.role == 'Instrumentist'}
-                                                Instrumentista
-                                            {/if}
-                                        </td>
                                         <td class="center hidden-xs">Pessoal: {$procedure.personalremun}€;
                                             Total: {$procedure.totalremun}€
                                         </td>
+                                        <td class="center">{$procedure.paymentstatus}</td>
                                         <td class="center">
-                                            <div class="hidden-md hidden-lg hidden-sm hidden-xs">
-                                                <form class="inlineForm"
-                                                      action="{$BASE_URL}actions/procedures/shareprocedure.php"
-                                                      method="post">
-                                                    <input type="hidden" name="idprocedure"
-                                                           value="{$procedure.idprocedure}"/>
-                                                    <button type="submit" class="btn btn-xs btn-blue tooltips"
-                                                            data-placement="top"
-                                                            data-original-title="Partilhar">
-                                                        <i class="fa fa-share"></i>
-                                                    </button>
-                                                </form>
-
-                                                <form class="inlineForm"
-                                                      action="{$BASE_URL}pages/procedures/procedure.php">
-                                                    <input type="hidden" name="idprocedure"
-                                                           value="{$procedure.idprocedure}"/>
-                                                    <button type="submit" class="btn btn-xs btn-blue tooltips"
-                                                            data-placement="top"
-                                                            data-original-title="Editar">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </form>
-
-                                                <form class="inlineForm"
-                                                      action="{$BASE_URL}actions/procedures/deleteprocedure.php"
-                                                      method="post">
-                                                    <input type="hidden" name="idprocedure"
-                                                           value="{$procedure.idprocedure}"/>
-                                                    <button type="submit" class="btn btn-xs btn-bricky tooltips"
-                                                            data-placement="top"
-                                                            data-original-title="Remover">
-                                                        <i class="fa fa-times fa fa-white"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
                                             <div class="visible-xs visible-sm visible-md visible-lg">
                                                 <div class="btn-group">
                                                     <a class="btn btn-primary dropdown-toggle btn-sm"
@@ -132,9 +109,9 @@
                                                                         class="btn btn-xs btn-blue tooltips"
                                                                         data-placement="top"
                                                                         {if $procedure.readonly}
-                                                                            data-original-title="Ver"
+                                                                    data-original-title="Ver"
                                                                         {else}
-                                                                            data-original-title="Editar"
+                                                                    data-original-title="Editar"
                                                                         {/if}>
                                                                     <i class="fa fa-share"></i> Partilhar
                                                                 </button>
@@ -150,9 +127,9 @@
                                                                         class="btn btn-xs btn-blue tooltips"
                                                                         data-placement="top"
                                                                         {if $procedure.readonly}
-                                                                            data-original-title="Ver"
+                                                                    data-original-title="Ver"
                                                                         {else}
-                                                                            data-original-title="Editar"
+                                                                    data-original-title="Editar"
                                                                         {/if}>
                                                                     <i class="fa fa-edit"></i>
                                                                     {if $procedure.readonly}
@@ -201,3 +178,25 @@
 {/if}
 
 {include file='common/footer.tpl'}
+
+<!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script type="text/javascript" src="{$BASE_URL}assets/plugins/select2/select2.min.js"></script>
+<script src="{$BASE_URL}assets/plugins/bootbox/bootbox.min.js"></script>
+<script type="text/javascript" src="{$BASE_URL}assets/plugins/jquery-mockjax/jquery.mockjax.js"></script>
+<script type="text/javascript" src="{$BASE_URL}assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="{$BASE_URL}assets/plugins/datatables/media/js/DT_bootstrap.js"></script>
+<script src="{$BASE_URL}assets/plugins/tableexport/tableExport.js"></script>
+<script src="{$BASE_URL}assets/plugins/tableexport/jquery.base64.js"></script>
+<script src="{$BASE_URL}assets/plugins/tableexport/html2canvas.js"></script>
+<script src="{$BASE_URL}assets/plugins/tableexport/jspdf/libs/sprintf.js"></script>
+<script src="{$BASE_URL}assets/plugins/tableexport/jspdf/jspdf.js"></script>
+<script src="{$BASE_URL}assets/plugins/tableexport/jspdf/libs/base64.js"></script>
+<script src="{$BASE_URL}assets/js/table-export.js"></script>
+
+<script>
+    jQuery(document).ready(function() {
+        TableExport.init();
+    });
+</script>
+
+<!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->

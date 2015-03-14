@@ -20,7 +20,7 @@ if ($name) {
     try {
         editProfessionalName($accountId, $idprofessional, $name);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar profissional ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar profissional ' ;//. $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idprofessional'] = $idprofessional;
@@ -34,7 +34,7 @@ if ($nif) {
     try {
         editProfessionalNif($accountId, $idprofessional, $nif);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar profissional ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar profissional ' ;//. $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idprofessional'] = $idprofessional;
@@ -48,7 +48,7 @@ if ($licenseid) {
     try {
         editProfessionalLicenseId($accountId, $idprofessional, $licenseid);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar profissional ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar profissional ' ;//. $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idprofessional'] = $idprofessional;
@@ -62,7 +62,7 @@ if ($speciality) {
     try {
         editProfessionalSpeciality($accountId, $idprofessional, $speciality);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar profissional ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar profissional ' ;//. $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idprofessional'] = $idprofessional;

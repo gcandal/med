@@ -34,7 +34,7 @@ try {
     if (strpos($e->getMessage(), 'validnif') !== false) {
         $_SESSION['error_messages'][] = 'NIF inválido';
         $_SESSION['field_errors']['nif'] = 'NIF inválido';
-    } else $_SESSION['error_messages'][] = 'Erro a criar paciente ' . $e->getMessage();
+    } else $_SESSION['error_messages'][] = 'Erro a criar paciente ';// . $e->getMessage();
 
     $_SESSION['form_values'] = $_POST;
 

@@ -20,7 +20,7 @@
             exit;
         }
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a apagar organização' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a apagar organização';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         header("Location: $BASE_URL" . 'pages/organizations/organizations.php');
@@ -30,7 +30,7 @@
     try {
         deleteOrganization($idorganization);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a apagar a organização ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a apagar a organização ';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         header("Location: $BASE_URL" . 'pages/organizations/organizations.php');

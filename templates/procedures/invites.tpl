@@ -31,7 +31,10 @@
                                 <ul class="list-unstyled">
                                     <li>
                                         <h4>{$invite.invitingname}</h4>
-
+                                        <p>{$invite.date}</p>
+                                            {foreach $invite.subprocedures as $subprocedure}
+                                                <p>{$subprocedure.quantity}x {$subprocedure.code} {$subprocedure.name}</p>
+                                            {/foreach}
                                         <form style="display: inline"
                                               action="{$BASE_URL}actions/procedures/acceptsharedprocedure.php"
                                               method="post">

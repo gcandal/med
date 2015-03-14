@@ -11,6 +11,9 @@ if (!$_SESSION['email']) {
 
 $licenseid = $_SESSION['licenseid'];
 $invites = getProcedureInvites($licenseid);
+foreach ($invites as $key => $invite) {
+    $invites[$key]["subprocedures"] = getSubProcedures($invite['idprocedure']);
+}
 
 $smarty->assign('INVITES', $invites);
 $smarty->display('procedures/invites.tpl');

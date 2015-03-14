@@ -110,7 +110,7 @@ function getSubProcedures($idProcedure)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT name, quantity FROM proceduretype, procedureproceduretype
+    $stmt = $conn->prepare("SELECT name, quantity, code FROM proceduretype, procedureproceduretype
                                 WHERE procedureproceduretype.idprocedure = :idProcedure
                                 AND procedureproceduretype.idproceduretype = proceduretype.idproceduretype");
 
@@ -527,11 +527,13 @@ function getProcedureInvites($licenseid)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT Account.name invitingName,
-                            ProcedureInvitation.idProcedure, ProcedureInvitation.idInvitingAccount, wasRejected
-                            FROM ProcedureInvitation, Account
+    $stmt = $conn->prepare("SELECT Account.name invitingName, ProcedureInvitation.idProcedure,
+                            ProcedureInvitation.idInvitingAccount, wasRejected,
+                            date
+                            FROM ProcedureInvitation, Account, Procedure
                             WHERE ProcedureInvitation.licenseIdInvited = :licenseId
-                            AND ProcedureInvitation.idInvitingAccount = Account.idAccount");
+                            AND ProcedureInvitation.idInvitingAccount = Account.idAccount
+                            AND Procedure.idProcedure = ProcedureInvitation.idProcedure");
     $stmt->execute(array("licenseId" => $licenseid));
 
     return $stmt->fetchAll();

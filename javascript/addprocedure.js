@@ -68,7 +68,7 @@ $(document).ready(function () {
         editValuePerK = 0;
     }
 
-    if(isReadOnly)
+    if (isReadOnly)
         return;
 
     $('#addSubProcedure').click(function (e) {
@@ -166,7 +166,7 @@ $(document).ready(function () {
 
             $('.professionalName').autocomplete({
                 source: recentProfessionals,
-                minLength: 3,
+                minLength: 1,
                 select: function (event, ui) {
                     if (ui.item) {
                         $(this).parent().siblings().first().next().children().first().val(ui.item.licenseid);
@@ -224,7 +224,7 @@ var disableAnesthetistRow = function (disable) {
 
 var subProcedureTypes = [];
 var getSubProcedureTypes = function () {
-    if(subProcedureTypes.length > 0 )
+    if (subProcedureTypes.length > 0)
         return subProcedureTypes;
 
     var result = "";
@@ -236,10 +236,37 @@ var getSubProcedureTypes = function () {
     return result;
 };
 
+var addSubProcedureCallback = function(subProcedure) {
+    subProcedure.on("paste drop input change cut", (function() {
+        var before = "01.00.00.01";
+
+        return function() {
+            var text = $(this).val();
+
+            if(text.length > 11)
+                $(this).val(text.slice(0, 11));
+
+            if (before.length < text.length && (text.length == 2 || text.length == 5 || text.length == 8) )
+                $(this).val(text + '.');
+            else if (before.length > text.length && text[text.length - 1] == '.')
+                $(this).val(text.slice(0, text.length - 1));
+            else if (before.length < text.length && (text.length == 3 || text.length == 6 || text.length == 9))
+                $(this).val(text.slice(0, text.length - 1) + '.' + text.slice(text.length - 1));
+
+            if (text[text.length - 1] == '.')
+                before = text.slice(0, text.length - 1);
+            else
+                before = text;
+        }
+    })());
+};
+
 var addSubProcedure = function () {
     nSubProcedures.val(++subProcedures);
     $(subProcedureTemplate({number: subProcedures, type: getSubProcedureTypes()}))
         .fadeIn('slow').appendTo('#subProcedures');
+
+    addSubProcedureCallback($("#subProcedures .subProcedure:last-child .subProcedureCode").last());
     //$(".subProcedure").hide();
 
     updateRemunerations();
@@ -311,7 +338,7 @@ var disablePatientValidations = function (disable) {
     }
 };
 
-var disablePayerValidations = function(disable) {
+var disablePayerValidations = function (disable) {
     if (disable) {
         errorMessageNamePrivate.parent().hide();
         errorMessageNamePrivate.text("");
@@ -350,7 +377,7 @@ var fillValuePerK = function (type) {
     valuePerK.val(curreantPayerValuePerK);
 
     if (curreantPayerValuePerK === 0) {
-        if(editValuePerK > 0)
+        if (editValuePerK > 0)
             valuePerK.val(editValuePerK);
         else
             enableField(valuePerK, false);
@@ -622,8 +649,8 @@ $(document).on("focus", ".subProcedureName:not(.ui-autocomplete-input)", functio
 }).on("focus", ".subProcedureCode:not(.ui-autocomplete-input)", function () {
     $(this).autocomplete({
         source: function (request, response) {
-            response(subProceduresList.filter(function (e) {
-                return new RegExp('^' + request.term).test(e.code);
+            response(subProceduresList2.filter(function (e) {
+                return new RegExp('^' + request.term).test(e.label);
             }));
         },
         select: function (event, ui) {

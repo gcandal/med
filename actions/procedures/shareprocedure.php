@@ -21,7 +21,7 @@ try {
 } catch (PDOException $e) {
     if (strpos($e->getMessage(), 'procedureinvitation_pkey') !== false) {
         $_SESSION['error_messages'][] = 'Já enviou um convite para esse membro.';
-    } else  $_SESSION['error_messages'][] = 'Erro a partilhar registo ' . $e->getMessage();
+    } else  $_SESSION['error_messages'][] = 'Erro a partilhar registo ';// . $e->getMessage();
 
     header("Location: $BASE_URL" . 'pages/procedures/procedures.php');
     exit;

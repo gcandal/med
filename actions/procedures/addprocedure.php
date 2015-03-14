@@ -54,7 +54,7 @@ if ($idprivatepayer === 'NewPrivate') {
     try {
         $idprivatepayer = createPrivatePayer($name, $accountId, $nif, $valueperk);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a criar entidade ';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');
@@ -89,7 +89,7 @@ if (isset($_POST['idPatient'])) {
             if (strpos($e->getMessage(), 'validnif') !== false) {
                 $_SESSION['error_messages'][] = 'NIF inválido';
                 $_SESSION['field_errors']['nif'] = 'NIF inválido';
-            } else $_SESSION['error_messages'][] = 'Erro a criar paciente ' . $e->getMessage();
+            } else $_SESSION['error_messages'][] = 'Erro a criar paciente ';// . $e->getMessage();
 
             $_SESSION['form_values'] = $_POST;
 
@@ -189,7 +189,7 @@ try {
 
     $conn->commit();
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a adicionar registo ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a adicionar registo ';// . $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 
     header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');

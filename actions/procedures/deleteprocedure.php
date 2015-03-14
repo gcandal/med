@@ -15,7 +15,7 @@ $idprocedure = $_POST['idprocedure'];
 try {
     deleteProcedure($idprocedure, $idaccount);
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a apagar registo ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a apagar registo ';// . $e->getMessage();
 
     header("Location: $BASE_URL" . 'pages/procedures/procedures.php');
     exit;

@@ -9,10 +9,11 @@
         exit;
     }
 
+    $idorganization = $_POST['idorganization'];
+
     if ($_POST['name']) {
         $name = $_POST['name'];
         $accountId = $_SESSION['idaccount'];
-        $idorganization = $_POST['idorganization'];
 
         try {
             if (!isAdministrator($accountId, $idorganization)) {
@@ -22,7 +23,7 @@
                 exit;
             }
         } catch (PDOException $e) {
-            $_SESSION['error_messages'][] = 'Erro a editar organização ' . $e->getMessage();
+            $_SESSION['error_messages'][] = 'Erro a editar organização ';// . $e->getMessage();
             $_SESSION['form_values'] = $_POST;
             $_SESSION['idorganization'] = $idorganization;
 
@@ -37,7 +38,7 @@
             if (strpos($e->getMessage(), 'organization_name_key') !== false) {
                 $_SESSION['error_messages'][] = 'Já existe uma organização com este nome.';
                 $_SESSION['field_errors']['name'] = 'Já existe uma organização com este nome.';
-            } else $_SESSION['error_messages'][] = 'Erro a editar entidade ' . $e->getMessage();
+            } else $_SESSION['error_messages'][] = 'Erro a editar entidade ';// . $e->getMessage();
 
             $_SESSION['form_values'] = $_POST;
             $_SESSION['idorganization'] = $idorganization;

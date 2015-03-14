@@ -29,7 +29,7 @@ if ($name) {
     try {
         editPrivatePayerName($accountId, $name, $idprivatepayer);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar entidade ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar entidade ';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idprivatepayer'] = $idprivatepayer;
@@ -43,7 +43,7 @@ if ($valueperk) {
     try {
         editPrivatePayerValuePerK($accountId, $idprivatepayer, $valueperk);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = $e->getMessage();
+        //$_SESSION['error_messages'][] = $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idprivatepayer'] = $idprivatepayer;

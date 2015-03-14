@@ -61,7 +61,7 @@
         try {
             logAttempt($current_user['idaccount']);
         } catch (PDOException $e) {
-            $_SESSION['error_messages'][] = $e->getMessage();
+           // $_SESSION['error_messages'][] = $e->getMessage();
         }
 
         $_SESSION['error_messages'][] = 'Email e password inválidos.';

@@ -21,7 +21,7 @@ $idAccount = $_SESSION['idaccount'];
 try {
     addProfessional($_POST['name'], $_POST['nif'], $idAccount, $_POST['licenseId'], "", $_POST['speciality']);
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a criar profissional ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a criar profissional ' ;//. $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 
     header("Location: $BASE_URL" . 'pages/professionals/addprofessional.php');

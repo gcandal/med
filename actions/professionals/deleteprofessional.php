@@ -17,7 +17,7 @@ try {
 } catch (PDOException $e) {
     if (strpos($e->getMessage(), 'is still referenced') !== false)
         $_SESSION['error_messages'][] = 'Este profissional está em uso, não pode ser apagado';
-    else $_SESSION['error_messages'][] = 'Erro a apagar profissional ' . $e->getMessage();
+    else $_SESSION['error_messages'][] = 'Erro a apagar profissional ';// . $e->getMessage();
 }
 
 header("Location: $BASE_URL" . "pages/professionals/professionals.php");

@@ -26,7 +26,7 @@
         try {
             logAttempt($current_user['idaccount']);
         } catch (PDOException $e) {
-            $_SESSION['error_messages'][] = $e->getMessage();
+            //$_SESSION['error_messages'][] = $e->getMessage();
         }
 
         $_SESSION['field_errors']['oldpassword'] = 'Password inválida.'.$password;
@@ -52,7 +52,7 @@
             editPassword($email, $new_password, $salt);
             $_SESSION['success_messages'][] = 'Password edited successfully';
         } catch (PDOException $e) {
-            $_SESSION['error_messages'][] = $e->getMessage();
+           //$_SESSION['error_messages'][] = $e->getMessage();
         }
     }
 
@@ -70,7 +70,7 @@
             $_SESSION['success_messages'][] = 'Email edited successfully ';
             $_SESSION['email'] = $new_email;
         } catch (PDOException $e) {
-            $_SESSION['error_messages'][] = $e->getMessage();
+            //$_SESSION['error_messages'][] = $e->getMessage();
         }
     }
 

@@ -378,7 +378,7 @@
         <script src="{$BASE_URL}lib/handlebars-v1.3.0.js" type="text/javascript"></script>
         <script id="subProcedure-template" type="text/x-handlebars-template">
             {literal}
-                <div id="subProcedure{{number}}">
+                <div id="subProcedure{{number}}" class="subProcedure">
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">

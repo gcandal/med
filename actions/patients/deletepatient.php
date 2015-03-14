@@ -17,7 +17,7 @@ try {
 } catch (PDOException $e) {
     if (strpos($e->getMessage(), 'is still referenced') !== false)
         $_SESSION['error_messages'][] = 'Este paciente está em uso, não pode ser apagado';
-    else $_SESSION['error_messages'][] = 'Erro a apagar pagador ' . $e->getMessage();
+    else $_SESSION['error_messages'][] = 'Erro a apagar pagador ';// . $e->getMessage();
 }
 
 header("Location: $BASE_URL" . "pages/patients/patients.php");

@@ -19,7 +19,7 @@ if ($_POST['idinvitingaccount'] && $_POST['idorganization'] && $_POST['orgauthor
     try {
         acceptInvite($idOrganization, $idInvitingAccount, $licenseIdInvited, $idAccount, $orgauthorization);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a aceitar convite ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a aceitar convite ';// . $e->getMessage();
 
         header("Location: $BASE_URL" . 'pages/organizations/invites.php');
         exit;

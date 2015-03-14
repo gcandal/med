@@ -17,7 +17,7 @@ if ($_POST['idinvitingaccount'] && $_POST['idprocedure']) {
     try {
         rejectShared($idProcedure, $idInvitingAccount, $licenseIdInvited);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a rejeitar convite ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a rejeitar convite ';// . $e->getMessage();
 
         header("Location: $BASE_URL" . 'pages/procedures/invites.php');
         exit;

@@ -26,7 +26,7 @@
                 exit;
             }
         } catch (PDOException $e) {
-            $_SESSION['error_messages'][] = 'Erro a convidar para organização ' . $e->getMessage();
+            $_SESSION['error_messages'][] = 'Erro a convidar para organização ';// . $e->getMessage();
 
             header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization=' . $idorganization);
             exit;
@@ -37,7 +37,7 @@
         } catch (PDOException $e) {
             if (strpos($e->getMessage(), 'orginvitation_pkey') !== false) {
                 $_SESSION['error_messages'][] = 'Já enviou um convite para esse membro.';
-            } else  $_SESSION['error_messages'][] = 'Erro a editar entidade ' . $e->getMessage();
+            } else  $_SESSION['error_messages'][] = 'Erro a editar entidade ';// . $e->getMessage();
 
             header("Location: $BASE_URL" . 'pages/organizations/organization.php?idorganization=' . $idorganization);
             exit;

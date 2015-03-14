@@ -21,7 +21,7 @@ if ($_POST['idinvitingaccount'] && $_POST['idprocedure']) {
         if (strpos($e->getMessage(), 'procedureaccount_pkey') !== false) {
             $_SESSION['error_messages'][] = 'Já tinha adicionado este registo';
             rejectShared($idProcedure, $idInvitingAccount, $licenseIdInvited);
-        } else $_SESSION['error_messages'][] = 'Erro a aceitar partilha ' . $e->getMessage();
+        } else $_SESSION['error_messages'][] = 'Erro a aceitar partilha ';// . $e->getMessage();
 
         header("Location: $BASE_URL" . 'pages/procedures/invites.php');
         exit;

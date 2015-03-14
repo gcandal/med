@@ -31,7 +31,7 @@ if ($_POST['visibility']) {
     try {
         editOrganizationVisibility($idorganization, $accountId, $visibility);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a alterar a visibilidade ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a alterar a visibilidade ';// . $e->getMessage();
 
         header("Location: $BASE_URL" . 'pages/organizations/organizations.php');
         exit;

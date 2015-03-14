@@ -23,7 +23,7 @@ if ($name) {
     try {
         editPatientName($accountId, $name, $idpatient);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar paciente ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar paciente ';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idpatient'] = $idpatient;
@@ -37,7 +37,7 @@ if ($nif) {
     try {
         editPatientNif($accountId, $nif, $idpatient);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar paciente ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar paciente ';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idpatient'] = $idpatient;
@@ -51,7 +51,7 @@ if ($cellphone) {
     try {
         editPatientCellphone($accountId, $cellphone, $idpatient);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar paciente ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar paciente ';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idpatient'] = $idpatient;
@@ -65,7 +65,7 @@ if ($beneficiarynr) {
     try {
         editPatientBeneficiaryNr($accountId, $beneficiarynr, $idpatient);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a editar paciente ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a editar paciente ';// . $e->getMessage();
         $_SESSION['form_values'] = $_POST;
 
         $_SESSION['idpatient'] = $idpatient;

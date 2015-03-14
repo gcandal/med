@@ -36,7 +36,7 @@ if (checkDuplicateEntityName($accountId, $name)) {
 try {
     createPrivatePayer($name, $accountId, $valueperk);
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a criar entidade ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a criar entidade ';// . $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 
     header("Location: $BASE_URL" . 'pages/payers/addpayer.php');

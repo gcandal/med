@@ -17,7 +17,7 @@ if ($_POST['licenseidinvited'] && $_POST['idorganization']) {
     try {
         deleteInvite($idOrganization, $idInvitingAccount, $licenseIdInvited);
     } catch (PDOException $e) {
-        $_SESSION['error_messages'][] = 'Erro a apagar convite ' . $e->getMessage();
+        $_SESSION['error_messages'][] = 'Erro a apagar convite ';// . $e->getMessage();
 
         header("Location: $BASE_URL" . 'pages/organizations/invites.php');
         exit;
