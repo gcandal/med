@@ -3,7 +3,9 @@
 include_once('../../config/init.php');
 include_once($BASE_DIR . 'database/users.php');
 
-if (!$_POST['email'] || !$_POST['password'] || !$_POST['passwordconfirm'] || !$_POST['name'] || !$_POST['licenseid']) {
+if (!$_POST['email'] || !$_POST['password'] || !$_POST['passwordconfirm'] || !$_POST['name']
+    || !$_POST['licenseid'] || !isset($_POST['speciality']) || !isset($_POST['title'])) {
+
     $_SESSION['error_messages'][] = 'Todos os campos são obrigatórios';
     $_SESSION['form_values'] = $_POST;
 
@@ -17,6 +19,7 @@ $password = $_POST['password'];
 $licenseid = $_POST['licenseid'];
 $passwordconfirm = $_POST['passwordconfirm'];
 $idspeciality = $_POST['speciality'];
+$title = $_POST['title'];
 
 if (strlen($name) > 40) {
     $_SESSION['error_messages'][] = 'Nome demasiado grande';
@@ -47,7 +50,7 @@ if ($password !== $passwordconfirm) {
 $random_salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), true));
 
 try {
-    createAccount($email, $password, $name, $random_salt, $licenseid, $idspeciality);
+    createAccount($email, $password, $name, $random_salt, $licenseid, $idspeciality, $title);
 } catch (PDOException $e) {
 
     if (strpos($e->getMessage(), 'account_email_key') !== false) {
@@ -58,7 +61,7 @@ try {
         $_SESSION['error_messages'][] = 'Email inválido';
     } elseif (strpos($e->getMessage(), 'account_licenseid_key') !== false) {
         $_SESSION['error_messages'][] = 'Número de cédula já em uso';
-    } else $_SESSION['error_messages'][] = 'Erro a criar conta ';// . $e->getMessage();
+    } else $_SESSION['error_messages'][] = 'Erro a criar conta ' . $e->getMessage();
 
     $_SESSION['form_values'] = $_POST;
     header("Location: $BASE_URL" . 'pages/main.php?box=register');

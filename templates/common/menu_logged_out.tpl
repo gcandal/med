@@ -201,6 +201,12 @@
                         <option value="49">Urologia</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <select name="title" id="title" class="form-control">
+                        <option value="Dr.">Dr.</option>
+                        <option value="Dra.">Dra.</option>
+                    </select>
+                </div>
                 <p>
                     Preencha as informações da conta:
                 </p>
@@ -262,5 +268,7 @@
 
 <script>
     var isEdit = false;
+    $("#specialityId").val("{$FORM_VALUES.speciality}");
+    $("#title").val("{$FORM_VALUES.title}");
 </script>
 <script src="{$BASE_URL}javascript/validateuserform.js"></script>

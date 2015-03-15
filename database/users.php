@@ -35,7 +35,7 @@ function getUserByEmail($email)
 {
     global $conn;
     $stmt = $conn->prepare("SELECT Account.name as name, email, password, salt, licenseid, validuntil, freeregisters,
-                                Speciality.name as speciality, idaccount
+                                Speciality.name as speciality, idaccount, title
                                 FROM Account, Speciality
                                 WHERE email = ? AND Speciality.idspeciality = speciality");
     $stmt->execute(array($email));
@@ -43,14 +43,14 @@ function getUserByEmail($email)
     return $stmt->fetch();
 }
 
-function createAccount($email, $password, $name, $salt, $licenseid, $idspeciality)
+function createAccount($email, $password, $name, $salt, $licenseid, $idspeciality, $title)
 {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO Account(password, name, email, salt, licenseid, speciality)
-                            VALUES (:password, :name, :email, :salt, :licenseid, :idspeciality)");
+    $stmt = $conn->prepare("INSERT INTO Account(password, name, email, salt, licenseid, speciality, title)
+                            VALUES (:password, :name, :email, :salt, :licenseid, :idspeciality, :title)");
 
     $stmt->execute(array("password" => hash('sha512', $password . $salt), "name" => $name, "email" => $email,
-        "salt" => $salt, "licenseid" => $licenseid, "idspeciality" => $idspeciality));
+        "salt" => $salt, "licenseid" => $licenseid, "idspeciality" => $idspeciality, "title" => $title));
 
     return $stmt->fetch() == true;
 }

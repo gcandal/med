@@ -54,6 +54,7 @@
         $_SESSION['freeregisters'] = $current_user['freeregisters'];
         $_SESSION['idaccount'] = $current_user['idaccount'];
         $_SESSION['licenseid'] = $current_user['licenseid'];
+        $_SESSION['title'] = $current_user['title'];
 
         $_SESSION['success_messages'][] = 'Login successful ';
         var_dump($_SESSION);

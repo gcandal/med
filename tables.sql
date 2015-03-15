@@ -31,6 +31,7 @@ CREATE TYPE ProcedurePaymentStatus AS ENUM ('Recebi', 'Paguei', 'Pendente');
 CREATE TYPE EntityType AS ENUM ('Hospital', 'Insurance');
 CREATE TYPE OrgAuthorizationType AS ENUM ('AdminVisible', 'AdminNotVisible', 'Visible', 'NotVisible');
 CREATE TYPE RoleInProcedureType AS ENUM ('General', 'FirstAssistant', 'SecondAssistant', 'Anesthetist', 'Instrumentist');
+CREATE TYPE UserTitle AS ENUM ('Dr.', 'Dra.');
 
 ------------------------------------------------------------------------
 

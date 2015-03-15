@@ -21,7 +21,7 @@
                 <li class="dropdown current-user">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true"
                        href="#">
-                        Dr. <span class="username">{$NAME}</span>
+                        {$TITLE} <span class="username">{$NAME}</span>
                         <i class="clip-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu">
