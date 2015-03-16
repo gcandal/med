@@ -18,12 +18,13 @@ DROP TABLE IF EXISTS Speciality;
 DROP DOMAIN IF EXISTS Email;
 DROP DOMAIN IF EXISTS NIF;
 DROP DOMAIN IF EXISTS LicenseId;
+DROP DOMAIN IF EXISTS Cellphone;
 
 DROP TYPE IF EXISTS ProcedurePaymentStatus;
 DROP TYPE IF EXISTS EntityType;
 DROP TYPE IF EXISTS OrgAuthorizationType;
 DROP TYPE IF EXISTS RoleInProcedureType;
-DROP TYPE IF EXISTS Cellphone;
+DROP TYPE IF EXISTS UserTitle;
 
 ------------------------------------------------------------------------
 
@@ -69,6 +70,7 @@ CREATE TABLE Account (
   validUntil    DATE        NOT NULL                                                            DEFAULT CURRENT_DATE +
                                                                                                         INTERVAL '1 year',
   freeRegisters INTEGER     NOT NULL                                                            DEFAULT -1,
+  title         UserTitle   NOT NULL                                                            DEFAULT 'Dr.',
   CHECK (freeRegisters >= -1)
 );
 
@@ -127,7 +129,7 @@ CREATE TABLE ProcedureType (
 
 CREATE TABLE Procedure (
   idProcedure          SERIAL PRIMARY KEY,
-  paymentStatus        ProcedurePaymentStatus NOT NULL DEFAULT 'Pendente',
+  paymentStatus        ProcedurePaymentStatus NOT NULL                                               DEFAULT 'Pendente',
   idPrivatePayer       INTEGER REFERENCES PrivatePayer (idPrivatePayer),
   idPatient            INTEGER REFERENCES Patient (idPatient),
   idGeneral            INTEGER REFERENCES Professional (idProfessional),
@@ -135,17 +137,21 @@ CREATE TABLE Procedure (
   idSecondAssistant    INTEGER REFERENCES Professional (idProfessional),
   idAnesthetist        INTEGER REFERENCES Professional (idProfessional),
   idInstrumentist      INTEGER REFERENCES Professional (idProfessional),
-  date                 DATE                   NOT NULL DEFAULT CURRENT_DATE,
-  valuePerK            FLOAT,
-  totalRemun           FLOAT                           DEFAULT 0,
-  generalRemun         FLOAT                           DEFAULT 0,
-  firstAssistantRemun  FLOAT                           DEFAULT 0,
-  secondAssistantRemun FLOAT                           DEFAULT 0,
-  anesthetistRemun     FLOAT                           DEFAULT 0,
-  instrumentistRemun   FLOAT                           DEFAULT 0,
-  hasManualK           BOOLEAN                NOT NULL DEFAULT FALSE,
-  localAnesthesia      BOOLEAN                NOT NULL DEFAULT FALSE,
-  anesthetistK         VARCHAR(5)
+  date                 DATE                   NOT NULL                                               DEFAULT CURRENT_DATE,
+  valuePerK            FLOAT                  NOT NULL                                               DEFAULT 0,
+  totalRemun           FLOAT                  NOT NULL                                               DEFAULT 0,
+  generalRemun         FLOAT                  NOT NULL                                               DEFAULT 0,
+  firstAssistantRemun  FLOAT                  NOT NULL                                               DEFAULT 0,
+  secondAssistantRemun FLOAT                  NOT NULL                                               DEFAULT 0,
+  anesthetistRemun     FLOAT                  NOT NULL                                               DEFAULT 0,
+  instrumentistRemun   FLOAT                  NOT NULL                                               DEFAULT 0,
+  hasManualK           BOOLEAN                NOT NULL                                               DEFAULT FALSE,
+  localAnesthesia      BOOLEAN                NOT NULL                                               DEFAULT FALSE,
+  generalK             FLOAT                  NOT NULL                                               DEFAULT 0,
+  firstAssistantK      FLOAT                  NOT NULL                                               DEFAULT 0,
+  secondAssistantK     FLOAT                  NOT NULL                                               DEFAULT 0,
+  anesthetistK         FLOAT                  NOT NULL                                               DEFAULT 0,
+  instrumentistK       FLOAT                  NOT NULL                                               DEFAULT 0
 );
 
 CREATE TABLE ProcedureAccount (

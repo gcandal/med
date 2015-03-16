@@ -25,27 +25,17 @@
             <div class="row">
                 <div class="col-md-12 space20">
                     <div class="btn-group pull-right">
-                        <button data-toggle="dropdown" class="btn btn-green dropdown-toggle">
+                        <button data-toggle="dropdown" class="btn btn-blue dropdown-toggle">
                             Exportar <i class="fa fa-angle-down"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-light pull-right">
-                            <li>
-                                <a href="#" class="export-pdf" data-table="#sample-table-1">
-                                    Como PDF
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="export-txt" data-table="#sample-table-1">
-                                    Como TXT
-                                </a>
-                            </li>
                             <li>
                                 <a href="#" class="export-excel" data-table="#sample-table-1">
                                     Para Excel
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="export-doc" data-table="#sample-table-1">
+                                <a href="#" class="export-word" data-table="#sample-table-1">
                                     Para Word
                                 </a>
                             </li>
@@ -75,8 +65,8 @@
                                 {foreach $PROCEDURES as $procedure}
                                     <tr>
                                         <td class="center">{$procedure.date}</td>
-                                        <td>{$procedure.patientName}</td>
-                                        <td>{$procedure.patientBeneficiaryNr}</td>
+                                        <td>{$procedure.patientname}</td>
+                                        <td>{$procedure.patientbeneficiarynr}</td>
                                         <td class="center">
                                             <a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a>
                                         </td>

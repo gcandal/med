@@ -263,7 +263,9 @@
                                                        class="professionalLicenseId"
                                                        value="{$FORM_VALUES.GENERALLICENSEID}"/>
                                             </td>
-                                            <td class="center" id="generalK">100%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="100" name="generalK" id="generalK" required />
+                                            </td>
                                             <td class="center">
                                                 <input type="text" name="generalRemun" id="generalRemun"
                                                        style="background-color: lightgrey" value="0" readonly></td>
@@ -278,7 +280,9 @@
                                                                                 class="professionalLicenseId"
                                                                                 value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/>
                                             </td>
-                                            <td class="center">20%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="0" name="firstAssistantK" id="firstAssistantK" required />
+                                            </td>
                                             <td class="center"><input type="text" name="firstAssistantRemun"
                                                                       id="firstAssistantRemun"
                                                                       style="background-color: lightgrey" value="0"
@@ -294,7 +298,9 @@
                                                                                 class="professionalLicenseId"
                                                                                 value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/>
                                             </td>
-                                            <td class="center">10%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="0" name="secondAssistantK" id="secondAssistantK" required />
+                                            </td>
                                             <td class="center"><input type="text" name="secondAssistantRemun"
                                                                       id="secondAssistantRemun"
                                                                       style="background-color: lightgrey" value="0"
@@ -310,7 +316,9 @@
                                                                                 class="professionalLicenseId"
                                                                                 value="{$FORM_VALUES.INSTRUMENTISTLICENSEID}"/>
                                             </td>
-                                            <td class="center">10%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="0" name="instrumentistK" id="instrumentistK" required />
+                                            </td>
                                             <td class="center"><input type="text" name="instrumentistRemun"
                                                                       id="instrumentistRemun"
                                                                       style="background-color: lightgrey" value="0"
@@ -327,11 +335,14 @@
                                                                                 value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/>
                                             </td>
                                             <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="0" name="anesthetistK" id="anesthetistK" required />
+                                                <!--
                                                 <select id="anesthetistK" name="anesthetistK">
                                                     <option value="25">25%</option>
                                                     <option value="30">30%</option>
                                                     <option value="table">Tabela OM</option>
                                                 </select>
+                                                -->
                                             </td>
                                             <td class="center"><input type="text" name="anesthetistRemun"
                                                                       id="anesthetistRemun"

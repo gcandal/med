@@ -15,7 +15,7 @@ var instrumentistRemun = $('#instrumentistRemun');
 var instrumentistName = $('#instrumentistName');
 var anesthetistName = $('#anesthetistName');
 var anesthetistK = $('#anesthetistK');
-var generalK = $('#generalK');
+var kValues = $(".kValue");
 var nSubProcedures = $('#nSubProcedures');
 var submitButton = $("#submitButton");
 var role = $('#role');
@@ -147,7 +147,7 @@ $(document).ready(function () {
         fillGeneralRemuneration();
     });
 
-    anesthetistK.change(function () {
+    kValues.change(function () {
         updateRemunerations();
     });
 
@@ -317,7 +317,10 @@ var updatePatientInfo = function () {
 };
 
 var disablePatientForm = function (disable) {
-    patientForm.find("input").attr("disabled", disable);
+    if(disable)
+        patientForm.hide();
+    else
+        patientForm.show();
 
     disablePatientValidations(disable);
 };
@@ -344,6 +347,7 @@ var disablePayerValidations = function (disable) {
         errorMessageNamePrivate.text("");
         newPrivatePayer.find("input").css("border", "");
     } else {
+        errorMessageNamePrivate.parent().show();
         isInvalidPayer(namePrivate, "Nome obrigatório", errorMessageNamePrivate);
     }
 };
@@ -408,76 +412,35 @@ var getPatient = function (id) {
 };
 
 var updateRemunerations = function () {
+    const roles = ['#general', '#firstAssistant', '#secondAssistant', '#anesthetist', '#instrumentist'];
+
     fillTotalRemuneration();
+    const total = totalRemun.val();
+
+    roles.forEach(function(role) {
+        console.log(role);
+        console.log(total);
+        console.log($(role + "Remun").val());
+        console.log($(role + "K").val());
+        console.log($(role + "K").val());
+        if($(role + "Name").val() !== '')
+            $(role + "Remun").val(total * $(role + "K").val() / 100.0);
+        else
+            $(role + "Remun").val(0);
+    });
+
+    /*
     fillFirstAssistantRemuneration();
     fillSecondAssistantRemuneration();
     fillInstrumentistRemuneration();
     fillAnesthetistRemuneration();
     fillGeneralRemuneration();
+    */
 };
 
-var fillGeneralRemuneration = function () {
-    var total = totalRemun.val();
 
-    if (thereIsAFirstAssistant()) {
-        total -= firstAssistantRemun.val();
-    }
-
-    if (thereIsASecondAssistant()) {
-        total -= secondAssistantRemun.val();
-    }
-
-    if (thereIsAnInstrumentist()) {
-        total -= instrumentistRemun.val();
-    }
-
-    if (thereIsAnAnesthetist()) {
-        total -= anesthetistRemun.val();
-    }
-
-    if (totalRemun.val() > 0)
-        generalK.text(Math.floor((total / totalRemun.val()) * 100) + '%');
-
-    generalRemun.val(total);
-};
-
-var fillFirstAssistantRemuneration = function () {
-    if (thereIsAFirstAssistant()) {
-        var remun = totalRemun.val() * 0.2;
-        firstAssistantRemun.val(remun);
-    } else {
-        firstAssistantRemun.val(0);
-    }
-};
-
-var fillSecondAssistantRemuneration = function () {
-    if (thereIsASecondAssistant()) {
-        var remun = totalRemun.val() * 0.1;
-        secondAssistantRemun.val(remun);
-    } else {
-        secondAssistantRemun.val(0);
-    }
-};
-
-var fillInstrumentistRemuneration = function () {
-    if (thereIsAnInstrumentist()) {
-        var remun = totalRemun.val() * 0.1;
-        instrumentistRemun.val(remun);
-    } else {
-        instrumentistRemun.val(0);
-    }
-};
-
-var fillAnesthetistRemuneration = function () {
-    var remun;
-    if (thereIsAnAnesthetist()) {
+/*
         switch (anesthetistK.val()) {
-            case "25":
-                remun = totalRemun.val() * 0.25;
-                break;
-            case "30":
-                remun = totalRemun.val() * 0.30;
-                break;
             case "table":
                 var totalK = getTotalK();
                 var k;
@@ -529,11 +492,7 @@ var fillAnesthetistRemuneration = function () {
 
                 break;
         }
-        anesthetistRemun.val(remun);
-    } else {
-        anesthetistRemun.val(0);
-    }
-};
+        */
 
 var removeSubProcedure = function (subProcedureNr) {
     $("#subProcedure" + subProcedureNr).remove();
@@ -563,25 +522,6 @@ var fillTotalRemuneration = function () {
     }
 };
 
-
-function getTotalK() {
-    var total = 0;
-
-    if (isNumeric($('input[name=valuePerK]').val())) {
-        $('.subProcedure').each(function () {
-            for (var i = 0; i < subProceduresList.length; i++) {
-                if ($(this).val() == subProceduresList[i].id) {
-                    total += parseInt(subProceduresList[i].k);
-                }
-            }
-        });
-
-        return total;
-    }
-
-    return 0;
-}
-
 var updatePayerVisibility = function () {
     switch (idPayer.val()) {
         case 'NewPrivate':
@@ -605,22 +545,6 @@ var updatePayerVisibility = function () {
             checkSubmitButton();
             break;
     }
-};
-
-var thereIsAFirstAssistant = function () {
-    return firstAssistantName.val() != "";
-};
-
-var thereIsASecondAssistant = function () {
-    return secondAssistantName.val() != "";
-};
-
-var thereIsAnInstrumentist = function () {
-    return instrumentistName.val() != "";
-};
-
-var thereIsAnAnesthetist = function () {
-    return anesthetistName.val() != "";
 };
 
 var isNumeric = function (n) {
