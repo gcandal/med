@@ -148,7 +148,8 @@ try {
     $idProcedure = addProcedure($idAccount, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
         $idprivatepayer, $role, $_POST['anesthetistK'], $hasManualK, $localAnesthesia, $personalRemun,
         $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
-        $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
+        $_POST['anesthetistRemun'], $_POST['instrumentistRemun'],
+        $_POST['generalK'], $_POST['firstAssistantK'], $_POST['secondAssistantK'], $_POST['instrumentistK']);
 
     if (count($subProcedures) > 0) {
         addSubProcedures($idProcedure, $subProcedures);
@@ -189,7 +190,7 @@ try {
 
     $conn->commit();
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a adicionar registo ';// . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a adicionar registo ' . $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 
     header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');

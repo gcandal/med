@@ -70,6 +70,10 @@
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                             <span id="errorMessageCellphonePatient" class="errorMessage"></span>
                         </div>
+                        <div class="alert alert-danger" role="alert" style="display: none">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span id="errorMessageKs" class="errorMessage"></span>
+                        </div>
 
                         {if $FIELD_ERRORS.name}
                             <div class="alert alert-danger" role="alert">
@@ -84,7 +88,7 @@
                             </div>
                         {/if}
                         <form action="{$BASE_URL}actions/procedures/editprocedure.php" role="form" id="form"
-                              novalidate="novalidate" method="post">
+                              method="post">
                             <input type="hidden" id="idProcedure" name="idprocedure" value="{$PROCEDURE.idprocedure}"/>
                             {if $PROCEDURE.readonly}
                                 <input type="hidden" id="readOnly" name="readonly" value="1"/>
@@ -177,7 +181,7 @@
                                                 </label>
                                                 <input type="text" placeholder="Nome" class="form-control"
                                                        id="namePatient"
-                                                       name="namePatient" value required>
+                                                       name="namePatient" value>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">
@@ -285,7 +289,10 @@
                                                        class="professionalLicenseId"
                                                        value="{$PROCEDURE.professionals.general.licenseid}"/>
                                             </td>
-                                            <td class="center" id="generalK">100%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.generalk}"
+                                                       name="generalK" id="generalK" required/>
+                                            </td>
                                             <td class="center">
                                                 <input type="text" name="generalRemun" id="generalRemun"
                                                        style="background-color: lightgrey" value="0" readonly></td>
@@ -300,7 +307,10 @@
                                                                                 class="professionalLicenseId"
                                                                                 value="{$PROCEDURE.professionals.firstassistant.licenseid}"/>
                                             </td>
-                                            <td class="center">20%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.firstassistantk}"
+                                                       name="firstAssistantK" id="firstAssistantK" required/>
+                                            </td>
                                             <td class="center"><input type="text" name="firstAssistantRemun"
                                                                       id="firstAssistantRemun"
                                                                       style="background-color: lightgrey" value="0"
@@ -316,7 +326,10 @@
                                                                                 class="professionalLicenseId"
                                                                                 value="{$PROCEDURE.professionals.secondassistant.licenseid}"/>
                                             </td>
-                                            <td class="center">10%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.secondassistantk}"
+                                                       name="secondAssistantK" id="secondAssistantK" required/>
+                                            </td>
                                             <td class="center"><input type="text" name="secondAssistantRemun"
                                                                       id="secondAssistantRemun"
                                                                       style="background-color: lightgrey" value="0"
@@ -332,7 +345,10 @@
                                                                                 class="professionalLicenseId"
                                                                                 value="{$PROCEDURE.professionals.instrumentist.licenseid}"/>
                                             </td>
-                                            <td class="center">10%</td>
+                                            <td class="center">
+                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.instrumentistk}"
+                                                       name="instrumentistK" id="instrumentistK" required/>
+                                            </td>
                                             <td class="center"><input type="text" name="instrumentistRemun"
                                                                       id="instrumentistRemun"
                                                                       style="background-color: lightgrey" value="0"
@@ -350,11 +366,8 @@
                                                                                 value="{$PROCEDURE.professionals.anesthetist.licenseid}"/>
                                             </td>
                                             <td class="center">
-                                                <select id="anesthetistK" name="anesthetistK">
-                                                    <option value="25">25%</option>
-                                                    <option value="30">30%</option>
-                                                    <option value="table">Tabela OM</option>
-                                                </select>
+                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.anesthetistk}"
+                                                       name="anesthetistK" id="anesthetistK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="anesthetistRemun"
                                                                       id="anesthetistRemun"

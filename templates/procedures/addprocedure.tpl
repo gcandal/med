@@ -61,6 +61,10 @@
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                             <span id="errorMessageCellphonePatient" class="errorMessage"></span>
                         </div>
+                        <div class="alert alert-danger" role="alert" style="display: none">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span id="errorMessageKs" class="errorMessage"></span>
+                        </div>
 
                         {if $FIELD_ERRORS.name}
                             <div class="alert alert-danger" role="alert">
@@ -75,7 +79,7 @@
                             </div>
                         {/if}
                         <form action="{$BASE_URL}actions/procedures/addprocedure.php" role="form" id="form"
-                              novalidate="novalidate" method="post">
+                              method="post">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="errorHandler alert alert-danger no-display">
@@ -160,7 +164,7 @@
                                                 Nome <span class="symbol required"></span>
                                             </label>
                                             <input type="text" placeholder="Nome" class="form-control" id="namePatient"
-                                                   name="namePatient" value required>
+                                                   name="namePatient" value>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">
@@ -260,11 +264,12 @@
                                             <td class="center hidden-xs">Cirurgião Principal</td>
                                             <td class="center hidden-xs">
                                                 <input type="text" name="generaltLicenseId"
-                                                       class="professionalLicenseId"
+                                                       class="professionalLicenseId" id="generalLicenseId"
                                                        value="{$FORM_VALUES.GENERALLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="100" name="generalK" id="generalK" required />
+                                                <input type="number" class="kValue" min="0" max="100" value="100"
+                                                       name="generalK" id="generalK" required/>
                                             </td>
                                             <td class="center">
                                                 <input type="text" name="generalRemun" id="generalRemun"
@@ -278,10 +283,12 @@
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="firstAssistantLicenseId"
                                                                                 class="professionalLicenseId"
+                                                                                id="firstAssistantLicenseId"
                                                                                 value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0" name="firstAssistantK" id="firstAssistantK" required />
+                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                       name="firstAssistantK" id="firstAssistantK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="firstAssistantRemun"
                                                                       id="firstAssistantRemun"
@@ -296,10 +303,12 @@
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="secondAssistantLicenseId"
                                                                                 class="professionalLicenseId"
+                                                                                id="secondAssistantLicenseId"
                                                                                 value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0" name="secondAssistantK" id="secondAssistantK" required />
+                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                       name="secondAssistantK" id="secondAssistantK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="secondAssistantRemun"
                                                                       id="secondAssistantRemun"
@@ -314,10 +323,12 @@
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="instrumentistAssistantLicenseId"
                                                                                 class="professionalLicenseId"
+                                                                                id="instrumentistLicenseId"
                                                                                 value="{$FORM_VALUES.INSTRUMENTISTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0" name="instrumentistK" id="instrumentistK" required />
+                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                       name="instrumentistK" id="instrumentistK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="instrumentistRemun"
                                                                       id="instrumentistRemun"
@@ -332,10 +343,12 @@
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="anesthetistAssistantLicenseId"
                                                                                 class="professionalLicenseId"
+                                                                                id="anesthetistLicenseId"
                                                                                 value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0" name="anesthetistK" id="anesthetistK" required />
+                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                       name="anesthetistK" id="anesthetistK" required/>
                                                 <!--
                                                 <select id="anesthetistK" name="anesthetistK">
                                                     <option value="25">25%</option>

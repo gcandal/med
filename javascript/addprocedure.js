@@ -16,6 +16,7 @@ var instrumentistName = $('#instrumentistName');
 var anesthetistName = $('#anesthetistName');
 var anesthetistK = $('#anesthetistK');
 var kValues = $(".kValue");
+var professionalNames = $(".professionalName");
 var nSubProcedures = $('#nSubProcedures');
 var submitButton = $("#submitButton");
 var role = $('#role');
@@ -32,6 +33,7 @@ var errorMessageNifPatient = $("#errorMessageNifPatient");
 var errorMessageNamePatient = $("#errorMessageNamePatient");
 var errorMessageCellphonePatient = $("#errorMessageCellphonePatient");
 var errorMessageNamePrivate = $('#errorMessageNamePrivate');
+var errorMessageKs = $('#errorMessageKs');
 var subProcedureTemplate = Handlebars.compile($('#subProcedure-template').html());
 
 //Defined in separate file
@@ -127,28 +129,35 @@ $(document).ready(function () {
         updateRemunerations();
     });
 
-    firstAssistantName.bind("paste drop input change cut", function () {
-        fillFirstAssistantRemuneration();
-        fillGeneralRemuneration();
+    professionalNames.bind("paste drop input change cut", function () {
+        updateRemunerations();
+
+        var val = $(this).attr("id");
+
+        blockProfessionalRow($(this).val() === '', val.slice(0, val.length - 4));
     });
 
-    secondAssistantName.bind("paste drop input change cut", function () {
-        fillSecondAssistantRemuneration();
-        fillGeneralRemuneration();
-    });
-
-    instrumentistName.bind("paste drop input change cut", function () {
-        fillInstrumentistRemuneration();
-        fillGeneralRemuneration();
-    });
-
-    anesthetistName.bind("paste drop input change cut", function () {
-        fillAnesthetistRemuneration();
-        fillGeneralRemuneration();
-    });
+    if(method !== 'editProcedure') {
+        blockProfessionalRow(true, 'firstAssistant');
+        blockProfessionalRow(true, 'secondAssistant');
+        blockProfessionalRow(true, 'anesthetist');
+        blockProfessionalRow(true, 'instrumentist');
+    }
 
     kValues.change(function () {
         updateRemunerations();
+
+        var ks = getSumOfK();
+
+        if(ks === 100) {
+            errorMessageKs.parent().hide();
+            errorMessageKs.text("");
+        } else {
+            errorMessageKs.parent().show();
+            errorMessageKs.text("A soma da % de K dos membros da equipa tem que ser 100, mas é " + ks);
+        }
+
+        checkSubmitButton();
     });
 
     $.ajax({
@@ -164,7 +173,7 @@ $(document).ready(function () {
                 };
             });
 
-            $('.professionalName').autocomplete({
+            professionalNames.autocomplete({
                 source: recentProfessionals,
                 minLength: 1,
                 select: function (event, ui) {
@@ -187,22 +196,41 @@ var fillProfessionalRow = function (roleName) {
     var currentRoleFields = $("#" + roleName + "Row");
     var currentRoleName = currentRoleFields.children().first().children().first();
     var currentRoleLicenseId = currentRoleFields.children().first().next().next().children().first();
+    var currentRoleK = currentRoleFields.children().first().next().next().next().children().first();
 
     currentRoleName.val(myName);
     enableField(currentRoleName, true);
     currentRoleLicenseId.val(myLicenseId);
     enableField(currentRoleLicenseId, true);
+    enableField(currentRoleK, false);
 
     var previousRoleFields = $("#" + previousRole + "Row");
     var previousRoleName = previousRoleFields.children().first().children().first();
     var previousRoleLicenseId = previousRoleFields.children().first().next().next().children().first();
+    var previousRoleK = previousRoleFields.children().first().next().next().next().children().first();
 
     previousRoleName.val("");
     enableField(previousRoleName, false);
     previousRoleLicenseId.val("");
-    enableField(previousRoleLicenseId, false);
+    previousRoleK.val(0);
+    enableField(previousRoleK, true);
 
     previousRole = roleName;
+};
+
+var blockProfessionalRow = function (block, role) {
+    var licenseId = $("#" + role + "LicenseId");
+    var k = $("#" + role + "K");
+
+    if(block) {
+        licenseId.val("");
+        k.val(0);
+    }
+
+    enableField(licenseId, block);
+    licenseId.attr("disabled", block).trigger("change");
+    enableField(k, block);
+    k.trigger('change');
 };
 
 var fillSubProcedure = function (selectField) {
@@ -411,6 +439,20 @@ var getPatient = function (id) {
     return false;
 };
 
+var getSumOfK = function() {
+    const roles = ['#general', '#firstAssistant', '#secondAssistant', '#anesthetist', '#instrumentist'];
+    var sum = 0;
+
+    roles.forEach(function(role) {
+        var k = parseInt($(role + "K").val());
+
+        if(isNumeric(k))
+            sum += k;
+    });
+
+    return sum;
+};
+
 var updateRemunerations = function () {
     const roles = ['#general', '#firstAssistant', '#secondAssistant', '#anesthetist', '#instrumentist'];
 
@@ -418,11 +460,6 @@ var updateRemunerations = function () {
     const total = totalRemun.val();
 
     roles.forEach(function(role) {
-        console.log(role);
-        console.log(total);
-        console.log($(role + "Remun").val());
-        console.log($(role + "K").val());
-        console.log($(role + "K").val());
         if($(role + "Name").val() !== '')
             $(role + "Remun").val(total * $(role + "K").val() / 100.0);
         else

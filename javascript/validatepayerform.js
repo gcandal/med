@@ -39,6 +39,7 @@ var checkValidPayerName = function (field) {
 var isInvalidPayer = function (field, errorText, errorField) {
     field.css('border', '1px solid red');
     errorField.text(errorText);
+    errorField.parent().show();
 
     checkSubmitButton();
 };
@@ -47,7 +48,6 @@ var isValidPayer = function (field, errorField) {
     field.css('border', '1px solid green');
     errorField.text("");
     errorField.parent().hide();
-
 
     checkSubmitButton();
 };
