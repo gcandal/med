@@ -137,7 +137,7 @@ $(document).ready(function () {
         blockProfessionalRow($(this).val() === '', val.slice(0, val.length - 4));
     });
 
-    if(method !== 'editProcedure') {
+    if (method !== 'editProcedure') {
         blockProfessionalRow(true, 'firstAssistant');
         blockProfessionalRow(true, 'secondAssistant');
         blockProfessionalRow(true, 'anesthetist');
@@ -149,7 +149,7 @@ $(document).ready(function () {
 
         var ks = getSumOfK();
 
-        if(ks === 100) {
+        if (ks === 100) {
             errorMessageKs.parent().hide();
             errorMessageKs.text("");
         } else {
@@ -222,7 +222,7 @@ var blockProfessionalRow = function (block, role) {
     var licenseId = $("#" + role + "LicenseId");
     var k = $("#" + role + "K");
 
-    if(block) {
+    if (block) {
         licenseId.val("");
         k.val(0);
     }
@@ -264,17 +264,17 @@ var getSubProcedureTypes = function () {
     return result;
 };
 
-var addSubProcedureCallback = function(subProcedure) {
-    subProcedure.on("paste drop input change cut", (function() {
+var addSubProcedureCallback = function (subProcedure) {
+    subProcedure.on("paste drop input change cut", (function () {
         var before = "01.00.00.01";
 
-        return function() {
+        return function () {
             var text = $(this).val();
 
-            if(text.length > 11)
+            if (text.length > 11)
                 $(this).val(text.slice(0, 11));
 
-            if (before.length < text.length && (text.length == 2 || text.length == 5 || text.length == 8) )
+            if (before.length < text.length && (text.length == 2 || text.length == 5 || text.length == 8))
                 $(this).val(text + '.');
             else if (before.length > text.length && text[text.length - 1] == '.')
                 $(this).val(text.slice(0, text.length - 1));
@@ -345,7 +345,7 @@ var updatePatientInfo = function () {
 };
 
 var disablePatientForm = function (disable) {
-    if(disable)
+    if (disable)
         patientForm.hide();
     else
         patientForm.show();
@@ -439,14 +439,14 @@ var getPatient = function (id) {
     return false;
 };
 
-var getSumOfK = function() {
+var getSumOfK = function () {
     const roles = ['#general', '#firstAssistant', '#secondAssistant', '#anesthetist', '#instrumentist'];
     var sum = 0;
 
-    roles.forEach(function(role) {
+    roles.forEach(function (role) {
         var k = parseInt($(role + "K").val());
 
-        if(isNumeric(k))
+        if (isNumeric(k))
             sum += k;
     });
 
@@ -459,77 +459,77 @@ var updateRemunerations = function () {
     fillTotalRemuneration();
     const total = totalRemun.val();
 
-    roles.forEach(function(role) {
-        if($(role + "Name").val() !== '')
+    roles.forEach(function (role) {
+        if ($(role + "Name").val() !== '')
             $(role + "Remun").val(total * $(role + "K").val() / 100.0);
         else
             $(role + "Remun").val(0);
     });
 
     /*
-    fillFirstAssistantRemuneration();
-    fillSecondAssistantRemuneration();
-    fillInstrumentistRemuneration();
-    fillAnesthetistRemuneration();
-    fillGeneralRemuneration();
-    */
+     fillFirstAssistantRemuneration();
+     fillSecondAssistantRemuneration();
+     fillInstrumentistRemuneration();
+     fillAnesthetistRemuneration();
+     fillGeneralRemuneration();
+     */
 };
 
 
 /*
-        switch (anesthetistK.val()) {
-            case "table":
-                var totalK = getTotalK();
-                var k;
-                if (totalK < 101) {
-                    k = 27;
-                } else if (totalK < 121) {
-                    k = 33;
-                } else if (totalK < 141) {
-                    k = 39;
-                } else if (totalK < 161) {
-                    k = 45;
-                } else if (totalK < 181) {
-                    k = 51;
-                } else if (totalK < 201) {
-                    k = 57;
-                } else if (totalK < 241) {
-                    k = 66;
-                } else if (totalK < 281) {
-                    k = 78;
-                } else if (totalK < 301) {
-                    k = 87;
-                } else if (totalK < 341) {
-                    k = 95;
-                } else if (totalK < 401) {
-                    k = 110;
-                } else if (totalK < 421) {
-                    k = 120;
-                } else if (totalK < 461) {
-                    k = 130;
-                } else if (totalK < 481) {
-                    k = 140;
-                } else if (totalK < 511) {
-                    k = 150;
-                } else if (totalK < 561) {
-                    k = 160;
-                } else if (totalK < 601) {
-                    k = 175;
-                } else if (totalK < 701) {
-                    k = 195;
-                } else if (totalK < 801) {
-                    k = 225;
-                } else if (totalK < 901) {
-                    k = 255;
-                } else {
-                    k = 300;
-                }
+ switch (anesthetistK.val()) {
+ case "table":
+ var totalK = getTotalK();
+ var k;
+ if (totalK < 101) {
+ k = 27;
+ } else if (totalK < 121) {
+ k = 33;
+ } else if (totalK < 141) {
+ k = 39;
+ } else if (totalK < 161) {
+ k = 45;
+ } else if (totalK < 181) {
+ k = 51;
+ } else if (totalK < 201) {
+ k = 57;
+ } else if (totalK < 241) {
+ k = 66;
+ } else if (totalK < 281) {
+ k = 78;
+ } else if (totalK < 301) {
+ k = 87;
+ } else if (totalK < 341) {
+ k = 95;
+ } else if (totalK < 401) {
+ k = 110;
+ } else if (totalK < 421) {
+ k = 120;
+ } else if (totalK < 461) {
+ k = 130;
+ } else if (totalK < 481) {
+ k = 140;
+ } else if (totalK < 511) {
+ k = 150;
+ } else if (totalK < 561) {
+ k = 160;
+ } else if (totalK < 601) {
+ k = 175;
+ } else if (totalK < 701) {
+ k = 195;
+ } else if (totalK < 801) {
+ k = 225;
+ } else if (totalK < 901) {
+ k = 255;
+ } else {
+ k = 300;
+ }
 
-                remun = k * valuePerK.val();
+ remun = k * valuePerK.val();
 
-                break;
-        }
-        */
+ break;
+ }
+ */
 
 var removeSubProcedure = function (subProcedureNr) {
     $("#subProcedure" + subProcedureNr).remove();

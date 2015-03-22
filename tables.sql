@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS ProcedureType;
 DROP TABLE IF EXISTS Procedure;
 DROP TABLE IF EXISTS Professional;
 DROP TABLE IF EXISTS LoginAttempts;
+DROP TABLE IF EXISTS ResetTokens;
 DROP TABLE IF EXISTS PrivatePayer;
 DROP TABLE IF EXISTS EntityPayer;
 DROP TABLE IF EXISTS Patient;
@@ -78,6 +79,12 @@ CREATE TABLE LoginAttempts (
   idAttempt SERIAL PRIMARY KEY,
   idAccount INTEGER     NOT NULL REFERENCES Account (idAccount) ON DELETE CASCADE,
   time      VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE ResetTokens (
+  email      Email     NOT NULL UNIQUE REFERENCES Account(email) ON DELETE CASCADE,
+  token      CHAR(128) NOT NULL UNIQUE,
+  validUntil TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP + INTERVAL '2 hours'
 );
 
 CREATE TABLE Organization (

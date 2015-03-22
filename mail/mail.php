@@ -1,22 +1,99 @@
 <?php
-require_once '../../lib/swiftmailer/lib/swift_required.php';
 
-$transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, "ssl")
-    ->setUsername('gabrielcandal@gmail.com')
-    ->setPassword('password');
-$mailer = Swift_Mailer::newInstance($transport);
+require_once(__DIR__ . '/../vendor/autoload.php');
 
-function notifyOrganizationInvite($organizatioName, $nameInvited, $emailInvited, $nameInviting)
+function sendPasswordResetToken($email, $token)
 {
-    global $mailer, $BASE_URL;
+    $mail = new PHPMailer;
 
-    $message = Swift_Message::newInstance('Convite para se juntar a '.$organizatioName)
-        ->setFrom(array('gabrielcandal2@gmail.com' => 'Trigonum'))
-        ->setTo(array($emailInvited => $nameInvited))
-        ->setBody('Recebeu um convite para se juntar à '.$organizatioName.' por '.$nameInviting."\r\n"
-                    .'Vá a 192.168.1.80'.$BASE_URL.'pages/organizations/invites.php');
+    //$mail->SMTPDebug = 3;
+    $mail->isSMTP();
+    $mail->Host = 'smtp-pt.securemail.pro';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'geral@trigonum.pt';
+    $mail->Password = '2014trigonum';
+    $mail->Port = 25;
+    $mail->From = 'geral@trigonum.pt';
+    $mail->FromName = 'Trigonum DocDue';
 
-    $mailer->send($message);
+    $mail->addAddress($email);
+
+    $mail->Subject = 'Restabelecer a password';
+    $mail->isHTML(true);
+    $mail->Body = "<a href='http://trigonum.pt/docdue/pages/main.php?box=forgot&token=$token'>Clique aqui</a>";
+
+    return $mail->send();
+
+    /*
+    if (!$mail->send()) {
+        echo 'Message could not be sent.';
+        return 'Mailer Error: ' . $mail->ErrorInfo;
+    } else {
+        return 'Message has been sent';
+    }
+    */
 }
 
-?>
+function sendPasswordResetSuccess($email)
+{
+    $mail = new PHPMailer;
+
+    //$mail->SMTPDebug = 3;
+    $mail->isSMTP();
+    $mail->Host = 'smtp-pt.securemail.pro';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'geral@trigonum.pt';
+    $mail->Password = '2014trigonum';
+    $mail->Port = 25;
+    $mail->From = 'geral@trigonum.pt';
+    $mail->FromName = 'Trigonum DocDue';
+
+    $mail->addAddress($email);
+
+    $mail->Subject = 'Palavra-passe recuperada';
+    $mail->isHTML(true);
+    $mail->Body = "A sua palavra-passe foi alterada com sucesso.";
+
+    return $mail->send();
+
+    /*
+    if (!$mail->send()) {
+        echo 'Message could not be sent.';
+        return 'Mailer Error: ' . $mail->ErrorInfo;
+    } else {
+        return 'Message has been sent';
+    }
+    */
+}
+
+function sendPasswordResetNoAccount($email)
+{
+    $mail = new PHPMailer;
+
+    //$mail->SMTPDebug = 3;
+    $mail->isSMTP();
+    $mail->Host = 'smtp-pt.securemail.pro';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'geral@trigonum.pt';
+    $mail->Password = '2014trigonum';
+    $mail->Port = 25;
+    $mail->From = 'geral@trigonum.pt';
+    $mail->FromName = 'Trigonum DocDue';
+
+    $mail->addAddress($email);
+
+    $mail->Subject = 'Tentativa de restabelecer password';
+    $mail->isHTML(true);
+    $mail->Body = "Foi pedido que a password para este e-mail fosse restabelecida. No entanto, este e-mail não se encontra registado.";
+
+    return $mail->send();
+
+    /*
+    if (!$mail->send()) {
+        echo 'Message could not be sent.';
+        return 'Mailer Error: ' . $mail->ErrorInfo;
+    } else {
+        return 'Message has been sent';
+    }
+    */
+}

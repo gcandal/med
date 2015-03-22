@@ -71,26 +71,86 @@
             Insira o seu email para recuperar a palavra-passe.
         </p>
 
-        <form class="form-forgot">
-            <div class="errorHandler alert alert-danger no-display">
-                <i class="fa fa-remove-sign"></i> Alguma coisa correu mal. Por favor reveja o formulário.
+        {foreach $SUCCESS_MESSAGES as $success}
+            <div class="alert alert-success" role="alert">
+                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                <span>{$success}</span>
             </div>
-            <fieldset>
-                <div class="form-group">
+        {/foreach}
+
+        {foreach $ERROR_MESSAGES as $error}
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span>{$error}</span>
+            </div>
+        {/foreach}
+
+        <div class="alert alert-danger" role="alert" style="display: none;">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span id="emailError"></span>
+        </div>
+
+        {if !$TOKEN}
+            <form class="form-forgot" action="{$BASE_URL}actions/users/resetpassword.php" method="post">
+                <div class="errorHandler alert alert-danger no-display">
+                    <i class="fa fa-remove-sign"></i> Alguma coisa correu mal. Por favor reveja o formulário.
+                </div>
+                <fieldset>
+                    <div class="form-group">
                             <span class="input-icon">
-                                <input type="email" class="form-control" name="email" placeholder="Email" disabled>
+                                <input type="email" class="form-control" name="email" placeholder="Email" required id="email">
                                 <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <div class="form-actions">
+                        <a href="?box=login" class="btn btn-light-grey go-back">
+                            <i class="fa fa-circle-arrow-left"></i> Para trás
+                        </a>
+                        <button type="submit" class="btn btn-blue pull-right" id="submitButton">
+                            Enviar <i class="fa fa-arrow-circle-right"></i>
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+        {else}
+            <div class="alert alert-danger" role="alert" style="display: none;">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span id="passwordError"></span>
+            </div>
+
+            <form class="form-forgot" action="{$BASE_URL}actions/users/changepassword.php" method="post">
+                <div class="errorHandler alert alert-danger no-display">
+                    <i class="fa fa-remove-sign"></i> Alguma coisa correu mal. Por favor reveja o formulário.
                 </div>
-                <div class="form-actions">
-                    <a href="?box=login" class="btn btn-light-grey go-back">
-                        <i class="fa fa-circle-arrow-left"></i> Para trás
-                    </a>
-                    <button type="submit" class="btn btn-blue pull-right" disabled>
-                        Enviar <i class="fa fa-arrow-circle-right"></i>
-                    </button>
-                </div>
-            </fieldset>
-        </form>
+                <fieldset>
+                    <input type="hidden" name="token" value="{$TOKEN}" />
+                    <div class="form-group">
+                            <span class="input-icon">
+                                <input type="email" class="form-control" name="email" placeholder="Email" value="{$EMAIL_TOKEN}"
+                                        required id="email">
+                                <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <div class="form-group">
+                            <span class="input-icon">
+                                <input type="password" class="form-control" required id="password" name="password"
+                                       placeholder="Nova palavra-passe">
+                                <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <div class="form-group">
+                            <span class="input-icon">
+                                <input type="password" class="form-control" id="passwordconfirm" name="passwordconfirm"
+                                       placeholder="Repita a nova palavra-passe">
+                                <i class="fa fa-lock"></i> </span>
+                    <div class="form-actions">
+                        <a href="?box=login" class="btn btn-light-grey go-back">
+                            <i class="fa fa-circle-arrow-left"></i> Para trás
+                        </a>
+                        <button type="submit" class="btn btn-blue pull-right" id="submitButton">
+                            Mudar <i class="fa fa-arrow-circle-right"></i>
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+        {/if}
     </div>
     <!-- end: FORGOT BOX -->
     <!-- start: REGISTER BOX -->
@@ -139,13 +199,15 @@
             <fieldset>
                 <div class="form-group">
                             <span class="input-icon">
-                                <input type="text" value="{$FORM_VALUES.name}" required class="form-control" name="name" id="userName"
+                                <input type="text" value="{$FORM_VALUES.name}" required class="form-control" name="name"
+                                       id="userName"
                                        placeholder="Nome clínico" maxlength="40">
                                 <i class="fa fa-user"></i> </span>
                 </div>
                 <div class="form-group">
                             <span class="input-icon">
-                                <input type="text" value="{$FORM_VALUES.licenseid}" required class="form-control" name="licenseid" id="licenseId"
+                                <input type="text" value="{$FORM_VALUES.licenseid}" required class="form-control"
+                                       name="licenseid" id="licenseId"
                                        placeholder="Cédula">
                                 <i class="fa fa-edit"></i></span>
                 </div>
@@ -213,7 +275,8 @@
 
                 <div class="form-group">
                             <span class="input-icon">
-                                <input type="email" class="form-control" value="{$FORM_VALUES.email}" required name="email" id="email"
+                                <input type="email" class="form-control" value="{$FORM_VALUES.email}" required
+                                       name="email" id="email"
                                        placeholder="Email" maxlength="254">
                                 <i class="fa fa-envelope"></i> </span>
                 </div>

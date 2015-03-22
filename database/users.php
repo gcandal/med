@@ -34,8 +34,8 @@ function getUserById($id)
 function getUserByEmail($email)
 {
     global $conn;
-    $stmt = $conn->prepare("SELECT Account.name as name, email, password, salt, licenseid, validuntil, freeregisters,
-                                Speciality.name as speciality, idaccount, title
+    $stmt = $conn->prepare("SELECT Account.name AS name, email, password, salt, licenseid, validuntil, freeregisters,
+                                Speciality.name AS speciality, idaccount, title
                                 FROM Account, Speciality
                                 WHERE email = ? AND Speciality.idspeciality = speciality");
     $stmt->execute(array($email));
@@ -82,6 +82,10 @@ function checkBrute($email)
 function editPassword($email, $password, $salt)
 {
     global $conn;
+
+    if(!$salt)
+        $salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), true));
+
     $stmt = $conn->prepare("UPDATE account SET password = :password, salt = :salt
                             WHERE email = :email");
 
@@ -101,3 +105,69 @@ function editEmail($email, $new_email)
     return $stmt->fetch() == true;
 }
 
+function generateResetToken($email)
+{
+    global $conn;
+
+    /*
+        $stmt = $conn->prepare("SELECT email, token, validuntil > CURRENT_TIMESTAMP as valid
+                                FROM ResetTokens WHERE email = :email");
+        $stmt->execute(array("email" => $email));
+        $result = $stmt->fetch();
+
+        if($result && !$result['valid']) {
+            $stmt = $conn->prepare("DELETE FROM ResetTokens WHERE email = :email");
+            $stmt->execute(array("email" => $email));
+        }
+    */
+
+    $stmt = $conn->prepare("DELETE FROM ResetTokens WHERE email = :email");
+    $stmt->execute(array("email" => $email));
+
+    do {
+        $token = base64_encode(uniqid(openssl_random_pseudo_bytes(20), true));
+
+        $stmt = $conn->prepare("SELECT 1 FROM ResetTokens
+                                    WHERE token = :token");
+
+        $stmt->execute(array("token" => hash('sha512', $token)));
+    } while ($stmt->fetch());
+
+    $stmt = $conn->prepare("INSERT INTO ResetTokens
+                                VALUES (:email, :token, DEFAULT)");
+    $stmt->execute(array("email" => $email, "token" => hash('sha512', $token)));
+
+
+    return $token;
+}
+
+function getEmailFromToken($token)
+{
+    if (!$token)
+        return "";
+
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT email FROM ResetTokens WHERE token = :token");
+    $stmt->execute(array("token" => hash('sha512', $token)));
+    $result = $stmt->fetch();
+
+    return $result['email'];
+}
+
+;
+
+function isValidToken($token, $email)
+{
+
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT validuntil > CURRENT_TIMESTAMP AS valid FROM ResetTokens
+                            WHERE token = :token AND email = :email");
+    $stmt->execute(array("token" => hash('sha512', $token), "email" => $email));
+    $result = $stmt->fetch();
+
+    return $result['valid'];
+}
+
+;
