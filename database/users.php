@@ -83,7 +83,7 @@ function editPassword($email, $password, $salt)
 {
     global $conn;
 
-    if(!$salt)
+    if (!$salt)
         $salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), true));
 
     $stmt = $conn->prepare("UPDATE account SET password = :password, salt = :salt
@@ -155,8 +155,6 @@ function getEmailFromToken($token)
     return $result['email'];
 }
 
-;
-
 function isValidToken($token, $email)
 {
 
@@ -169,5 +167,3 @@ function isValidToken($token, $email)
 
     return $result['valid'];
 }
-
-;

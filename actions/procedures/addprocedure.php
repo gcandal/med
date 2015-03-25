@@ -190,7 +190,7 @@ try {
 
     $conn->commit();
 } catch (PDOException $e) {
-    $_SESSION['error_messages'][] = 'Erro a adicionar registo ' . $e->getMessage();
+    $_SESSION['error_messages'][] = 'Erro a adicionar registo ';// . $e->getMessage();
     $_SESSION['form_values'] = $_POST;
 
     header("Location: $BASE_URL" . 'pages/procedures/addprocedure.php');

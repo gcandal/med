@@ -145,9 +145,14 @@ $(document).ready(function () {
     }
 
     kValues.change(function () {
+        var ks = getSumOfK(true);
+        var newGeneralK = Math.max(0, 100 - ks);
+
+        $("#generalK").val(newGeneralK);
+
         updateRemunerations();
 
-        var ks = getSumOfK();
+        ks += newGeneralK;
 
         if (ks === 100) {
             errorMessageKs.parent().hide();
@@ -439,16 +444,24 @@ var getPatient = function (id) {
     return false;
 };
 
-var getSumOfK = function () {
+var getSumOfK = function (excludeGeneral) {
     const roles = ['#general', '#firstAssistant', '#secondAssistant', '#anesthetist', '#instrumentist'];
     var sum = 0;
 
-    roles.forEach(function (role) {
-        var k = parseInt($(role + "K").val());
+    if (excludeGeneral)
+        roles.slice(1).forEach(function (role) {
+            var k = parseInt($(role + "K").val());
 
-        if (isNumeric(k))
-            sum += k;
-    });
+            if (isNumeric(k))
+                sum += k;
+        });
+    else
+        roles.forEach(function (role) {
+            var k = parseInt($(role + "K").val());
+
+            if (isNumeric(k))
+                sum += k;
+        });
 
     return sum;
 };

@@ -30,7 +30,5 @@ if (sendPasswordResetToken($email, $token))
 else
     $_SESSION['error_messages'][] = 'A alteração da palavra-passe falhou';
 
-echo $token; exit;
-
 header("Location: $BASE_URL" . 'pages/main.php?box=forgot');
 exit;

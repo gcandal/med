@@ -156,7 +156,8 @@ try {
     editProcedure($idAccount, $idProcedure, $_POST['status'], $_POST['date'], $_POST['totalRemun'], $_POST['valuePerK'],
         $idprivatepayer, $role, $_POST['anesthetistK'], $hasManualK, $personalRemun,
         $_POST['generalRemun'], $_POST['firstAssistantRemun'], $_POST['secondAssistantRemun'],
-        $_POST['anesthetistRemun'], $_POST['instrumentistRemun']);
+        $_POST['anesthetistRemun'], $_POST['instrumentistRemun'],
+        $_POST['generalK'], $_POST['firstAssistantK'], $_POST['secondAssistantK'], $_POST['instrumentistK']);
 
 
     if (count($subProcedures) > 0) {

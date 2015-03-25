@@ -35,7 +35,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="export-word" data-table="#sample-table-1">
+                                <a href="#" class="export-doc" data-table="#sample-table-1">
                                     Para Word
                                 </a>
                             </li>
@@ -65,8 +65,20 @@
                                 {foreach $PROCEDURES as $procedure}
                                     <tr>
                                         <td class="center">{$procedure.date}</td>
-                                        <td>{$procedure.patientname}</td>
-                                        <td>{$procedure.patientbeneficiarynr}</td>
+                                        <td>
+                                            {if $procedure.idpatient}
+                                                <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
+                                                    {$procedure.patientName}
+                                                </a>
+                                            {/if}
+                                        </td>
+                                        <td>
+                                            {if $procedure.idpatient}
+                                                <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
+                                                    {$procedure.patientBeneficiaryNr}
+                                                </a>
+                                            {/if}
+                                        </td>
                                         <td class="center">
                                             <a href="{$BASE_URL}pages/payers/payers.php">{$procedure.payerName}</a>
                                         </td>
@@ -80,6 +92,41 @@
                                         </td>
                                         <td class="center">{$procedure.paymentstatus}</td>
                                         <td class="center">
+                                            <div class="hidden-md hidden-lg hidden-sm hidden-xs">
+                                                <form class="inlineForm"
+                                                      action="{$BASE_URL}actions/procedures/shareprocedure.php">
+                                                    <input type="hidden" name="idprocedure"
+                                                           value="{$procedure.idprocedure}"/>
+                                                    <button type="submit" class="btn btn-xs btn-blue tooltips"
+                                                            data-placement="top"
+                                                            data-original-title="Partilhar">
+                                                        <i class="fa fa-share"></i>
+                                                    </button>
+                                                </form>
+
+                                                <form class="inlineForm"
+                                                      action="{$BASE_URL}pages/procedures/procedure.php">
+                                                    <input type="hidden" name="idprocedure"
+                                                           value="{$procedure.idprocedure}"/>
+                                                    <button type="submit" class="btn btn-xs btn-blue tooltips"
+                                                            data-placement="top"
+                                                            data-original-title="Editar">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </form>
+
+                                                <form class="inlineForm"
+                                                      action="{$BASE_URL}actions/procedures/deleteprocedure.php"
+                                                      method="post">
+                                                    <input type="hidden" name="idprocedure"
+                                                           value="{$procedure.idprocedure}"/>
+                                                    <button type="submit" class="btn btn-xs btn-bricky tooltips"
+                                                            data-placement="top"
+                                                            data-original-title="Remover">
+                                                        <i class="fa fa-times fa fa-white"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                             <div class="visible-xs visible-sm visible-md visible-lg">
                                                 <div class="btn-group">
                                                     <a class="btn btn-primary dropdown-toggle btn-sm"
@@ -91,18 +138,13 @@
                                                         <li role="presentation">
                                                             <form role="menuitem" tabindex="-1"
                                                                   class="inlineForm"
-                                                                  action="{$BASE_URL}actions/procedures/shareprocedure.php"
-                                                                  method="post">
+                                                                  action="{$BASE_URL}actions/procedures/shareprocedure.php">
                                                                 <input type="hidden" name="idprocedure"
                                                                        value="{$procedure.idprocedure}"/>
                                                                 <button type="submit"
                                                                         class="btn btn-xs btn-blue tooltips"
                                                                         data-placement="top"
-                                                                        {if $procedure.readonly}
-                                                                    data-original-title="Ver"
-                                                                        {else}
-                                                                    data-original-title="Editar"
-                                                                        {/if}>
+                                                                        data-original-title="Editar">
                                                                     <i class="fa fa-share"></i> Partilhar
                                                                 </button>
                                                             </form>
@@ -116,17 +158,8 @@
                                                                 <button type="submit"
                                                                         class="btn btn-xs btn-blue tooltips"
                                                                         data-placement="top"
-                                                                        {if $procedure.readonly}
-                                                                    data-original-title="Ver"
-                                                                        {else}
-                                                                    data-original-title="Editar"
-                                                                        {/if}>
-                                                                    <i class="fa fa-edit"></i>
-                                                                    {if $procedure.readonly}
-                                                                        Ver
-                                                                    {else}
-                                                                        Editar
-                                                                    {/if}
+                                                                        data-original-title="Editar">
+                                                                    <i class="fa fa-edit"></i> Editar
                                                                 </button>
                                                             </form>
                                                         </li>
