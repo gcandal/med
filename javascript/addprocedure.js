@@ -350,10 +350,12 @@ var updatePatientInfo = function () {
 };
 
 var disablePatientForm = function (disable) {
+    /*
     if (disable)
         patientForm.hide();
     else
         patientForm.show();
+     */
 
     disablePatientValidations(disable);
 };
@@ -372,6 +374,10 @@ var disablePatientValidations = function (disable) {
         isValidPatient(nifPatient, errorMessageNifPatient);
         isValidPatient(cellphonePatient, errorMessageCellphonePatient);
     }
+
+    $.each(patientForm.find("input"), function(k, v) {
+        enableField($(v), disable);
+    });
 };
 
 var disablePayerValidations = function (disable) {

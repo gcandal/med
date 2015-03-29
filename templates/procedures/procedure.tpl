@@ -280,112 +280,112 @@
                                         <tbody>
                                         <tr id="GeneralRow">
                                             <td>
-                                                <input type="text" name="generalName" class="professionalName"
+                                                <input type="text" name="generalName" class="professionalName form-control"
                                                        id="generalName"
                                                        value="{$PROCEDURE.professionals.general.name}"/></td>
                                             <td class="center hidden-xs">Cirurgião Principal</td>
                                             <td class="center hidden-xs">
                                                 <input type="text" name="generaltLicenseId"
-                                                       class="professionalLicenseId"
+                                                       class="professionalLicenseId form-control"
                                                        value="{$PROCEDURE.professionals.general.licenseid}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.generalk}"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.generalk}"
                                                        name="generalK" id="generalK" required/>
                                             </td>
                                             <td class="center">
-                                                <input type="text" name="generalRemun" id="generalRemun"
+                                                <input type="text" name="generalRemun" id="generalRemun" class="form-control"
                                                        style="background-color: lightgrey" value="0" readonly></td>
                                         </tr>
                                         <tr id="FirstAssistantRow">
-                                            <td><input type="text" name="firstAssistantName" class="professionalName"
+                                            <td><input type="text" name="firstAssistantName" class="professionalName form-control"
                                                        id="firstAssistantName"
                                                        value="{$PROCEDURE.professionals.firstassistant.name}"/></td>
-                                            <td class="center hidden-xs">1º Ajudante</td>
+                                            <td class="center hidden-xs ">1º Ajudante</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="firstAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 value="{$PROCEDURE.professionals.firstassistant.licenseid}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.firstassistantk}"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.firstassistantk}"
                                                        name="firstAssistantK" id="firstAssistantK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="firstAssistantRemun"
-                                                                      id="firstAssistantRemun"
+                                                                      id="firstAssistantRemun" class="form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly></td>
                                         </tr>
                                         <tr id="SecondAssistantRow">
-                                            <td><input type="text" name="secondAssistantName" class="professionalName"
+                                            <td><input type="text" name="secondAssistantName" class="professionalName form-control"
                                                        id="secondAssistantName"
                                                        value="{$PROCEDURE.professionals.secondassistant.name}"/></td>
                                             <td class="center hidden-xs">2º Ajudante</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="secondAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 value="{$PROCEDURE.professionals.secondassistant.licenseid}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.secondassistantk}"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.secondassistantk}"
                                                        name="secondAssistantK" id="secondAssistantK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="secondAssistantRemun"
-                                                                      id="secondAssistantRemun"
+                                                                      id="secondAssistantRemun" class="form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly></td>
                                         </tr>
                                         <tr id="InstrumentistRow">
-                                            <td><input type="text" name="instrumentistName" class="professionalName"
+                                            <td><input type="text" name="instrumentistName" class="professionalName form-control"
                                                        id="instrumentistName"
                                                        value="{$PROCEDURE.professionals.instrumentist.name}"/></td>
                                             <td class="center hidden-xs">Instrumentista</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="instrumentistAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 value="{$PROCEDURE.professionals.instrumentist.licenseid}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.instrumentistk}"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.instrumentistk}"
                                                        name="instrumentistK" id="instrumentistK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="instrumentistRemun"
-                                                                      id="instrumentistRemun"
+                                                                      id="instrumentistRemun" class="form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly></td>
                                         </tr>
 
                                         <tr id="AnesthetistRow">
-                                            <td><input type="text" name="anesthetistName" class="professionalName"
+                                            <td><input type="text" name="anesthetistName" class="professionalName form-control"
                                                        id="anesthetistName"
                                                        value="{$PROCEDURE.professionals.anesthetist.name}"/></td>
                                             <td class="center hidden-xs">Anestesista</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="anesthetistAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 value="{$PROCEDURE.professionals.anesthetist.licenseid}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="{$PROCEDURE.anesthetistk}"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.anesthetistk}"
                                                        name="anesthetistK" id="anesthetistK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="anesthetistRemun"
-                                                                      id="anesthetistRemun"
+                                                                      id="anesthetistRemun" class="form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td class="hidden-xs"></td>
+                                            <td class="hidden-xs"></td>
                                             <td class="center">Total
                                                 <select name="totalType" id="totalType">
                                                     <option value="auto">Por K</option>
                                                     <option value="manual">Manual</option>
                                                 </select></td>
                                             <td class="center"><input type="text" name="totalRemun" id="totalRemun"
-                                                                      style="background-color: lightgrey" value="0"
+                                                                      style="background-color: lightgrey" value="0" class="form-control"
                                                                       readonly value="{$PROCEDURE.totalremun}"></td>
                                         </tr>
                                         </tbody>

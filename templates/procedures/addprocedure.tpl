@@ -258,96 +258,96 @@
                                         <tbody>
                                         <tr id="GeneralRow">
                                             <td>
-                                                <input type="text" name="generalName" class="professionalName"
+                                                <input type="text" name="generalName" class="professionalName form-control"
                                                        id="generalName"
                                                        value="{$FORM_VALUES.GENERALNAME}"/></td>
                                             <td class="center hidden-xs">Cirurgião Principal</td>
                                             <td class="center hidden-xs">
                                                 <input type="text" name="generaltLicenseId"
-                                                       class="professionalLicenseId" id="generalLicenseId"
+                                                       class="professionalLicenseId form-control" id="generalLicenseId"
                                                        value="{$FORM_VALUES.GENERALLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="100"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="100"
                                                        name="generalK" id="generalK" required/>
                                             </td>
                                             <td class="center">
-                                                <input type="text" name="generalRemun" id="generalRemun"
+                                                <input type="text" name="generalRemun" id="generalRemun" class="form-control"
                                                        style="background-color: lightgrey" value="0" readonly></td>
                                         </tr>
                                         <tr id="FirstAssistantRow">
-                                            <td><input type="text" name="firstAssistantName" class="professionalName"
+                                            <td><input type="text" name="firstAssistantName" class="professionalName form-control"
                                                        id="firstAssistantName"
                                                        value="{$FORM_VALUES.FIRSTASSISTANTNAME}"/></td>
                                             <td class="center hidden-xs">1º Ajudante</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="firstAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 id="firstAssistantLicenseId"
                                                                                 value="{$FORM_VALUES.FIRSTASSISTANTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="0"
                                                        name="firstAssistantK" id="firstAssistantK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="firstAssistantRemun"
-                                                                      id="firstAssistantRemun"
+                                                                      id="firstAssistantRemun" class="form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly></td>
                                         </tr>
                                         <tr id="SecondAssistantRow">
-                                            <td><input type="text" name="secondAssistantName" class="professionalName"
+                                            <td><input type="text" name="secondAssistantName" class="professionalName form-control"
                                                        id="secondAssistantName"
                                                        value="{$FORM_VALUES.SECONDASSISTANTNAME}"/></td>
                                             <td class="center hidden-xs">2º Ajudante</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="secondAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 id="secondAssistantLicenseId"
                                                                                 value="{$FORM_VALUES.SECONDASSISTANTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="0"
                                                        name="secondAssistantK" id="secondAssistantK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="secondAssistantRemun"
-                                                                      id="secondAssistantRemun"
+                                                                      id="secondAssistantRemun" class="form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly></td>
                                         </tr>
                                         <tr id="InstrumentistRow">
-                                            <td><input type="text" name="instrumentistName" class="professionalName"
+                                            <td><input type="text" name="instrumentistName" class="professionalName form-control"
                                                        id="instrumentistName"
                                                        value="{$FORM_VALUES.INSTRUMENTISTNAME}"/></td>
                                             <td class="center hidden-xs">Instrumentista</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="instrumentistAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 id="instrumentistLicenseId"
                                                                                 value="{$FORM_VALUES.INSTRUMENTISTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="0"
                                                        name="instrumentistK" id="instrumentistK" required/>
                                             </td>
                                             <td class="center"><input type="text" name="instrumentistRemun"
-                                                                      id="instrumentistRemun"
+                                                                      id="instrumentistRemun" class="form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly></td>
                                         </tr>
                                         <tr id="AnesthetistRow">
-                                            <td><input type="text" name="anesthetistName" class="professionalName"
+                                            <td><input type="text" name="anesthetistName" class="professionalName form-control"
                                                        id="anesthetistName"
                                                        value="{$FORM_VALUES.ANESTHETISTNAME}"/></td>
                                             <td class="center hidden-xs">Anestesista</td>
                                             <td class="center hidden-xs"><input type="text"
                                                                                 name="anesthetistAssistantLicenseId"
-                                                                                class="professionalLicenseId"
+                                                                                class="professionalLicenseId form-control"
                                                                                 id="anesthetistLicenseId"
                                                                                 value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <input type="number" class="kValue" min="0" max="100" value="0"
+                                                <input type="number" class="kValue form-control" min="0" max="100" value="0"
                                                        name="anesthetistK" id="anesthetistK" required/>
                                                 <!--
                                                 <select id="anesthetistK" name="anesthetistK">
@@ -358,22 +358,22 @@
                                                 -->
                                             </td>
                                             <td class="center"><input type="text" name="anesthetistRemun"
-                                                                      id="anesthetistRemun"
+                                                                      id="anesthetistRemun" class="form-control form-control"
                                                                       style="background-color: lightgrey" value="0"
                                                                       readonly>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td class="hidden-xs"></td>
+                                            <td class="hidden-xs"></td>
                                             <td class="center">Total
                                                 <select name="totalType" id="totalType">
                                                     <option value="auto">Por K</option>
                                                     <option value="manual">Manual</option>
                                                 </select></td>
                                             <td class="center"><input type="text" name="totalRemun" id="totalRemun"
-                                                                      style="background-color: lightgrey"
+                                                                      style="background-color: lightgrey" class="form-control"
                                                                       readonly value="0"></td>
                                         </tr>
                                         </tbody>
