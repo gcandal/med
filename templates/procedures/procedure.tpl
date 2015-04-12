@@ -273,6 +273,7 @@
                                             <th class="center">Nome</th>
                                             <th class="center hidden-xs">Função</th>
                                             <th class="center hidden-xs">Cédula</th>
+                                            <th class="center"></th>
                                             <th class="center hidden-xs">% de K</th>
                                             <th class="center">Remuneração</th>
                                         </tr>
@@ -289,6 +290,7 @@
                                                        class="professionalLicenseId form-control"
                                                        value="{$PROCEDURE.professionals.general.licenseid}"/>
                                             </td>
+                                            <td></td>
                                             <td class="center">
                                                 <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.generalk}"
                                                        name="generalK" id="generalK" required/>
@@ -307,6 +309,7 @@
                                                                                 class="professionalLicenseId form-control"
                                                                                 value="{$PROCEDURE.professionals.firstassistant.licenseid}"/>
                                             </td>
+                                            <td></td>
                                             <td class="center">
                                                 <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.firstassistantk}"
                                                        name="firstAssistantK" id="firstAssistantK" required/>
@@ -326,6 +329,7 @@
                                                                                 class="professionalLicenseId form-control"
                                                                                 value="{$PROCEDURE.professionals.secondassistant.licenseid}"/>
                                             </td>
+                                            <td></td>
                                             <td class="center">
                                                 <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.secondassistantk}"
                                                        name="secondAssistantK" id="secondAssistantK" required/>
@@ -345,6 +349,7 @@
                                                                                 class="professionalLicenseId form-control"
                                                                                 value="{$PROCEDURE.professionals.instrumentist.licenseid}"/>
                                             </td>
+                                            <td></td>
                                             <td class="center">
                                                 <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.instrumentistk}"
                                                        name="instrumentistK" id="instrumentistK" required/>
@@ -366,6 +371,9 @@
                                                                                 value="{$PROCEDURE.professionals.anesthetist.licenseid}"/>
                                             </td>
                                             <td class="center">
+                                                <a data-toggle="modal" class="btn btn-danger" role="button" href="#myModal2"><i class="clip-search-2"></i></a>
+                                            </td>
+                                            <td class="center">
                                                 <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.anesthetistk}"
                                                        name="anesthetistK" id="anesthetistK" required/>
                                             </td>
@@ -382,7 +390,7 @@
                                             <td class="center">Total
                                                 <select name="totalType" id="totalType">
                                                     <option value="auto">Por K</option>
-                                                    <option value="manual">Manual</option>
+                                                    <!-- <option value="manual">Manual</option> -->
                                                 </select></td>
                                             <td class="center"><input type="text" name="totalRemun" id="totalRemun"
                                                                       style="background-color: lightgrey" value="0" class="form-control"
@@ -390,6 +398,49 @@
                                         </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                ×
+                                            </button>
+                                            <h4 class="modal-title">TNVROM - Anestesia</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Cirurgia superior a 900K: 300K
+                                                <br> Cirurgia de 900 a 801K: 255K
+                                                <br> Cirurgia de 800 a 701K: 225K
+                                                <br> Cirurgia de 700 a 601K: 195K
+                                                <br> Cirurgia de 600 a 561K: 175K
+                                                <br> Cirurgia de 560 a 511K: 160K
+                                                <br> Cirurgia de 510 a 481K: 150K
+                                                <br> Cirurgia de 480 a 461K: 140K
+                                                <br> Cirurgia de 460 a 421K: 130K
+                                                <br> Cirurgia de 420 a 401K: 120K
+                                                <br> Cirurgia de 400 a 341K: 110K
+                                                <br> Cirurgia de 340 a 301K: 95K
+                                                <br> Cirurgia de 300 a 281K: 87K
+                                                <br> Cirurgia de 280 a 241K: 78K
+                                                <br> Cirurgia de 240 a 201K: 66K
+                                                <br> Cirurgia de 200 a 181K: 57K
+                                                <br> Cirurgia de 180 a 161K: 51K
+                                                <br> Cirurgia de 160 a 141K: 45K
+                                                <br> Cirurgia de 140 a 121K: 39K
+                                                <br> Cirurgia de 120 a 101K: 33K
+                                                <br> Cirurgia de 100 a 81K: 27K
+                                                <br> Cirurgia inferior a 81K: 27K
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-default" data-dismiss="modal">
+                                                Fechar
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -505,9 +556,9 @@
             var editAnesthetistK = "{$PROCEDURE.anesthetistk}";
 
             {if $PROCEDURE.hasmanualk}
-                var editHasManualK = true;
+            var editHasManualK = true;
             {else}
-                var editHasManualK = false;
+            var editHasManualK = false;
             {/if}
 
             {if $PROCEDURE.localanesthesia}
@@ -515,11 +566,11 @@
             {/if}
 
             {if $PROCEDURE.readonly}
-                var isReadOnly = true;
-                $("#addSubProcedure, #submitButton, input, select").attr("disabled", true);
-                $("#idOrganization, #readOnly, #idProcedure").attr("disabled", false);
+            var isReadOnly = true;
+            $("#addSubProcedure, #submitButton, input, select").attr("disabled", true);
+            $("#idOrganization, #readOnly, #idProcedure").attr("disabled", false);
             {else}
-                var isReadOnly = false;
+            var isReadOnly = false;
             {/if}
         </script>
         <script src="{$BASE_URL}javascript/addprocedure.js"></script>
