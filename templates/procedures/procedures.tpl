@@ -67,15 +67,15 @@
                                         <td class="center">{$procedure.date}</td>
                                         <td>
                                             {if $procedure.idpatient}
-                                                <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
+                                                <a href="{$BASE_URL}pages/patients/patients.php">
                                                     {$procedure.patientName}
                                                 </a>
                                             {/if}
                                         </td>
-                                        <td>
+                                        <td class="center">
                                             {if $procedure.idpatient}
-                                                <a href="{$BASE_URL}pages/organizations/organization.php?idorganization={$procedure.idorganization}">
-                                                    {$procedure.patientBeneficiaryNr}
+                                                <a href="{$BASE_URL}pages/patients/patients.php">
+                                                    {$procedure.patientBenefeciaryNr}
                                                 </a>
                                             {/if}
                                         </td>

@@ -28,6 +28,21 @@ function getProcedures($idAccount)
             $procedure['organizationName'] = $organization['name'];
             $procedure['idorganization'] = $organization['idorganization'];
         }
+
+        $patient = getPatientForProcedure($procedure['idprocedure']);
+
+        if ($patient) {
+            $procedure['patientName'] = $patient['name'];
+            $procedure['patientNif'] = $patient['nif'];
+            $procedure['patientCellphone'] = $patient['cellphone'];
+            $procedure['patientBenefeciaryNr'] = $patient['beneficiarynr'];
+            $procedure['idpatient'] = $patient['idpatient'];
+        } else $procedure['idpatient'] = -1;
+
+        if ($organization) {
+            $procedure['patientName'] = $patient['name'];
+            $procedure['idpatient'] = $patient['idpatient'];
+        }
     }
 
     return $procedures;

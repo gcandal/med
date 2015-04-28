@@ -371,7 +371,7 @@
                                                                                 value="{$PROCEDURE.professionals.anesthetist.licenseid}"/>
                                             </td>
                                             <td class="center">
-                                                <a data-toggle="modal" class="btn btn-danger" role="button" href="#myModal2"><i class="clip-search-2"></i></a>
+                                                <a data-toggle="modal" class="btn" role="button" href="#myModal2"><i class="clip-search-2"></i></a>
                                             </td>
                                             <td class="center">
                                                 <input type="number" class="kValue form-control" min="0" max="100" value="{$PROCEDURE.anesthetistk}"

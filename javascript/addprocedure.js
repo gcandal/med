@@ -467,16 +467,33 @@ var getPatient = function (id) {
 
 var updateRemunerations = function () {
     const roles = ['#general', '#firstAssistant', '#secondAssistant', '#anesthetist', '#instrumentist'];
-    const total = getTotalRemuneration();
-    var sum = 0;
+    var total;
+    var sum;
 
-    roles.forEach(function (role) {
-        var remun = total * $(role + "K").val() / 100.0;
-        $(role + "Remun").val(remun);
-        sum += remun;
-    });
+    if(totalType.val() == 'auto') {
+        total = getTotalRemuneration();
+        sum = 0;
 
-    totalRemun.val(sum);
+        roles.forEach(function (role) {
+            var remun = total * parseFloat($(role + "K").val()) / 100.0;
+            $(role + "Remun").val(remun);
+            sum += remun;
+        });
+
+        totalRemun.val(sum);
+    } else {
+        total = totalRemun.val();
+        sum = 0;
+
+        roles.forEach(function (role) {
+            sum += parseFloat($(role + "K").val());
+        });
+
+        roles.forEach(function (role) {
+            var remun = parseFloat($(role + "K").val()) / sum * total;
+            $(role + "Remun").val(remun);
+        });
+    }
 };
 
 

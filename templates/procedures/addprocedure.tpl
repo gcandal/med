@@ -352,7 +352,7 @@
                                                                                 value="{$FORM_VALUES.ANESTHETISTLICENSEID}"/>
                                             </td>
                                             <td class="center">
-                                                <a data-toggle="modal" class="btn btn-danger" role="button" href="#myModal2"><i class="clip-search-2"></i></a>
+                                                <a data-toggle="modal" class="btn" role="button" href="#myModal2"><i class="clip-search-2"></i></a>
                                             </td>
                                             <td class="center">
                                                 <input type="number" class="kValue form-control" min="0" max="100" value="0"
@@ -378,7 +378,7 @@
                                             <td class="center">Total
                                                 <select name="totalType" id="totalType">
                                                     <option value="auto">Por K</option>
-                                                    <!-- <option value="manual">Manual</option> -->
+                                                    <option value="manual">Manual</option>
                                                 </select></td>
                                             <td class="center"><input type="text" name="totalRemun" id="totalRemun"
                                                                       style="background-color: lightgrey" class="form-control"
